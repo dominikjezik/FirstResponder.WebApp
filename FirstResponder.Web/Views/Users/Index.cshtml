@@ -1,0 +1,87 @@
+@{
+    ViewBag.Title = "Prehľad responderov";
+}
+
+<header class="main-header">
+    <h1>Prehľad responderov</h1>
+    <div class="buttons">
+        <a asp-controller="Users" asp-action="Create" class="button button-with-icon">
+            <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </span>
+            <span>Pridať respondera</span>
+        </a>
+    </div>
+</header>
+
+<div class="filter-table-form">
+    <div class="field">
+        <label class="label">Podľa&nbsp;mena</label>
+        <div class="control">
+            <input class="input" type="text">
+        </div>
+    </div>
+    
+    <div class="field">
+        <label class="label">Podľa&nbsp;telefónu</label>
+        <div class="control">
+            <input class="input" type="text">
+        </div>
+    </div>
+    
+    <div class="field">
+        <label class="label">Podľa&nbsp;stavu</label>
+        <div class="control">
+            <div class="select">
+                <select>
+                    <option>-</option>
+                    <option>Nezaradený</option>
+                    <option>Responder</option>
+                    <option>Zamestnanec</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field">
+        <label class="label">Podľa&nbsp;kraju</label>
+        <div class="control">
+            <div class="select">
+                <select>
+                    <option>-</option>
+                    <option>Trenčiansky kraj</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table is-striped is-narrow is-hoverable is-fullwidth table-with-clickable-link">
+    <thead>
+    <tr>
+        <th>Responder</th>
+        <th>Email</th>
+        <th>Telefón</th>
+        <th>Evidencia</th>
+        <th>Stav</th>
+        <th>Kraj</th>
+        <th>Adresa</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for (int i = 0; i < 20; i++)
+    {
+        <tr>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">John Doe</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">john@example.com</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">0905123456</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">03.10.2023</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">Responder</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">Trenčiansky kraj</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">Vysokoškolákov 1, 123 456 Trenčín</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

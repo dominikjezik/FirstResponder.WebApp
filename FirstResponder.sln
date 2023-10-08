@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.Web", "FirstResponder.Web\FirstResponder.Web.csproj", "{183EE000-2B3A-4452-A0BA-F3858B69B672}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{07523733-7033-4519-8495-94F99821453D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,8 @@ Global
 		{183EE000-2B3A-4452-A0BA-F3858B69B672}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{183EE000-2B3A-4452-A0BA-F3858B69B672}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{183EE000-2B3A-4452-A0BA-F3858B69B672}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{183EE000-2B3A-4452-A0BA-F3858B69B672} = {07523733-7033-4519-8495-94F99821453D}
 	EndGlobalSection
 EndGlobal

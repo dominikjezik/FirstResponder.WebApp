@@ -1,0 +1,57 @@
+@{
+    ViewBag.Title = "Prehľad responderov";
+}
+
+<header class="main-header">
+    <h1>Pohotovostná situácia</h1>
+</header>
+
+<div class="filter-table-form">
+    <div class="field">
+        <label class="label">Podľa&nbsp;prepravy</label>
+        <div class="control">
+            <div class="select">
+                <select>
+                    <option>-</option>
+                    <option>Chodec</option>
+                    <option>Bicykel</option>
+                    <option>Auto</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field">
+        <label class="label">Podľa&nbsp;kraju</label>
+        <div class="control">
+            <div class="select">
+                <select>
+                    <option>-</option>
+                    <option>Trenčiansky kraj</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="map" style="height: 600px;"></div>
+
+@section StyleSheets
+{
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+}
+
+@section Scripts
+{
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        let map = L.map('map').setView([48.684, 19.677], 8);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        let marker = L.marker([48.684, 19.677]).addTo(map);
+        //marker.bindPopup("Môj marker").openPopup();
+    </script>
+}

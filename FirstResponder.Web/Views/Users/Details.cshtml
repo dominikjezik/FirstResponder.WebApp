@@ -1,0 +1,194 @@
+<header class="main-header">
+    <h1>John Doe</h1>
+    <div class="buttons">
+        <a asp-controller="Users" asp-action="Index" class="button button-with-icon">
+            <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+                </svg>
+            </span>
+            <span>Prehľad responderov</span>
+        </a>
+    </div>
+</header>
+
+<div class="user-details-page">
+    <form class="user-details-form">
+        <div class="field">
+            <label class="label">Email *</label>
+            <div class="control">
+                <input class="input" type="email" placeholder="john@example.com" required>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Meno *</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="John Doe" required>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Mobil *</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="0901234567" required>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Dátum narodenia</label>
+            <div class="control">
+                <input class="input" type="date" placeholder="14.04.2002">
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Adresa</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Adresa 123">
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">PSČ</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="123 45">
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Mesto</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Mesto">
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Kraj</label>
+            <div class="control">
+                <div class="select select-full-width">
+                    <select>
+                        <option>Trenčiansky kraj</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Poznámka</label>
+            <div class="control">
+                <textarea class="textarea"></textarea>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Dátum registrácie</label>
+            <div class="control">
+                <input class="input" type="text" disabled>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Stav</label>
+            <div class="control">
+                <div class="select select-full-width">
+                    <select>
+                        <option>Nezaradený</option>
+                        <option>Responder</option>
+                        <option>Zamestnanec</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="field">
+            <div class="control">
+                <button class="button is-link">Uložiť</button>
+            </div>
+        </div>
+    </form>
+    
+    <aside class="user-details-aside">
+        <h2 class="heading-with-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-heart-pulse" viewBox="0 0 16 16">
+                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053.918 3.995.78 5.323 1.508 7H.43c-2.128-5.697 4.165-8.83 7.394-5.857.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17c3.23-2.974 9.522.159 7.394 5.856h-1.078c.728-1.677.59-3.005.108-3.947C13.486.878 10.4.28 8.717 2.01L8 2.748ZM2.212 10h1.315C4.593 11.183 6.05 12.458 8 13.795c1.949-1.337 3.407-2.612 4.473-3.795h1.315c-1.265 1.566-3.14 3.25-5.788 5-2.648-1.75-4.523-3.434-5.788-5Z"/>
+                <path d="M10.464 3.314a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8H.5a.5.5 0 0 0 0 1H4a.5.5 0 0 0 .416-.223l1.473-2.209 1.647 4.118a.5.5 0 0 0 .945-.049l1.598-5.593 1.457 3.642A.5.5 0 0 0 12 9h3.5a.5.5 0 0 0 0-1h-3.162l-1.874-4.686Z"/>
+            </svg>
+            Zásahy
+        </h2>
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+            <tr>
+                <th>Dátum</th>
+                <th>Adresa</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (int i = 0; i < 5; i++)
+            {
+                <tr>
+                    <td>05.10.2023 19:07</td>
+                    <td>Vysokoškolákov 1, 123 456 Trenčín</td>
+                    <td><a href="#">Detaily</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        
+        <h2 class="heading-with-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022ZM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816ZM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0Zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/>
+            </svg>
+            Zaradenia
+        </h2>
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+            <tr>
+                <th>Skupina</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (int i = 0; i < 2; i++)
+            {
+                <tr>
+                    <td>Dobrovoľný hasičský zbor Veľká Hradná</td>
+                    <td><a href="#">Detaily</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        
+        <h2 class="heading-with-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5ZM8 8.46 1.758 5.965 8 3.052l6.242 2.913L8 8.46Z"/>
+                <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46l-3.892-1.556Z"/>
+            </svg>
+            Školenia
+        </h2>
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+            <tr>
+                <th>Dátum</th>
+                <th>Školenie</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (int i = 0; i < 2; i++)
+            {
+                <tr>
+                    <td>05.10.2023</td>
+                    <td>Úvodné školenie</td>
+                    <td><a href="#">Detaily</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        
+    </aside>
+</div>
+
+
+
