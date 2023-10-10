@@ -35,13 +35,13 @@ body {
 // Layout
 $side-bar-width: 250px;
 $main-app-color: #000000;
+$mobile-top-menu-bar-height: 60px;
 
 .sidebar-layout {
-    .main-logo {
+    .logo {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 1rem;
         color: $main-app-color;
         fill: $main-app-color;
         
@@ -49,6 +49,10 @@ $main-app-color: #000000;
             font-size: 1.5rem;
             font-weight: bold;
         }
+    }
+
+    .main-logo {
+        margin: 1rem;
     }
     
     .sidebar {
@@ -149,16 +153,65 @@ $main-app-color: #000000;
         flex: 1;
         padding: 0 1rem;
     }
+    
+    // Responzitiva
+    .mobile-top-menu-bar {
+        z-index: 1006;
+        position: fixed;
+        background: #fff;
+        box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+        display: none;
+        height: $mobile-top-menu-bar-height;
+        
+        .open-menu-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 1rem;
+            color: #000;
+        }
+        
+        // Aby bolo logo vyrovnané na stred pri flex
+        &:after {
+            content: '';
+            display: block;
+            width: 3rem;
+        }
+    }
 
     @media only screen and (max-width: 1000px) {
+        padding-top: $mobile-top-menu-bar-height;
+        
         .sidebar {
             display: none;
+            z-index: 1005;
+            background: #fff;
+            top: 0;
         }
+        
+        .mobile-sidebar-open {
+            display: block;
+            width: 100%;
+        }
+        
         .sidebar-layout-container::before {
             display: none;
         }
+
+        .mobile-top-menu-bar {
+            top: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .content {
+            overflow-x: scroll;
+        }
     }
 }
+
 
 
 
@@ -212,12 +265,56 @@ $main-app-color: #000000;
     .user-details-aside {
         margin-left: 1rem;
     }
+    
+    .section-header {
+        margin-bottom: 1rem;
+        
+        h2 {
+            margin-bottom: 0;
+        }
+    }
+    
 }
 
 .form-section {
     padding-bottom: 2.5rem;
     border-bottom: 1px solid #e7e7e7;
     margin-bottom: 2rem;
+}
+
+.control-multiple-inputs {
+    display:  flex;
+    
+    input {
+        margin-right: 1rem;
+    }
+    
+    input:last-child{
+        margin-right: 0;
+    }
+}
+
+@media only screen and (max-width: 1000px) { 
+    .user-details-page {
+        flex-direction: column;
+        
+        .user-details-aside {
+            margin-top: 2rem;
+            margin-left: 0;
+        }
+
+        .radio + .radio {
+            margin-left: 0;
+        }
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .main-header {
+        align-items: start;
+        flex-direction: column;
+        margin-bottom: 2rem;
+    }
 }
 
 // General
