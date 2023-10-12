@@ -80,7 +80,7 @@ $mobile-top-menu-bar-height: 60px;
     .main-nav {
         padding: 1rem;
         
-        .nav-item>a {
+        .nav-item > a {
             width: 100%;
             font-weight: bold;
             display: flex;
@@ -126,12 +126,21 @@ $mobile-top-menu-bar-height: 60px;
             }
         }
 
-        .nav-item-open {
+        .sub-nav > .selected > a {
+            background: #00d1b2;
+            color: #fff;
+        }
+        
+        .nav-item.selected .nav-item-btn-toggle {
+            transform: rotate(90deg);
+        }
+
+        .nav-item-btn-toggle-open {
             transform: rotate(90deg);
             transition: transform .3s ease-in-out;
         }
 
-        .nav-item-close {
+        .nav-item-btn-toggle-close {
             transform: rotate(0deg);
             transition: transform .3s ease-in-out;
         }

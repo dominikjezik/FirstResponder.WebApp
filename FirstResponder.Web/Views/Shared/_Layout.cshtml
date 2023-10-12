@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@addTagHelper FirstResponder.Web.TagHelpers.ActiveMenuItemTagHelper, FirstResponder.Web
+@{ 
+    var currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<!DOCTYPE html>
 <html lang="sk">
 <head>
     <meta charset="utf-8"/>
@@ -21,7 +26,7 @@
                 <span>First Responder</span>
             </a>
             <ul class="main-nav">
-                <li class="nav-item" x-data="{ isMenuOpen: true }">
+                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "AED" ? "true" : "false") }">
                     <a href="#aed" @@click.prevent="isMenuOpen = !isMenuOpen" class="nav-item button is-white">
                         <span>
                             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -33,12 +38,14 @@
                             Register AED
                         </span>
     
-                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' :class="{'nav-item-open': isMenuOpen, 'nav-item-close': !isMenuOpen}">
+                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' 
+                             class="nav-item-btn-toggle @(currentControllerName == "AED" ? "nav-item-btn-toggle-open" : "")" 
+                             :class="{'nav-item-btn-toggle-open': isMenuOpen, 'nav-item-btn-toggle-close': !isMenuOpen}">
                             <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/>
                         </svg>
                     </a>
                     <ul class="sub-nav" x-show="isMenuOpen">
-                        <li class="sub-nav-item">
+                        <li class="sub-nav-item" is-active-controller="AED" is-active-action="Index">
                             <a asp-controller="AED" asp-action="Index" class="button is-white">
                                 <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                   <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z"/>
@@ -48,7 +55,7 @@
                                 Prehľad
                             </a>
                         </li>
-                        <li class="sub-nav-item">
+                        <li class="sub-nav-item" is-active-controller="AED" is-active-action="Map">
                             <a asp-controller="AED" asp-action="Map" class="button is-white">
                                 <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
@@ -76,7 +83,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item" x-data="{ isMenuOpen: true }">
+                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "Users" ? "true" : "false") }">
                     <a href="#fr" @@click.prevent="isMenuOpen = !isMenuOpen" class="nav-item button is-white">
                         <span>
                             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -85,13 +92,15 @@
                             Evidencia FR
                         </span>
     
-                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' :class="{'nav-item-open': isMenuOpen, 'nav-item-close': !isMenuOpen}">
+                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' 
+                             class="nav-item-btn-toggle @(currentControllerName == "Users" ? "nav-item-btn-toggle-open" : "")"
+                             :class="{'nav-item-btn-toggle-open': isMenuOpen, 'nav-item-btn-toggle-close': !isMenuOpen}">
                             <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/>
                         </svg>
                     </a>
                     
                     <ul class="sub-nav" x-show="isMenuOpen">
-                        <li class="sub-nav-item">
+                        <li class="sub-nav-item" is-active-controller="Users" is-active-action="Index">
                             <a asp-controller="Users" asp-action="Index" class="button is-white">
                                 <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z"/>
@@ -101,7 +110,7 @@
                                 Prehľad
                             </a>
                         </li>
-                        <li class="sub-nav-item">
+                        <li class="sub-nav-item" is-active-controller="Users" is-active-action="Map">
                             <a asp-controller="Users" asp-action="Map" class="button is-white">
                                 <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
@@ -137,7 +146,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item" x-data="{ isMenuOpen: false }">
+                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "ZASAHY" ? "true" : "false") }">
                     <a href="#zasahy" @@click.prevent="isMenuOpen = !isMenuOpen" class="nav-item button is-white">
                         <span>
                             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -147,7 +156,9 @@
                             Zásahy FR
                         </span>
     
-                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' :class="{'nav-item-open': isMenuOpen, 'nav-item-close': !isMenuOpen}">
+                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' 
+                             class="nav-item-btn-toggle @(currentControllerName == "ZASAHY" ? "nav-item-btn-toggle-open" : "")" 
+                             :class="{'nav-item-btn-toggle-open': isMenuOpen, 'nav-item-btn-toggle-close': !isMenuOpen}">
                             <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/>
                         </svg>
                     </a>
@@ -181,7 +192,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item" x-data="{ isMenuOpen: false }">
+                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "Settings" ? "true" : "false") }">
                     <a href="#nastavenia" @@click.prevent="isMenuOpen = !isMenuOpen" class="nav-item button is-white">
                         <span>
                             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -190,7 +201,9 @@
                             Nastavenia
                         </span>
     
-                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' :class="{'nav-item-open': isMenuOpen, 'nav-item-close': !isMenuOpen}">
+                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' 
+                             class="nav-item-btn-toggle @(currentControllerName == "Settings" ? "nav-item-btn-toggle-open" : "")" 
+                             :class="{'nav-item-btn-toggle-open': isMenuOpen, 'nav-item-btn-toggle-close': !isMenuOpen}">
                             <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/>
                         </svg>
                     </a>
