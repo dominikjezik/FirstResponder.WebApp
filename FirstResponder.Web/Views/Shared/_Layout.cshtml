@@ -1,6 +1,6 @@
 ﻿@addTagHelper FirstResponder.Web.TagHelpers.ActiveMenuItemTagHelper, FirstResponder.Web
 @{ 
-    var currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    var currentControllerName = (this.ViewContext.RouteData.Values["controller"] ?? "").ToString();
 }
 
 <!DOCTYPE html>
@@ -46,7 +46,7 @@
                     </a>
                     <ul class="sub-nav" x-show="isMenuOpen">
                         <li class="sub-nav-item" is-active-controller="AED" is-active-action="Index">
-                            <a asp-controller="AED" asp-action="Index" class="button is-white">
+                            <a asp-controller="Aed" asp-action="Index" class="button is-white">
                                 <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                   <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z"/>
                                   <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z"/>
@@ -56,7 +56,7 @@
                             </a>
                         </li>
                         <li class="sub-nav-item" is-active-controller="AED" is-active-action="Map">
-                            <a asp-controller="AED" asp-action="Map" class="button is-white">
+                            <a asp-controller="Aed" asp-action="Map" class="button is-white">
                                 <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
                                     <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>

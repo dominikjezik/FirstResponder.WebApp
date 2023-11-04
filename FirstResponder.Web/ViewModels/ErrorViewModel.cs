@@ -1,4 +1,4 @@
-namespace FirstResponder.Web.Models;
+namespace FirstResponder.Web.ViewModels;
 
 public class ErrorViewModel
 {

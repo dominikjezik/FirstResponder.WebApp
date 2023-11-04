@@ -1,19 +1,32 @@
+using FirstResponder.ApplicationCore.Abstractions;
+using FirstResponder.ApplicationCore.Aeds.Queries;
+using FirstResponder.Infrastructure.DbContext;
+using FirstResponder.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using FirstResponder.Web.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+
+// Add DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// Add Identity
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true); 
 builder.Services.AddControllersWithViews();
+
+// Add MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetAllAedsQuery>());
+
+// Add Repositories
+builder.Services.AddScoped<IAedRepository, AedRepository>();
 
 var app = builder.Build();
 

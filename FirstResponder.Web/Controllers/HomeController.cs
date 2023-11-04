@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
+using FirstResponder.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using FirstResponder.Web.Models;
 
 namespace FirstResponder.Web.Controllers;
 
