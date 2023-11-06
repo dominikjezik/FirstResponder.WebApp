@@ -1,8 +1,10 @@
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Aeds.Queries;
 using FirstResponder.Infrastructure.DbContext;
+using FirstResponder.Infrastructure.Identity;
 using FirstResponder.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,17 +18,27 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Add Identity
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+{
+    options.Password.RequireNonAlphanumeric = false;
+    options.User.RequireUniqueEmail = true;
+}).AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
+// Configure routing
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true); 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
 
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetAllAedsQuery>());
 
-// Add Repositories
+// Custom repositories and services
 builder.Services.AddScoped<IAedRepository, AedRepository>();
+
+builder.Services.AddTransient<IAuthService, AuthService>();
 
 var app = builder.Build();
 
@@ -52,6 +64,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
 
 app.Run();

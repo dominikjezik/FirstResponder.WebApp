@@ -1,11 +1,12 @@
 ﻿using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FirstResponder.Infrastructure.DbContext;
 
-public class ApplicationDbContext : IdentityDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

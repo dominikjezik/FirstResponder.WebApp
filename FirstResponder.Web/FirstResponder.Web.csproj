@@ -30,6 +30,8 @@
     <ItemGroup>
       <ProjectReference Include="..\FirstResponder.ApplicationCore\FirstResponder.ApplicationCore.csproj" />
       <ProjectReference Include="..\FirstResponder.Infrastructure\FirstResponder.Infrastructure.csproj" />
+
+
     </ItemGroup>
 
 
