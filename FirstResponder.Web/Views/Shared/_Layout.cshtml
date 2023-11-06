@@ -26,7 +26,7 @@
                 <span>First Responder</span>
             </a>
             <ul class="main-nav">
-                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "AED" ? "true" : "false") }">
+                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "Aed" ? "true" : "false") }">
                     <a href="#aed" @@click.prevent="isMenuOpen = !isMenuOpen" class="nav-item button is-white">
                         <span>
                             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -39,7 +39,7 @@
                         </span>
     
                         <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' 
-                             class="nav-item-btn-toggle @(currentControllerName == "AED" ? "nav-item-btn-toggle-open" : "")" 
+                             class="nav-item-btn-toggle @(currentControllerName == "Aed" ? "nav-item-btn-toggle-open" : "")" 
                              :class="{'nav-item-btn-toggle-open': isMenuOpen, 'nav-item-btn-toggle-close': !isMenuOpen}">
                             <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/>
                         </svg>
@@ -146,7 +146,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "ZASAHY" ? "true" : "false") }">
+                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "Zasahy" ? "true" : "false") }">
                     <a href="#zasahy" @@click.prevent="isMenuOpen = !isMenuOpen" class="nav-item button is-white">
                         <span>
                             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -157,7 +157,7 @@
                         </span>
     
                         <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' 
-                             class="nav-item-btn-toggle @(currentControllerName == "ZASAHY" ? "nav-item-btn-toggle-open" : "")" 
+                             class="nav-item-btn-toggle @(currentControllerName == "Zasahy" ? "nav-item-btn-toggle-open" : "")" 
                              :class="{'nav-item-btn-toggle-open': isMenuOpen, 'nav-item-btn-toggle-close': !isMenuOpen}">
                             <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/>
                         </svg>
@@ -192,7 +192,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "Settings" ? "true" : "false") }">
+                <li class="nav-item" x-data="{ isMenuOpen: @(currentControllerName == "settings" ? "true" : "false") }">
                     <a href="#nastavenia" @@click.prevent="isMenuOpen = !isMenuOpen" class="nav-item button is-white">
                         <span>
                             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -202,7 +202,7 @@
                         </span>
     
                         <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' 
-                             class="nav-item-btn-toggle @(currentControllerName == "Settings" ? "nav-item-btn-toggle-open" : "")" 
+                             class="nav-item-btn-toggle @(currentControllerName == "settings" ? "nav-item-btn-toggle-open" : "")" 
                              :class="{'nav-item-btn-toggle-open': isMenuOpen, 'nav-item-btn-toggle-close': !isMenuOpen}">
                             <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/>
                         </svg>

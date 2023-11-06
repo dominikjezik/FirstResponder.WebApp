@@ -30,7 +30,7 @@ public class ActiveMenuItemTagHelper : TagHelper
         var currentController = _httpContextAccessor.HttpContext.GetRouteValue("controller").ToString();
         var currentAction = _httpContextAccessor.HttpContext.GetRouteValue("action").ToString();
 
-        if (currentController != IsActiveController)
+        if (!string.Equals(currentController, IsActiveController, StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
@@ -41,7 +41,7 @@ public class ActiveMenuItemTagHelper : TagHelper
             return;
         }
 
-        if (currentAction != IsActiveAction)
+        if (!string.Equals(currentAction, IsActiveAction, StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
