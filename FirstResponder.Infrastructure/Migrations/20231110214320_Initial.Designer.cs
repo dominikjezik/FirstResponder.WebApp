@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FirstResponder.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231105141318_Initial")]
+    [Migration("20231110214320_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -31,7 +31,7 @@ namespace FirstResponder.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("BatteryExpiration")
+                    b.Property<DateTime?>("BatteryExpiration")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedAt")
@@ -40,13 +40,13 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Property<bool>("ElectrodesAdults")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("ElectrodesAdultsExpiration")
+                    b.Property<DateTime?>("ElectrodesAdultsExpiration")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("ElectrodesChildren")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("ElectrodesChildrenExpiration")
+                    b.Property<DateTime?>("ElectrodesChildrenExpiration")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("FullyAutomatic")
@@ -82,6 +82,8 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.HasIndex("ModelId");
 
                     b.ToTable("Aeds");
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Language", b =>
@@ -326,6 +328,28 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PersonalAed", b =>
+                {
+                    b.HasBaseType("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed");
+
+                    b.Property<Guid?>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.ToTable("PersonalAeds");
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>
+                {
+                    b.HasBaseType("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed");
+
+                    b.Property<string>("Holder")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("PublicAeds");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed", b =>
                 {
                     b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Language", "Language")
@@ -394,6 +418,24 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PersonalAed", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed", null)
+                        .WithOne()
+                        .HasForeignKey("FirstResponder.ApplicationCore.Entities.AedAggregate.PersonalAed", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed", null)
+                        .WithOne()
+                        .HasForeignKey("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

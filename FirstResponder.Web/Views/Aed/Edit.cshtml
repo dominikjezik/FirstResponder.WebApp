@@ -1,7 +1,7 @@
 @model AedFormDTO
 
 <header class="main-header">
-    <h1>Pridať nové AED</h1>
+    <h1>AED Adresa 123</h1>
     <div class="buttons">
         <a asp-controller="Aed" asp-action="Index" class="button button-with-icon">
             <span class="icon">
@@ -9,24 +9,31 @@
                     <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
                 </svg>
             </span>
-            <span>Späť na prehľad AED</span>
+            <span>Prehľad AED</span>
         </a>
     </div>
 </header>
 
-<div class="user-details-page" x-data="{ formType: '@AedGeneralType.Public' }">
-    <form asp-controller="Aed" asp-action="Create" class="user-details-form">
+<div class="user-details-page">
+    <form asp-controller="Aed" asp-action="Edit" asp-route-aedId="@Model.AedId" class="user-details-form">
         <div asp-validation-summary="All" class="text-red"></div>
         <section class="form-section">
+            <div class="field">
+                <label class="label">Registrácia</label>
+                <div class="control">
+                    <input class="input" type="text" value="@Model.CreatedAt" disabled>
+                </div>
+            </div>
+            
             <div class="field">
                 <label class="label">Typ</label>
                 <div class="control">
                     <label class="radio">
-                        <input type="radio" name="GeneralType" value="@AedGeneralType.Public" x-model="formType" checked>
+                        <input type="radio" disabled @(Model.GeneralType == AedGeneralType.Public ? "checked" : "")>
                         Verejný
                     </label>
                     <label class="radio">
-                        <input type="radio" name="GeneralType" value="@AedGeneralType.Personal" x-model="formType">
+                        <input type="radio" disabled @(Model.GeneralType == AedGeneralType.Personal ? "checked" : "")>
                         Osobný
                     </label>
                 </div>
@@ -43,13 +50,13 @@
             </div>
         </section>
         
-        <template x-if="formType == '@AedGeneralType.Public'">
+        @if (Model.GeneralType == AedGeneralType.Public) {
             <section class="form-section">
                 <h2>Umiestnenie</h2>
                 <div class="field">
                     <label asp-for="Holder" class="label">Držateľ *</label>
                     <div class="control">
-                        <input class="input" asp-for="Holder" required>
+                        <input class="input" type="text" asp-for="Holder" required>
                     </div>
                 </div>
 
@@ -70,7 +77,7 @@
                 <div class="field">
                     <label class="label">PSČ</label>
                     <div class="control">
-                        <input class="input" type="text" required>
+                        <input class="input" type="text">
                     </div>
                 </div>
 
@@ -98,7 +105,7 @@
                         <input class="input" type="text">
                     </div>
                 </div>
-                    
+                
                 <div class="field">
                     <label class="label">Popis</label>
                     <div class="control">
@@ -106,113 +113,112 @@
                     </div>
                 </div>
             </section>
-        </template> 
-        <template x-if="formType == '@AedGeneralType.Public'">
-            <section class="form-section">
-                    <h2>Dostupnosť</h2>
-                    <div class="field">
-                        <label class="label">Dostupnosť</label>
-                        <div class="control">
-                            <div class="select select-full-width">
-                                <select>
-                                    <option>Prevádzkové časy</option>
-                                    <option>???</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="field">
-                        <label class="label">Dostupnosť v termíne (od - do)</label>
-                        <div class="control control-multiple-inputs">
-                            <input class="input" type="date">
-                            <input class="input" type="date">
-                        </div>
-                    </div>
-                    
-                    <div class="field">
-                        <label class="label">Dostupnosť v čase (od - do)</label>
-                        <div class="control control-multiple-inputs">
-                            <input class="input" type="time">
-                            <input class="input" type="time">
-                        </div>
-                    </div>
-                    
-                    <div class="field">
-                        <label class="label">Dostupnosť v dňoch</label>
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Pondelok
-                            </label>
-                        </div>
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Utorok
-                            </label>
-                        </div>
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Streda
-                            </label>
-                        </div>
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Štvrtok
-                            </label>
-                        </div>
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Piatok
-                            </label>
-                        </div>
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Sobota
-                            </label>
-                        </div>
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Nedeľa
-                            </label>
-                        </div>
-                    </div>
-                </section>
-        </template> 
-        <template x-if="formType == '@AedGeneralType.Public'">
-            <section class="form-section">
-            <h2>Kontaktná osoba</h2>
-            <div class="field">
-                <label class="label">Meno</label>
-                <div class="control">
-                    <input class="input" type="text">
-                </div>
-            </div>
             
-            <div class="field">
-                <label class="label">Telefón</label>
-                <div class="control">
-                    <input class="input" type="text">
+            <section class="form-section">
+                <h2>Dostupnosť</h2>
+                <div class="field">
+                    <label class="label">Dostupnosť</label>
+                    <div class="control">
+                        <div class="select select-full-width">
+                            <select>
+                                <option>Prevádzkové časy</option>
+                                <option>???</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="field">
-                <label class="label">Email</label>
-                <div class="control">
-                    <input class="input" type="email">
+                
+                <div class="field">
+                    <label class="label">Dostupnosť v termíne (od - do)</label>
+                    <div class="control control-multiple-inputs">
+                        <input class="input" type="date">
+                        <input class="input" type="date">
+                    </div>
                 </div>
-            </div>
-        </section>
-        </template> 
+                
+                <div class="field">
+                    <label class="label">Dostupnosť v čase (od - do)</label>
+                    <div class="control control-multiple-inputs">
+                        <input class="input" type="time">
+                        <input class="input" type="time">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Dostupnosť v dňoch</label>
+                    <div class="control">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            Pondelok
+                        </label>
+                    </div>
+                    <div class="control">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            Utorok
+                        </label>
+                    </div>
+                    <div class="control">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            Streda
+                        </label>
+                    </div>
+                    <div class="control">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            Štvrtok
+                        </label>
+                    </div>
+                    <div class="control">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            Piatok
+                        </label>
+                    </div>
+                    <div class="control">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            Sobota
+                        </label>
+                    </div>
+                    <div class="control">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            Nedeľa
+                        </label>
+                    </div>
+                </div>
+            </section>
     
-        <template x-if="formType == '@AedGeneralType.Personal'">
-            <section class="form-section" >
+            <section class="form-section">
+                <h2>Kontaktná osoba</h2>
+                <div class="field">
+                    <label class="label">Meno</label>
+                    <div class="control">
+                        <input class="input" type="text">
+                    </div>
+                </div>
+            
+                <div class="field">
+                    <label class="label">Telefón</label>
+                    <div class="control">
+                        <input class="input" type="text">
+                    </div>
+                </div>
+            
+                <div class="field">
+                    <label class="label">Email</label>
+                    <div class="control">
+                        <input class="input" type="email">
+                    </div>
+                </div>
+            </section>
+        }
+    
+        @if (Model.GeneralType == AedGeneralType.Personal)
+        {
+            <section class="form-section">
                 <h2>Vlastník AED (First responder)</h2>
                 <div class="field">
                     <label class="label">Email First respondera</label>
@@ -221,12 +227,13 @@
                     </div>
                 </div>            
             </section>
-        </template>
-    
+        }
+        
+        
         <section class="form-section">
             <h2>Technické detaily</h2>
             <div class="field">
-                <label asp-for="ManufacturerId" class="label"></label>
+                <label class="label">Výrobca</label>
                 <div class="control">
                     <div class="select select-full-width">
                         <select asp-for="ManufacturerId" asp-items="@ViewBag.Manufacturers">
@@ -237,7 +244,7 @@
             </div>
 
             <div class="field">
-                <label asp-for="ModelId" class="label"></label>
+                <label class="label">Model</label>
                 <div class="control">
                     <div class="select select-full-width">
                         <select asp-for="ModelId" asp-items="@ViewBag.Models">
@@ -315,7 +322,7 @@
                 </div>
             </div>
         </section>
-        
+    
         <div class="field">
             <label asp-for="Notes" class="label"></label>
             <div class="control">
@@ -325,26 +332,27 @@
 
         <div class="field">
             <div class="control">
-                <button class="button is-link" type="submit">Uložiť</button>
+                <button class="button is-link">Uložiť</button>
             </div>
         </div>
     </form>
     
     <aside class="user-details-aside">
-        <section x-show="formType == '@AedGeneralType.Public'">
-            <h2 class="heading-with-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg>
-                Umiestnenie
-            </h2>
-            <div id="map" style="height: 300px; margin-bottom: 1rem;"></div>
-        </section>
-        
-        <template x-if="formType == '@AedGeneralType.Public'">
+        @if (Model.GeneralType == AedGeneralType.Public)
+        {
             <section>
-                <header class="section-header" x-if="formType == '@AedGeneralType.Public'">
+                <h2 class="heading-with-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    Umiestnenie
+                </h2>
+                <div id="map" style="height: 300px; margin-bottom: 1rem;"></div>
+            </section>
+        
+            <section>
+                <header class="section-header">
                     <h2 class="heading-with-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
                             <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
@@ -354,12 +362,13 @@
                     </h2>
                     <button class="button" disabled>Pridať fotografiu</button>
                 </header>
-                
+            
                 <div class="mb-5">
                     Neboli nahraté žiadne fotografie.
                 </div>
             </section>
-        </template>
+        }
+        
         
         <header class="section-header">
             <h2 class="heading-with-icon">
@@ -453,6 +462,3 @@
         //marker.bindPopup("Môj marker").openPopup();
     </script>
 }
-
-
-

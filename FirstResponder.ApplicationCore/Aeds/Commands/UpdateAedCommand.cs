@@ -4,11 +4,11 @@ using MediatR;
 
 namespace FirstResponder.ApplicationCore.Aeds.Commands;
 
-public class CreateAedCommand : IRequest<Aed>
+public class UpdateAedCommand : IRequest<Aed>
 {
     public AedFormDTO AedFormDto { get; private set; }
     
-    public CreateAedCommand(AedFormDTO aedFormDto)
+    public UpdateAedCommand(AedFormDTO aedFormDto)
     {
         AedFormDto = aedFormDto;
     }

@@ -99,9 +99,9 @@ namespace FirstResponder.Infrastructure.Migrations
                     FullyAutomatic = table.Column<bool>(type: "bit", nullable: false),
                     ElectrodesAdults = table.Column<bool>(type: "bit", nullable: false),
                     ElectrodesChildren = table.Column<bool>(type: "bit", nullable: false),
-                    ElectrodesAdultsExpiration = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ElectrodesChildrenExpiration = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BatteryExpiration = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ElectrodesAdultsExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ElectrodesChildrenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BatteryExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -232,6 +232,42 @@ namespace FirstResponder.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PersonalAeds",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonalAeds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PersonalAeds_Aeds_Id",
+                        column: x => x.Id,
+                        principalTable: "Aeds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PublicAeds",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Holder = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PublicAeds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PublicAeds_Aeds_Id",
+                        column: x => x.Id,
+                        principalTable: "Aeds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Aeds_LanguageId",
                 table: "Aeds",
@@ -291,9 +327,6 @@ namespace FirstResponder.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Aeds");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -309,6 +342,21 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "PersonalAeds");
+
+            migrationBuilder.DropTable(
+                name: "PublicAeds");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Aeds");
+
+            migrationBuilder.DropTable(
                 name: "AedLanguages");
 
             migrationBuilder.DropTable(
@@ -316,12 +364,6 @@ namespace FirstResponder.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AedModels");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
         }
     }
 }

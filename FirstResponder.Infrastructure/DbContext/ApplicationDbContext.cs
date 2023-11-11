@@ -15,9 +15,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     // Aed Aggregate
     public DbSet<Aed> Aeds { get; set; }
+    public DbSet<PublicAed> PublicAeds { get; set; }
+    public DbSet<PersonalAed> PersonalAeds { get; set; }
+    
     public DbSet<Manufacturer> AedManufacturers { get; set; }
     public DbSet<Language> AedLanguages { get; set; }
     public DbSet<Model> AedModels { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Aed>().UseTptMappingStrategy();
+    }
     
     public override int SaveChanges()
     {

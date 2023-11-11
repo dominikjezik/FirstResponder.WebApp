@@ -3,7 +3,7 @@ using FirstResponder.ApplicationCore.Enums;
 
 namespace FirstResponder.ApplicationCore.Entities.AedAggregate;
 
-public class Aed : AuditableEntity<Guid>
+public abstract class Aed : AuditableEntity<Guid>
 {
     public AedState State { get; set; }
 
@@ -24,13 +24,12 @@ public class Aed : AuditableEntity<Guid>
     
     public bool ElectrodesChildren { get; set; }
     
-    public DateTime ElectrodesAdultsExpiration { get; set; }
+    public DateTime? ElectrodesAdultsExpiration { get; set; }
 
-    public DateTime ElectrodesChildrenExpiration { get; set; }
+    public DateTime? ElectrodesChildrenExpiration { get; set; }
 
-    public DateTime BatteryExpiration { get; set; }
+    public DateTime? BatteryExpiration { get; set; }
     
     public string? Notes { get; set; }
     
-    // TODO: Namodelovať statický a externý
 }

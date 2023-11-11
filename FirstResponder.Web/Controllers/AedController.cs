@@ -1,6 +1,8 @@
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Aeds.Queries;
+using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.Web.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,11 +22,8 @@ public class AedController : Controller
     [Route("")]
     public async Task<IActionResult> Index()
     {
-        ViewBag.Manufacturers = (await _mediator.Send(new GetAllManufacturersQuery()))
-            .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
-        
-        ViewBag.Models = (await _mediator.Send(new GetAllModelsQuery()))
-            .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
+        await LoadManufacturersToViewBag();
+        await LoadModelsToViewBag();
         
         var aeds = await _mediator.Send(new GetAllAedsQuery());
         return View(aeds);
@@ -33,35 +32,111 @@ public class AedController : Controller
     [Route("[action]")]
     public async Task<IActionResult> Create()
     {
-        ViewBag.Manufacturers = (await _mediator.Send(new GetAllManufacturersQuery()))
-            .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
-        
-        ViewBag.Models = (await _mediator.Send(new GetAllModelsQuery()))
-            .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
-        
-        ViewBag.Languages = (await _mediator.Send(new GetAllLanguagesQuery()))
-            .Select(l => new SelectListItem { Text = l.Name, Value = l.Id.ToString() });
-        
+        await LoadOptionsForSelectionsToViewBag();
         return View();
     }
 
     [HttpPost]
     [Route("[action]")]
-    public async Task<IActionResult> Create(CreateAedDTO model)
+    public async Task<IActionResult> Create(AedFormDTO model)
     {
-        var result = await _mediator.Send(new CreateAedCommand(model));
-        return Ok(result);
+        if (!ModelState.IsValid)
+        {
+            await LoadOptionsForSelectionsToViewBag();
+            return View(model);
+        }
+        
+        try
+        {
+            var aed = await _mediator.Send(new CreateAedCommand(model));
+            return RedirectToAction(nameof(Edit), "Aed", new { aedId = aed.Id });
+        }
+        catch (EntityValidationException exception)
+        {
+            this.MapErrorsToModelState(exception);
+            await LoadOptionsForSelectionsToViewBag();
+            return View(model);
+        }
     }
 
     [Route("{aedId}")]
-    public IActionResult Details(string aedId)
+    public async Task<IActionResult> Edit(string aedId)
     {
-        return View();
+        var aed = await _mediator.Send(new GetAedByIdQuery(aedId));
+
+        if (aed == null)
+        {
+            return NotFound();
+        }
+
+        var model = aed.ToAedFormDTO();
+        
+        return View(model);
     }
+
+    [HttpPost]
+    [Route("{aedId}")]
+    public async Task<IActionResult> Edit(string aedId, AedFormDTO model)
+    {
+        if (!ModelState.IsValid)
+        {
+            await LoadOptionsForSelectionsToViewBag();
+            return View(model);
+        }
+
+        try
+        {
+            var aed = await _mediator.Send(new UpdateAedCommand(model));
+            return RedirectToAction(nameof(Edit), "Aed", new { aedId = aed.Id });
+        }
+        catch (EntityNotFoundException exception)
+        {
+            return NotFound();
+        }
+        catch (EntityValidationException exception)
+        {
+            this.MapErrorsToModelState(exception);
+            await LoadOptionsForSelectionsToViewBag();
+            return View(model);
+        }
+    }
+    
+    // TODO: Delete Aed action
     
     [Route("[action]")]
     public IActionResult Map()
     {
+        // TODO: Získanie a zobrazenie verejných AED na mape
         return View();
     }
+
+    #region Helpers
+
+    private async Task LoadOptionsForSelectionsToViewBag()
+    {
+        await LoadManufacturersToViewBag();
+        await LoadModelsToViewBag();
+        await LoadLanguagesToViewBag();
+    }
+
+    private async Task LoadManufacturersToViewBag()
+    {
+        ViewBag.Manufacturers = (await _mediator.Send(new GetAllManufacturersQuery()))
+            .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
+    }
+    
+    private async Task LoadModelsToViewBag()
+    {
+        ViewBag.Models = (await _mediator.Send(new GetAllModelsQuery()))
+            .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
+    }
+
+    private async Task LoadLanguagesToViewBag()
+    {
+        ViewBag.Languages = (await _mediator.Send(new GetAllLanguagesQuery()))
+            .Select(l => new SelectListItem { Text = l.Name, Value = l.Id.ToString() });
+    }
+
+    #endregion
+    
 }

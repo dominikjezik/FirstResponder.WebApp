@@ -6,12 +6,15 @@ public interface IAedRepository
 {
     Task<IEnumerable<Aed>> GetAllAeds();
 
-    Task<Aed> AddAed(Aed aed);
+    Task AddAed(Aed aed);
 
     Task<IEnumerable<Manufacturer>> GetAllManufacturers();
     
     Task<IEnumerable<Model>> GetAllModels();
     
     Task<IEnumerable<Language>> GetAllLanguages();
+
+    Task<Aed?> GetAedById(Guid id);
     
+    Task UpdateAed(Aed aed);
 }

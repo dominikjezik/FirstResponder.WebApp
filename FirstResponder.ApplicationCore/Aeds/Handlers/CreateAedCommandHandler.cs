@@ -1,6 +1,7 @@
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.ApplicationCore.Helpers;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Aeds.Handlers;
@@ -16,10 +17,12 @@ public class CreateAedCommandHandler : IRequestHandler<CreateAedCommand, Aed>
     
     public async Task<Aed> Handle(CreateAedCommand request, CancellationToken cancellationToken)
     {
-        // TODO: biznis validácia
-        // ak ide o stacionárny potom vytvoriť pod-entitu
+        var aed = request.AedFormDto.ToAed();
         
-        var aed = request.CreateAedDto.ToAed();
+        EntityValidator.Validate(aed);
+        
+        // TODO: prípadná biznis validácia
+        
         await _aedRepository.AddAed(aed);
 
         return aed;

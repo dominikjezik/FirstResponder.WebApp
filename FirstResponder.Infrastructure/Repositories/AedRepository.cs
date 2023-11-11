@@ -21,12 +21,10 @@ public class AedRepository : IAedRepository
             .ToListAsync();
     }
 
-    public async Task<Aed> AddAed(Aed aed)
+    public async Task AddAed(Aed aed)
     {
         _dbContext.Aeds.Add(aed);
         await _dbContext.SaveChangesAsync();
-
-        return aed;
     }
 
     public async Task<IEnumerable<Manufacturer>> GetAllManufacturers()
@@ -42,5 +40,16 @@ public class AedRepository : IAedRepository
     public async Task<IEnumerable<Language>> GetAllLanguages()
     {
         return await _dbContext.AedLanguages.ToListAsync();
+    }
+
+    public async Task<Aed?> GetAedById(Guid id)
+    {
+        return await _dbContext.Aeds.Where(a => a.Id == id).FirstOrDefaultAsync();
+    }
+
+    public async Task UpdateAed(Aed aed)
+    {
+        _dbContext.Update(aed);
+        await _dbContext.SaveChangesAsync();
     }
 }
