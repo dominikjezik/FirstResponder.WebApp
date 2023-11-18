@@ -89,7 +89,7 @@ public class AedController : Controller
             var aed = await _mediator.Send(new UpdateAedCommand(model));
             return RedirectToAction(nameof(Edit), "Aed", new { aedId = aed.Id });
         }
-        catch (EntityNotFoundException exception)
+        catch (EntityNotFoundException)
         {
             return NotFound();
         }
@@ -100,9 +100,26 @@ public class AedController : Controller
             return View(model);
         }
     }
-    
-    // TODO: Delete Aed action
-    
+
+    [HttpPost]
+    [Route("{aedId}/[action]")]
+    public async Task<IActionResult> Delete(string aedId)
+    {
+        try
+        {
+            await _mediator.Send(new DeleteAedCommand(aedId));
+            return RedirectToAction(nameof(Index), "Aed");
+        }
+        catch (ArgumentException)
+        {
+            return NotFound();
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
     [Route("[action]")]
     public IActionResult Map()
     {

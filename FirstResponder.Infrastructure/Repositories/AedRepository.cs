@@ -52,4 +52,10 @@ public class AedRepository : IAedRepository
         _dbContext.Update(aed);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task DeleteAed(Aed aed)
+    {
+        _dbContext.Aeds.Remove(aed);
+        await _dbContext.SaveChangesAsync();
+    }
 }

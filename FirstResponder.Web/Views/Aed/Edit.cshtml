@@ -15,328 +15,333 @@
 </header>
 
 <div class="user-details-page">
-    <form asp-controller="Aed" asp-action="Edit" asp-route-aedId="@Model.AedId" class="user-details-form">
-        <div asp-validation-summary="All" class="text-red"></div>
-        <section class="form-section">
-            <div class="field">
-                <label class="label">Registrácia</label>
-                <div class="control">
-                    <input class="input" type="text" value="@Model.CreatedAt" disabled>
-                </div>
-            </div>
-            
-            <div class="field">
-                <label class="label">Typ</label>
-                <div class="control">
-                    <label class="radio">
-                        <input type="radio" disabled @(Model.GeneralType == AedGeneralType.Public ? "checked" : "")>
-                        Verejný
-                    </label>
-                    <label class="radio">
-                        <input type="radio" disabled @(Model.GeneralType == AedGeneralType.Personal ? "checked" : "")>
-                        Osobný
-                    </label>
-                </div>
-            </div>
-            
-            <div class="field">
-                <label class="label">Stav *</label>
-                <div class="control">
-                    <div class="select select-full-width">
-                        <select asp-for="State" asp-items="Html.GetEnumSelectList<AedState>()">
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        @if (Model.GeneralType == AedGeneralType.Public) {
+    <div class="user-details-form">
+        <form asp-controller="Aed" asp-action="Edit" asp-route-aedId="@Model.AedId">
+            <div asp-validation-summary="All" class="text-red"></div>
             <section class="form-section">
-                <h2>Umiestnenie</h2>
                 <div class="field">
-                    <label asp-for="Holder" class="label">Držateľ *</label>
+                    <label class="label">Registrácia</label>
                     <div class="control">
-                        <input class="input" type="text" asp-for="Holder" required>
+                        <input class="input" type="text" value="@Model.CreatedAt" disabled>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">Ulica, číslo *</label>
+                    <label class="label">Typ</label>
                     <div class="control">
-                        <input class="input" type="text">
+                        <label class="radio">
+                            <input type="radio" disabled @(Model.GeneralType == AedGeneralType.Public ? "checked" : "")>
+                            Verejný
+                        </label>
+                        <label class="radio">
+                            <input type="radio" disabled @(Model.GeneralType == AedGeneralType.Personal ? "checked" : "")>
+                            Osobný
+                        </label>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">Mesto *</label>
-                    <div class="control">
-                        <input class="input" type="text">
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">PSČ</label>
-                    <div class="control">
-                        <input class="input" type="text">
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Kraj</label>
+                    <label class="label">Stav *</label>
                     <div class="control">
                         <div class="select select-full-width">
-                            <select>
-                                <option>Trenčiansky kraj</option>
+                            <select asp-for="State" asp-items="Html.GetEnumSelectList<AedState>()">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            @if (Model.GeneralType == AedGeneralType.Public)
+            {
+                <section class="form-section">
+                    <h2>Umiestnenie</h2>
+                    <div class="field">
+                        <label asp-for="Holder" class="label">Držateľ *</label>
+                        <div class="control">
+                            <input class="input" type="text" asp-for="Holder" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Ulica, číslo *</label>
+                        <div class="control">
+                            <input class="input" type="text">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Mesto *</label>
+                        <div class="control">
+                            <input class="input" type="text">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">PSČ</label>
+                        <div class="control">
+                            <input class="input" type="text">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Kraj</label>
+                        <div class="control">
+                            <div class="select select-full-width">
+                                <select>
+                                    <option>Trenčiansky kraj</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Zemepisná šírka</label>
+                        <div class="control">
+                            <input class="input" type="text">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Zemepisná dĺžka</label>
+                        <div class="control">
+                            <input class="input" type="text">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Popis</label>
+                        <div class="control">
+                            <textarea class="textarea"></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2>Dostupnosť</h2>
+                    <div class="field">
+                        <label class="label">Dostupnosť</label>
+                        <div class="control">
+                            <div class="select select-full-width">
+                                <select>
+                                    <option>Prevádzkové časy</option>
+                                    <option>???</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Dostupnosť v termíne (od - do)</label>
+                        <div class="control control-multiple-inputs">
+                            <input class="input" type="date">
+                            <input class="input" type="date">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Dostupnosť v čase (od - do)</label>
+                        <div class="control control-multiple-inputs">
+                            <input class="input" type="time">
+                            <input class="input" type="time">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Dostupnosť v dňoch</label>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Pondelok
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Utorok
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Streda
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Štvrtok
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Piatok
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Sobota
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Nedeľa
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2>Kontaktná osoba</h2>
+                    <div class="field">
+                        <label class="label">Meno</label>
+                        <div class="control">
+                            <input class="input" type="text">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Telefón</label>
+                        <div class="control">
+                            <input class="input" type="text">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                            <input class="input" type="email">
+                        </div>
+                    </div>
+                </section>
+            }
+
+            @if (Model.GeneralType == AedGeneralType.Personal)
+            {
+                <section class="form-section">
+                    <h2>Vlastník AED (First responder)</h2>
+                    <div class="field">
+                        <label class="label">Email First respondera</label>
+                        <div class="control">
+                            <input class="input" type="email">
+                        </div>
+                    </div>
+                </section>
+            }
+
+
+            <section class="form-section">
+                <h2>Technické detaily</h2>
+                <div class="field">
+                    <label class="label">Výrobca</label>
+                    <div class="control">
+                        <div class="select select-full-width">
+                            <select asp-for="ManufacturerId" asp-items="@ViewBag.Manufacturers">
+                                <option value="">-</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">Zemepisná šírka</label>
-                    <div class="control">
-                        <input class="input" type="text">
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Zemepisná dĺžka</label>
-                    <div class="control">
-                        <input class="input" type="text">
-                    </div>
-                </div>
-                
-                <div class="field">
-                    <label class="label">Popis</label>
-                    <div class="control">
-                        <textarea class="textarea"></textarea>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="form-section">
-                <h2>Dostupnosť</h2>
-                <div class="field">
-                    <label class="label">Dostupnosť</label>
+                    <label class="label">Model</label>
                     <div class="control">
                         <div class="select select-full-width">
-                            <select>
-                                <option>Prevádzkové časy</option>
-                                <option>???</option>
+                            <select asp-for="ModelId" asp-items="@ViewBag.Models">
+                                <option value="">-</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="field">
-                    <label class="label">Dostupnosť v termíne (od - do)</label>
-                    <div class="control control-multiple-inputs">
-                        <input class="input" type="date">
-                        <input class="input" type="date">
+                    <label asp-for="FullyAutomatic" class="label"></label>
+                    <div class="control">
+                        <label class="radio">
+                            <input type="radio" asp-for="FullyAutomatic" value="true" checked>
+                            Plne automatický
+                        </label>
+                        <label class="radio">
+                            <input type="radio" asp-for="FullyAutomatic" value="false">
+                            Poloautomatický
+                        </label>
                     </div>
                 </div>
-                
+
                 <div class="field">
-                    <label class="label">Dostupnosť v čase (od - do)</label>
-                    <div class="control control-multiple-inputs">
-                        <input class="input" type="time">
-                        <input class="input" type="time">
+                    <label asp-for="SerialNumber" class="label"></label>
+                    <div class="control">
+                        <input class="input" asp-for="SerialNumber">
                     </div>
                 </div>
-                
+
                 <div class="field">
-                    <label class="label">Dostupnosť v dňoch</label>
+                    <label asp-for="LanguageId" class="label"></label>
                     <div class="control">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            Pondelok
+                        <div class="select select-full-width">
+                            <select asp-for="LanguageId" asp-items="@ViewBag.Languages">
+                                <option value="">-</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <label asp-for="ElectrodesAdults" class="checkbox">
+                            <input asp-for="ElectrodesAdults">
+                            Elektródy pre dospelých
                         </label>
                     </div>
                     <div class="control">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            Utorok
+                        <label asp-for="ElectrodesChildren" class="checkbox">
+                            <input asp-for="ElectrodesChildren">
+                            Elektródy pre deti
                         </label>
                     </div>
+                </div>
+
+                <div class="field">
+                    <label asp-for="ElectrodesAdultsExpiration" class="label"></label>
                     <div class="control">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            Streda
-                        </label>
+                        <input class="input" asp-for="ElectrodesAdultsExpiration">
                     </div>
+                </div>
+
+                <div class="field">
+                    <label asp-for="ElectrodesChildrenExpiration" class="label"></label>
                     <div class="control">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            Štvrtok
-                        </label>
+                        <input class="input" asp-for="ElectrodesChildrenExpiration">
                     </div>
+                </div>
+
+                <div class="field">
+                    <label asp-for="BatteryExpiration" class="label"></label>
                     <div class="control">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            Piatok
-                        </label>
-                    </div>
-                    <div class="control">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            Sobota
-                        </label>
-                    </div>
-                    <div class="control">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            Nedeľa
-                        </label>
+                        <input class="input" asp-for="BatteryExpiration">
                     </div>
                 </div>
             </section>
-    
-            <section class="form-section">
-                <h2>Kontaktná osoba</h2>
-                <div class="field">
-                    <label class="label">Meno</label>
-                    <div class="control">
-                        <input class="input" type="text">
-                    </div>
-                </div>
-            
-                <div class="field">
-                    <label class="label">Telefón</label>
-                    <div class="control">
-                        <input class="input" type="text">
-                    </div>
-                </div>
-            
-                <div class="field">
-                    <label class="label">Email</label>
-                    <div class="control">
-                        <input class="input" type="email">
-                    </div>
-                </div>
-            </section>
-        }
-    
-        @if (Model.GeneralType == AedGeneralType.Personal)
-        {
-            <section class="form-section">
-                <h2>Vlastník AED (First responder)</h2>
-                <div class="field">
-                    <label class="label">Email First respondera</label>
-                    <div class="control">
-                        <input class="input" type="email">
-                    </div>
-                </div>            
-            </section>
-        }
-        
-        
-        <section class="form-section">
-            <h2>Technické detaily</h2>
-            <div class="field">
-                <label class="label">Výrobca</label>
-                <div class="control">
-                    <div class="select select-full-width">
-                        <select asp-for="ManufacturerId" asp-items="@ViewBag.Manufacturers">
-                            <option value="">-</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
 
             <div class="field">
-                <label class="label">Model</label>
+                <label asp-for="Notes" class="label"></label>
                 <div class="control">
-                    <div class="select select-full-width">
-                        <select asp-for="ModelId" asp-items="@ViewBag.Models">
-                            <option value="">-</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="field">
-                <label asp-for="FullyAutomatic" class="label"></label>
-                <div class="control">
-                    <label class="radio">
-                        <input type="radio" asp-for="FullyAutomatic" value="true" checked>
-                        Plne automatický
-                    </label>
-                    <label class="radio">
-                        <input type="radio" asp-for="FullyAutomatic" value="false">
-                        Poloautomatický
-                    </label>
-                </div>
-            </div>
-
-            <div class="field">
-                <label asp-for="SerialNumber" class="label"></label>
-                <div class="control">
-                    <input class="input" asp-for="SerialNumber">
-                </div>
-            </div>
-            
-            <div class="field">
-                <label asp-for="LanguageId" class="label"></label>
-                <div class="control">
-                    <div class="select select-full-width">
-                        <select asp-for="LanguageId" asp-items="@ViewBag.Languages">
-                            <option value="">-</option>
-                        </select>
-                    </div>
+                    <textarea class="textarea" asp-for="Notes"></textarea>
                 </div>
             </div>
 
             <div class="field">
                 <div class="control">
-                    <label asp-for="ElectrodesAdults" class="checkbox">
-                        <input asp-for="ElectrodesAdults">
-                        Elektródy pre dospelých
-                    </label>
-                </div>
-                <div class="control">
-                    <label asp-for="ElectrodesChildren" class="checkbox">
-                        <input asp-for="ElectrodesChildren">
-                        Elektródy pre deti
-                    </label>
+                    <button type="submit" class="button is-link">Uložiť</button>
+                    <button type="submit" class="button is-danger is-light" form="formDelete">Odstrániť AED</button>
                 </div>
             </div>
+        </form>
+        <form asp-controller="Aed" asp-action="Delete" asp-route-aedId="@Model.AedId" id="formDelete" onSubmit="return confirm('Naozaj chcete odstrániť toto AED?') "></form>
+    </div>
 
-            <div class="field">
-                <label asp-for="ElectrodesAdultsExpiration" class="label"></label>
-                <div class="control">
-                    <input class="input" asp-for="ElectrodesAdultsExpiration">
-                </div>
-            </div>
-
-            <div class="field">
-                <label asp-for="ElectrodesChildrenExpiration" class="label"></label>
-                <div class="control">
-                    <input class="input" asp-for="ElectrodesChildrenExpiration">
-                </div>
-            </div>
-
-            <div class="field">
-                <label asp-for="BatteryExpiration" class="label"></label>
-                <div class="control">
-                    <input class="input" asp-for="BatteryExpiration">
-                </div>
-            </div>
-        </section>
-    
-        <div class="field">
-            <label asp-for="Notes" class="label"></label>
-            <div class="control">
-                <textarea class="textarea" asp-for="Notes"></textarea>
-            </div>
-        </div>
-
-        <div class="field">
-            <div class="control">
-                <button class="button is-link">Uložiť</button>
-            </div>
-        </div>
-    </form>
-    
     <aside class="user-details-aside">
         @if (Model.GeneralType == AedGeneralType.Public)
         {

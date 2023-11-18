@@ -17,4 +17,6 @@ public interface IAedRepository
     Task<Aed?> GetAedById(Guid id);
     
     Task UpdateAed(Aed aed);
+
+    Task DeleteAed(Aed aed);
 }
