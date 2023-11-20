@@ -1,3 +1,5 @@
+@model UserFormDTO
+
 <header class="main-header">
     <h1>Pridať nového respondera</h1>
     <div class="buttons">
@@ -13,74 +15,74 @@
 </header>
 
 <div class="user-details-page">
-    <form class="user-details-form">
+    <form asp-controller="Users" asp-action="Create" class="user-details-form">
+        <div asp-validation-summary="All" class="text-red"></div>
         <div class="field">
-            <label class="label">Email *</label>
+            <label asp-for="Email" class="label">Email *</label>
             <div class="control">
-                <input class="input" type="email" placeholder="john@example.com" required>
+                <input asp-for="Email" class="input" placeholder="john@example.com">
             </div>
         </div>
-        
+
         <div class="field">
-            <label class="label">Meno *</label>
+            <label asp-for="FullName" class="label">Meno *</label>
             <div class="control">
-                <input class="input" type="text" placeholder="John Doe" required>
+                <input asp-for="FullName" class="input" placeholder="John Doe">
             </div>
         </div>
-        
+
         <div class="field">
-            <label class="label">Mobil *</label>
+            <label asp-for="PhoneNumber" class="label">Mobil *</label>
             <div class="control">
-                <input class="input" type="text" placeholder="0901234567" required>
+                <input asp-for="PhoneNumber" class="input" placeholder="0901234567">
             </div>
         </div>
-        
+
         <div class="field">
-            <label class="label">Dátum narodenia</label>
+            <label asp-for="DateOfBirth" class="label">Dátum narodenia *</label>
             <div class="control">
-                <input class="input" type="date">
+                <input asp-for="DateOfBirth" class="input">
             </div>
         </div>
-        
+
         <div class="field">
-            <label class="label">Adresa</label>
+            <label asp-for="Address" class="label">Adresa</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Adresa 123">
+                <input asp-for="Address" class="input" placeholder="Adresa 123">
             </div>
         </div>
-        
+
         <div class="field">
-            <label class="label">PSČ</label>
+            <label asp-for="PostalCode" class="label">PSČ</label>
             <div class="control">
-                <input class="input" type="text" placeholder="123 45">
+                <input asp-for="PostalCode" class="input" placeholder="123 45">
             </div>
         </div>
-        
+
         <div class="field">
-            <label class="label">Mesto</label>
+            <label asp-for="City" class="label">Mesto</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Mesto">
+                <input asp-for="City" class="input" placeholder="Mesto">
             </div>
         </div>
-        
+
         <div class="field">
-            <label class="label">Kraj</label>
+            <label asp-for="Region" class="label">Kraj *</label>
             <div class="control">
                 <div class="select select-full-width">
-                    <select>
-                        <option>Trenčiansky kraj</option>
+                    <select asp-for="Region" asp-items="Html.GetEnumSelectList<RegionOfState>()">
                     </select>
                 </div>
             </div>
         </div>
-        
+
         <div class="field">
-            <label class="label">Poznámka</label>
+            <label asp-for="Notes" class="label">Poznámka</label>
             <div class="control">
-                <textarea class="textarea"></textarea>
+                <textarea asp-for="Notes" class="textarea"></textarea>
             </div>
         </div>
-        
+
         <div class="field">
             <label class="label">Stav</label>
             <div class="control">
@@ -93,16 +95,13 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="field">
             <div class="control">
-                <button class="button is-link">Uložiť</button>
+                <button type="submit" class="button is-link">Uložiť</button>
             </div>
         </div>
     </form>
     
     <aside class="user-details-aside"></aside>
 </div>
-
-
-

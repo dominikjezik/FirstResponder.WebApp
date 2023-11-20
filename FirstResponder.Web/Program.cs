@@ -37,6 +37,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Ge
 
 // Custom repositories and services
 builder.Services.AddScoped<IAedRepository, AedRepository>();
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 

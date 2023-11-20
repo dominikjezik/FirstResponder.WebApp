@@ -6,7 +6,5 @@ public class PersonalAed : Aed
 {
     [Required]
     public Guid? OwnerId { get; set; }
-
-    // TODO
-    //public User Owner { get; set; }
+    public User? Owner { get; set; }
 }

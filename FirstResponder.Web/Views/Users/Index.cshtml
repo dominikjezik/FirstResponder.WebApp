@@ -1,9 +1,10 @@
+@model IEnumerable<FirstResponder.ApplicationCore.Entities.User>
 @{
-    ViewBag.Title = "Prehľad responderov";
+    ViewBag.Title = "Prehľad responderov / zamestnancov";
 }
 
 <header class="main-header">
-    <h1>Prehľad responderov</h1>
+    <h1>Prehľad responderov / zamestnancov</h1>
     <div class="buttons">
         <a asp-controller="Users" asp-action="Create" class="button button-with-icon">
             <span class="icon">
@@ -16,7 +17,7 @@
     </div>
 </header>
 
-<div class="filter-table-form">
+<div class="filter-table-form" style="opacity: 0.2">
     <div class="field">
         <label class="label">Podľa&nbsp;mena</label>
         <div class="control">
@@ -71,16 +72,16 @@
     </tr>
     </thead>
     <tbody>
-    @for (int i = 0; i < 20; i++)
+    @foreach (var user in Model)
     {
         <tr>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">John Doe</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">john@example.com</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">0905123456</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">03.10.2023</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">Responder</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">Trenčiansky kraj</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">Vysokoškolákov 1, 123 456 Trenčín</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.FullName</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.Email</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.PhoneNumber</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.CreatedAt</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">R / Z</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.Region</a></td>
+            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.Address</a></td>
         </tr>
     }
     </tbody>
