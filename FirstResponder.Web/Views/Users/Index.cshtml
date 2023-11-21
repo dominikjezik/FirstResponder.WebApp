@@ -75,13 +75,13 @@
     @foreach (var user in Model)
     {
         <tr>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.FullName</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.Email</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.PhoneNumber</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.CreatedAt</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">R / Z</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.Region</a></td>
-            <td><a asp-controller="Users" asp-action="Details" asp-route-userId="@user.Id">@user.Address</a></td>
+            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.FullName</a></td>
+            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Email</a></td>
+            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.PhoneNumber</a></td>
+            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.CreatedAt</a></td>
+            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">R / Z</a></td>
+            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Region</a></td>
+            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Address</a></td>
         </tr>
     }
     </tbody>

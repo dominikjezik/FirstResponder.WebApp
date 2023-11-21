@@ -2,7 +2,6 @@ using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Users.Commands;
 using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.ApplicationCore.Users.Queries;
-using FirstResponder.Infrastructure.Identity;
 using FirstResponder.Web.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +43,7 @@ public class UsersController : Controller
         try
         {
             var user = await _mediator.Send(new CreateUserCommand(model));
-            return RedirectToAction(nameof(Details), "Users", new { userId = user.Id });
+            return RedirectToAction(nameof(Edit), "Users", new { userId = user.Id });
         }
         catch (EntityValidationException exception)
         {
@@ -54,7 +53,7 @@ public class UsersController : Controller
     }
     
     [Route("{userId}")]
-    public async Task<IActionResult> Details(string userId)
+    public async Task<IActionResult> Edit(string userId)
     {
         var user = await _mediator.Send(new GetUserByIdQuery(userId));
 
@@ -66,6 +65,27 @@ public class UsersController : Controller
         var model = user.ToUserFormDTO();
 
         return View(model);
+    }
+    
+    [HttpPost]
+    [Route("{userId}")]
+    public async Task<IActionResult> Edit(string userId, UserFormDTO model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        
+        try
+        {
+            var user = await _mediator.Send(new UpdateUserCommand(model));
+            return RedirectToAction(nameof(Edit), "Users", new { userId = user.Id });
+        }
+        catch (EntityValidationException exception)
+        {
+            this.MapErrorsToModelState(exception);
+            return View(model);
+        }
     }
 
     [Route("[action]")]

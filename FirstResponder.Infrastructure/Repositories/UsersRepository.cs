@@ -1,5 +1,6 @@
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities;
+using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,9 +37,27 @@ public class UsersRepository : IUsersRepository
         return applicationUser.ToDomainUser();
     }
 
-    public Task UpdateUser(User user)
+    public async Task UpdateUser(User user)
     {
-        throw new NotImplementedException();
+        var applicationUser = await _dbContext.Users.Where(a => a.Id == user.Id).FirstOrDefaultAsync();
+
+        if (applicationUser == null)
+        {
+            throw new EntityNotFoundException();
+        }
+        
+        applicationUser.FullName = user.FullName;
+        applicationUser.Email = user.Email;
+        applicationUser.PhoneNumber = user.PhoneNumber;
+        applicationUser.DateOfBirth = user.DateOfBirth;
+        applicationUser.Address = user.Address;
+        applicationUser.PostalCode = user.PostalCode;
+        applicationUser.City = user.City;
+        applicationUser.Region = user.Region;
+        applicationUser.Notes = user.Notes;
+        
+        _dbContext.Update(applicationUser);
+        await _dbContext.SaveChangesAsync();
     }
 
     public Task DeleteUser(User user)

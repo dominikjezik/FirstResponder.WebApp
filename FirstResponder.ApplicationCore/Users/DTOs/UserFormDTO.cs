@@ -23,20 +23,45 @@ public class UserFormDTO
 
     public string? Notes { get; set; }
     
-    public User ToUser()
+    #region Edit form properties
+
+    public Guid UserId { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+    #endregion
+    
+    public User ToUser(User? targetUser = null)
     {
-        return new User
+        if (targetUser == null)
         {
-            Email = Email,
-            FullName = FullName,
-            PhoneNumber = PhoneNumber,
-            DateOfBirth = DateOfBirth,
-            Address = Address,
-            PostalCode = PostalCode,
-            City = City,
-            Region = Region,
-            Notes = Notes
-        };
+            return new User
+            {
+                Id = UserId,
+                Email = Email,
+                FullName = FullName,
+                PhoneNumber = PhoneNumber,
+                DateOfBirth = DateOfBirth,
+                Address = Address,
+                PostalCode = PostalCode,
+                City = City,
+                Region = Region,
+                Notes = Notes
+            };
+        }
+
+        targetUser.Id = UserId;
+        targetUser.Email = Email;
+        targetUser.FullName = FullName;
+        targetUser.PhoneNumber = PhoneNumber;
+        targetUser.DateOfBirth = DateOfBirth;
+        targetUser.Address = Address;
+        targetUser.PostalCode = PostalCode;
+        targetUser.City = City;
+        targetUser.Region = Region;
+        targetUser.Notes = Notes;
+
+        return targetUser;
     }
 }
 
