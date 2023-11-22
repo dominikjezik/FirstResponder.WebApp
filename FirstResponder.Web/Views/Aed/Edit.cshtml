@@ -22,7 +22,7 @@
                 <div class="field">
                     <label class="label">Registrácia</label>
                     <div class="control">
-                        <input class="input" type="text" value="@Model.CreatedAt" disabled>
+                        <input class="input" asp-for="CreatedAt" disabled>
                     </div>
                 </div>
 
@@ -34,7 +34,7 @@
                             Verejný
                         </label>
                         <label class="radio">
-                            <input type="radio" disabled @(Model.GeneralType == AedGeneralType.Personal ? "checked" : "")>
+                            <input type="radio" id="radio-personal-aed" disabled @(Model.GeneralType == AedGeneralType.Personal ? "checked" : "")>
                             Osobný
                         </label>
                     </div>
@@ -222,15 +222,23 @@
             {
                 <section class="form-section">
                     <h2>Vlastník AED (First responder)</h2>
-                    <div class="field">
-                        <label class="label">Email First respondera</label>
+                    <div id="search-field" class="field aed-responder-search-field" style="display: none">
+                        <label class="label">Používateľ</label>
                         <div class="control">
-                            <input class="input" type="email">
+                            <input id="search-box" class="input" placeholder="Vyhľadávanie podľa mena alebo emailu" autocomplete="off">
                         </div>
+                        <ul id="search-results" class="results panel"></ul>
                     </div>
+                    
+                    <div class="card" id="selected-owner">
+                        <footer class="card-content aed-responder-selected-owner">
+                            <p id="owner-name"><b>@Model.Owner.FullName</b> (@Model.Owner.Email)</p>
+                            <button id="remove-selected-owner" class="delete" aria-label="delete"></button>
+                        </footer>
+                    </div>
+                    <input type="hidden" asp-for="OwnerId" id="owner-id">
                 </section>
             }
-
 
             <section class="form-section">
                 <h2>Technické detaily</h2>
@@ -466,4 +474,6 @@
         let marker = L.marker([48.684, 19.677]).addTo(map);
         //marker.bindPopup("Môj marker").openPopup();
     </script>
+    
+    <script src="~/js/find-users-aed.js"></script>
 }

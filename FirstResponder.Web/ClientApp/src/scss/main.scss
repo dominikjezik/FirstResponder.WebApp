@@ -345,3 +345,35 @@ $mobile-top-menu-bar-height: 60px;
         transform: translate(0, .2rem);
     }
 }
+
+// AED Create/Edit
+.aed-responder-search-field {
+    position: relative;
+    
+    ul.results {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        background: #fff;
+        margin: 0;
+        width: 100%;
+        transform: translate(0, 100%);
+        
+        li {
+            list-style: none;
+        }
+    }
+    
+}
+
+.aed-responder-selected-owner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    #owner-name {
+        margin-bottom: 0;
+    }
+}
+

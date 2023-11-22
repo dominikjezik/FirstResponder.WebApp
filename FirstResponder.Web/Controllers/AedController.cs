@@ -1,6 +1,7 @@
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Aeds.Queries;
+using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.Web.Extensions;
 using MediatR;
@@ -78,16 +79,30 @@ public class AedController : Controller
     [Route("{aedId}")]
     public async Task<IActionResult> Edit(string aedId, AedFormDTO model)
     {
+        var aed = await _mediator.Send(new GetAedByIdQuery(aedId));
+
+        if (aed == null)
+        {
+            return NotFound();
+        }
+        
         if (!ModelState.IsValid)
         {
+            model.CreatedAt = aed.CreatedAt;
+            
+            if (aed is PersonalAed personalAed)
+            {
+                model.Owner = personalAed.Owner;
+            }
+            
             await LoadOptionsForSelectionsToViewBag();
             return View(model);
         }
 
         try
         {
-            var aed = await _mediator.Send(new UpdateAedCommand(model));
-            return RedirectToAction(nameof(Edit), "Aed", new { aedId = aed.Id });
+            var updatedAed = await _mediator.Send(new UpdateAedCommand(model));
+            return RedirectToAction(nameof(Edit), "Aed", new { aedId = updatedAed.Id });
         }
         catch (EntityNotFoundException)
         {
@@ -96,6 +111,13 @@ public class AedController : Controller
         catch (EntityValidationException exception)
         {
             this.MapErrorsToModelState(exception);
+            
+            model.CreatedAt = aed.CreatedAt;
+            if (aed is PersonalAed personalAed)
+            {
+                model.Owner = personalAed.Owner;
+            }
+
             await LoadOptionsForSelectionsToViewBag();
             return View(model);
         }

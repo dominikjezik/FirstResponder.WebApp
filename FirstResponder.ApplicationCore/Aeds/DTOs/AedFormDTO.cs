@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Enums;
 
@@ -62,6 +63,8 @@ public class AedFormDTO
 
     public Guid AedId { get; set; }
 
+    public User? Owner { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     #endregion
@@ -84,6 +87,14 @@ public class AedFormDTO
         else
         {
             aed = targetAed;
+            if (aed is PublicAed)
+            {
+                GeneralType = AedGeneralType.Public;
+            }
+            else
+            {
+                GeneralType = AedGeneralType.Personal;
+            }
         }
         
         if (GeneralType == AedGeneralType.Public)
@@ -140,6 +151,7 @@ public static class AedExtensions
         {
             dto.GeneralType = AedGeneralType.Personal;
             dto.OwnerId = personalAed.OwnerId;
+            dto.Owner = personalAed?.Owner;
         }
         else
         {

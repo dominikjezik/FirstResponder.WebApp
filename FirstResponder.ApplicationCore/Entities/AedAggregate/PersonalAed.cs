@@ -4,7 +4,7 @@ namespace FirstResponder.ApplicationCore.Entities.AedAggregate;
 
 public class PersonalAed : Aed
 {
-    [Required]
+    [Required(ErrorMessage = "Vlastník je povinný údaj.")]
     public Guid? OwnerId { get; set; }
     public User? Owner { get; set; }
 }

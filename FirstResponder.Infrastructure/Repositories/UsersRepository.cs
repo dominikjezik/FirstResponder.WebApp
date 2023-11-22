@@ -1,6 +1,7 @@
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ public class UsersRepository : IUsersRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<User?> GetUserById(Guid id)
+    public async Task<User?> GetUserById(Guid? id)
     {
         var applicationUser = await _dbContext.Users.Where(a => a.Id == id).FirstOrDefaultAsync();
         return applicationUser.ToDomainUser();
@@ -63,5 +64,29 @@ public class UsersRepository : IUsersRepository
     public Task DeleteUser(User user)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<UserSearchResultDTO>> GetUsersBySearch(string searchQuery, int limitResultsCount)
+    {
+        var results = await _dbContext.Users
+            .Where(a => 
+                a.FullName.Contains(searchQuery) || 
+                a.Email.Contains(searchQuery)
+            )
+            .Select(a => new UserSearchResultDTO
+            {
+                UserId = a.Id,
+                FullName = a.FullName,
+                Email = a.Email
+            })
+            .Take(limitResultsCount)
+            .ToListAsync();
+        
+        return results;
+    }
+
+    public async Task<bool> UserExists(Guid? id)
+    {
+        return await _dbContext.Users.Where(a => a.Id == id).CountAsync() == 1;
     }
 }
