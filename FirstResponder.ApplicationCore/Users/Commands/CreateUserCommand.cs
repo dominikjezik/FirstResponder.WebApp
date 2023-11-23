@@ -8,8 +8,11 @@ public class CreateUserCommand : IRequest<User>
 {
     public UserFormDTO UserFormDto { get; private set; }
 
-    public CreateUserCommand(UserFormDTO userFormDto)
+    public string UserPassword { get; private set; }
+
+    public CreateUserCommand(UserFormDTO userFormDto, string userPassword)
     {
         UserFormDto = userFormDto;
+        UserPassword = userPassword;
     }
 }

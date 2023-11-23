@@ -94,10 +94,7 @@
             <label class="label">Stav</label>
             <div class="control">
                 <div class="select select-full-width">
-                    <select>
-                        <option>Nezaradený</option>
-                        <option>Responder</option>
-                        <option>Zamestnanec</option>
+                    <select asp-for="UserType" asp-items="Html.GetEnumSelectList<UserType>()">
                     </select>
                 </div>
             </div>

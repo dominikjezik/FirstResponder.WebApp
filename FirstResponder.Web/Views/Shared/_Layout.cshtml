@@ -1,6 +1,9 @@
 ﻿@addTagHelper FirstResponder.Web.TagHelpers.ActiveMenuItemTagHelper, FirstResponder.Web
+@using System.Security.Claims;
+@inject IHttpContextAccessor _httpContext
 @{ 
     var currentControllerName = (this.ViewContext.RouteData.Values["controller"] ?? "").ToString();
+    var fullName = _httpContext.HttpContext.User?.FindFirstValue(ClaimTypes.Name);
 }
 
 <!DOCTYPE html>
@@ -232,8 +235,8 @@
         </div>
 
         <div class="sidebar-footer">
-            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-            <strong>Dominik Ježík</strong>
+            @* <img src="~/icons/default-user.svg" alt="" width="32" height="32" class="me-2"> *@
+            <b>@fullName</b>
             <div class="dropdown">
                 <ul class="dropdown-menu text-small shadow">
                     <li><a class="dropdown-item" href="#">Sign out</a></li>

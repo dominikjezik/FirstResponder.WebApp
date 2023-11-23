@@ -21,7 +21,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, User>
         
         EntityValidator.Validate(user);
         
-        await _usersRepository.AddUser(user);
+        await _usersRepository.AddUser(user, request.UserPassword);
 
         return user;
     }

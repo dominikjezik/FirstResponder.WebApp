@@ -22,6 +22,8 @@ public class UserFormDTO
     public RegionOfState Region { get; set; }
 
     public string? Notes { get; set; }
+
+    public UserType UserType { get; set; }
     
     #region Edit form properties
 
@@ -46,6 +48,7 @@ public class UserFormDTO
                 PostalCode = PostalCode,
                 City = City,
                 Region = Region,
+                Type = UserType,
                 Notes = Notes
             };
         }
@@ -59,6 +62,7 @@ public class UserFormDTO
         targetUser.PostalCode = PostalCode;
         targetUser.City = City;
         targetUser.Region = Region;
+        targetUser.Type = UserType;
         targetUser.Notes = Notes;
 
         return targetUser;
@@ -79,7 +83,9 @@ public static class UserExtensions
             PostalCode = user.PostalCode,
             City = user.City,
             Region = user.Region,
-            Notes = user.Notes
+            Notes = user.Notes,
+            UserType = user.Type,
+            CreatedAt = user.CreatedAt
         };
     }
 }

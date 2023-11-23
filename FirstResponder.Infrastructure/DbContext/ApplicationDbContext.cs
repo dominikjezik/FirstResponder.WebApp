@@ -1,6 +1,7 @@
 ﻿using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +27,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Aed>().UseTptMappingStrategy();
+        
         modelBuilder.Ignore<User>();
+        
+        modelBuilder.Entity<Aed>().UseTptMappingStrategy();
         modelBuilder.Entity<PersonalAed>()
             .HasOne<ApplicationUser>()
             .WithMany()
             .HasForeignKey(a => a.OwnerId)
             .IsRequired();
+        
+        modelBuilder.SeedUserRoles();
     }
     
     public override int SaveChanges()

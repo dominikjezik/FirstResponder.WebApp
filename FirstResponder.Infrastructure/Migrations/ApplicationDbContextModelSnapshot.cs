@@ -154,6 +154,20 @@ namespace FirstResponder.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6362ced8-0559-4270-8c88-249400928f38"),
+                            Name = "Responder",
+                            NormalizedName = "RESPONDER"
+                        },
+                        new
+                        {
+                            Id = new Guid("bd4fa5ab-762b-481b-bc27-5c2e79105b2e"),
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        });
                 });
 
             modelBuilder.Entity("FirstResponder.Infrastructure.Identity.ApplicationUser", b =>

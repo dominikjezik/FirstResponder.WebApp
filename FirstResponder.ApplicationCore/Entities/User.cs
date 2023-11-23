@@ -22,7 +22,7 @@ public class User : AuditableEntity<Guid>
     public RegionOfState Region { get; set; }
 
     public string? Notes { get; set; }
-    
-    // TODO: Pridať rolu
-    
+
+    public UserType Type { get; set; } = UserType.Default;
+
 }
