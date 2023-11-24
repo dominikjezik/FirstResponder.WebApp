@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Users.Commands;
 using FirstResponder.ApplicationCore.Users.DTOs;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FirstResponder.Web.Controllers.API;
 
 [Route("api/[controller]")]
+[IgnoreAntiforgeryToken]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -23,7 +25,7 @@ public class AccountController : ControllerBase
     [Route("[action]")]
     public async Task<IActionResult> Register(UserAuthFormDTO model)
     {
-        // TODO: Zabezpečiť aby rola používateľa bola vždy Nezaradený
+        model.UserType = UserType.Default;
         
         try
         {

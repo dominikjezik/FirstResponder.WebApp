@@ -25,6 +25,11 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 }).AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";
+});
+
 // Configure routing
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true); 
 builder.Services.AddControllersWithViews(options =>

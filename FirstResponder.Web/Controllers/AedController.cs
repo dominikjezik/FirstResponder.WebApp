@@ -5,11 +5,13 @@ using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.Web.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FirstResponder.Web.Controllers;
 
+[Authorize]
 [Route("[controller]")]
 public class AedController : Controller
 {

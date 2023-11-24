@@ -235,12 +235,22 @@
         </div>
 
         <div class="sidebar-footer">
-            @* <img src="~/icons/default-user.svg" alt="" width="32" height="32" class="me-2"> *@
-            <b>@fullName</b>
-            <div class="dropdown">
-                <ul class="dropdown-menu text-small shadow">
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
-                </ul>
+            <div class="dropdown is-up is-hoverable">
+                <div class="dropdown-trigger">
+                    <div>
+                        <img src="~/icons/default-user.svg" alt="" width="32" height="32" class="me-2">
+                        <b>@fullName</b>
+                    </div>
+                </div>
+                <div class="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                        <div class="dropdown-item">
+                            <form asp-controller="Account" asp-action="Logout">
+                                <input type="submit" value="Odhlásiť sa" class="button is-ghost">
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

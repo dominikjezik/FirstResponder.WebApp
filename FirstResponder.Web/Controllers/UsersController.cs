@@ -4,10 +4,12 @@ using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.ApplicationCore.Users.Queries;
 using FirstResponder.Web.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FirstResponder.Web.Controllers;
 
+[Authorize]
 [Route("[controller]")]
 public class UsersController : Controller
 {
