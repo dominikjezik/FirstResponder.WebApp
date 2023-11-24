@@ -3,26 +3,40 @@
     Layout = "_GuestLayout";
 }
 
-<h1>Login</h1>
+<h1 class="has-text-centered">Prihlásenie</h1>
+
+<div class="message is-danger">
+    <div asp-validation-summary="ModelOnly" class="message-body mb-1"></div>
+</div>
+
 <form asp-controller="Account" asp-action="Login">
     <div class="field">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" placeholder="user@example.com" />
-        <span asp-validation-for="Email" class="text-red"></span>
+        <label asp-for="Email" class="label"></label>
+        <div class="control">
+            <input asp-for="Email" class="input" placeholder="user@example.com" required>
+        </div>
+        <span asp-validation-for="Email" class="help is-danger"></span>
     </div>
     <div class="field">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" placeholder="********" />
-        <span asp-validation-for="Password" class="text-red"></span>
+        <label asp-for="Password" class="label"></label>
+        <div class="control">
+            <input asp-for="Password" class="input" placeholder="********" required>
+        </div>
+        <span asp-validation-for="Password" class="help is-danger"></span>
     </div>
+    
     <div class="field">
-        <label asp-for="RememberMe">
-            <input asp-for="RememberMe" />
-            @Html.DisplayNameFor(m => m.RememberMe)
-        </label>
+        <div class="control">
+            <label asp-for="RememberMe" class="checkbox">
+                <input asp-for="RememberMe"/>
+                @Html.DisplayNameFor(m => m.RememberMe)
+            </label>
+        </div>
     </div>
-    <div asp-validation-summary="ModelOnly" class="text-red"></div>
-    <div>
-        <input type="submit" value="Login" class="btn">
+
+    <div class="field is-grouped">
+        <div class="control">
+            <button type="submit" class="button is-link">Prihlásiť sa</button>
+        </div>
     </div>
 </form>

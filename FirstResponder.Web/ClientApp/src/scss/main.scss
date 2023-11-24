@@ -32,25 +32,25 @@ body {
     opacity: .5;
 }
 
+$main-app-color: #000000;
+.main-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $main-app-color;
+    fill: $main-app-color;
+
+    span {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+}
+
 // Layout
 $side-bar-width: 250px;
-$main-app-color: #000000;
 $mobile-top-menu-bar-height: 60px;
 
 .sidebar-layout {
-    .logo {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: $main-app-color;
-        fill: $main-app-color;
-        
-        span {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-    }
-
     .main-logo {
         margin: 1rem;
     }
@@ -67,13 +67,22 @@ $mobile-top-menu-bar-height: 60px;
     }
     
     .sidebar-footer {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        padding: 1rem;
+        .dropdown-menu {
+            width: 100%;
+            input {
+                width: 100%;
+            }
+        }
         
-        img {
-            margin-right: 1rem;
+        .logged-user{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+
+            img {
+                margin-right: 1rem;
+            }
         }
     }
     
@@ -377,3 +386,31 @@ $mobile-top-menu-bar-height: 60px;
     }
 }
 
+// Login page
+.guest-layout {
+    .main-logo {
+        margin-bottom: 1rem;
+    }
+    
+    .login-main {
+        width: 800px;
+        margin: 0 auto;
+        padding-top: 2rem;
+    
+        .input-validation-error {
+            border-color: #f14668;
+        }
+    }
+    
+    .message ul{
+        list-style: none;
+        margin: 0;
+    }
+}
+
+@media only screen and (max-width: 800px) { 
+    .guest-layout .login-main {
+        width: 100%;
+    }
+    
+}
