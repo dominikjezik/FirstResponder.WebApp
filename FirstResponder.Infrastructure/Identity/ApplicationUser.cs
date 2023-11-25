@@ -21,6 +21,8 @@ public class ApplicationUser : IdentityUser<Guid>, IAuditable
 
     public string? Notes { get; set; }
     
+    public UserType Type { get; set; }
+    
     public DateTime CreatedAt { get; set; }
     
     public DateTime UpdatedAt { get; set; }
@@ -45,6 +47,7 @@ public static class ApplicationUserExtensions
             City = applicationUser.City,
             Region = applicationUser.Region,
             Notes = applicationUser.Notes,
+            Type = applicationUser.Type,
             CreatedAt = applicationUser.CreatedAt,
             UpdatedAt = applicationUser.UpdatedAt
         };
@@ -69,6 +72,7 @@ public static class UserExtensions
             City = user.City,
             Region = user.Region,
             Notes = user.Notes,
+            Type = user.Type,
             FullName = user.FullName,
             CreatedAt = user.CreatedAt,
             UpdatedAt = user.UpdatedAt

@@ -1,6 +1,5 @@
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities;
-using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.Infrastructure.DbContext;
@@ -36,21 +35,8 @@ public class UsersRepository : IUsersRepository
         }
         
         var applicationUser = await _userManager.FindByIdAsync(id.ToString());
-        if (applicationUser == null)
-        {
-            return null;
-        }
-        
-        var user = applicationUser.ToDomainUser();
-        
-        var roles = await _userManager.GetRolesAsync(applicationUser);
 
-        if (roles.Count != 0)
-        {
-            user.Type = Enum.Parse<UserType>(roles.First());
-        }
-
-        return user;
+        return applicationUser.ToDomainUser();
     }
     
     public async Task AddUser(User user, string password)
@@ -58,38 +44,21 @@ public class UsersRepository : IUsersRepository
         var applicationUser = user.ToApplicationUser();
         applicationUser.UserName = applicationUser.Email;
         
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        var result = await _userManager.CreateAsync(applicationUser, password);
 
-        try
+        if (!result.Succeeded)
         {
-            var result = await _userManager.CreateAsync(applicationUser, password);
-
-            if (!result.Succeeded)
-            {
-                var errors = new Dictionary<string, string>();
-            
-                foreach (var error in result.Errors)
-                {
-                    errors.Add(error.Code, error.Description);
-                }
-
-                throw new EntityValidationException(errors);
-            }
+            var errors = new Dictionary<string, string>();
         
-            user.Id = applicationUser.Id;
-        
-            if (user.Type != UserType.Default)
+            foreach (var error in result.Errors)
             {
-                await _userManager.AddToRoleAsync(applicationUser, user.Type.ToString());
+                errors.Add(error.Code, error.Description);
             }
-            
-            await transaction.CommitAsync();
+
+            throw new EntityValidationException(errors);
         }
-        catch (Exception)
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
+    
+        user.Id = applicationUser.Id;
     }
 
     public async Task UpdateUser(User user)
@@ -110,23 +79,10 @@ public class UsersRepository : IUsersRepository
         applicationUser.City = user.City;
         applicationUser.Region = user.Region;
         applicationUser.Notes = user.Notes;
-      
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
-        try
-        {
-            _dbContext.Update(applicationUser);
-
-            await this.UpdateUserRole(applicationUser, user.Type);
-            await _dbContext.SaveChangesAsync();
-            
-            await transaction.CommitAsync();
-        } 
-        catch (Exception)
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
+        applicationUser.Type = user.Type;
+        
+        _dbContext.Update(applicationUser);
+        await _dbContext.SaveChangesAsync();
     }
 
     public Task DeleteUser(User user)
@@ -156,32 +112,6 @@ public class UsersRepository : IUsersRepository
     public async Task<bool> UserExists(Guid? id)
     {
         return await _dbContext.Users.Where(a => a.Id == id).CountAsync() == 1;
-    }
-
-    /**
-     * This method is used to update user role in case that user type has changed.
-     * It assumes that user has always only one role.
-     */
-    private async Task UpdateUserRole(ApplicationUser applicationUser, UserType newType)
-    {
-        var roles = await _userManager.GetRolesAsync(applicationUser);
-
-        if (roles.Count != 0)
-        {
-            if (newType == UserType.Default)
-            {
-                await _userManager.RemoveFromRoleAsync(applicationUser, roles.First());
-            } 
-            else if (roles.First() != newType.ToString())
-            {
-                await _userManager.RemoveFromRoleAsync(applicationUser, roles.First());
-                await _userManager.AddToRoleAsync(applicationUser, newType.ToString());
-            }
-        }
-        else if (newType != UserType.Default)
-        {
-            await _userManager.AddToRoleAsync(applicationUser, newType.ToString());
-        }
     }
     
 }

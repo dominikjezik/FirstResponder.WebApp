@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using FirstResponder.Web.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FirstResponder.Web.Controllers;
@@ -14,9 +13,13 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    [Authorize]
     public IActionResult Index()
     {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction(nameof(AccountController.Login), "Account");
+        }
+        
         return View();
     }
 

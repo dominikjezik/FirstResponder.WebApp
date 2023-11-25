@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace FirstResponder.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -75,6 +73,7 @@ namespace FirstResponder.Infrastructure.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Region = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -283,15 +282,6 @@ namespace FirstResponder.Infrastructure.Migrations
                         principalTable: "Aeds",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { new Guid("6362ced8-0559-4270-8c88-249400928f38"), null, "Responder", "RESPONDER" },
-                    { new Guid("bd4fa5ab-762b-481b-bc27-5c2e79105b2e"), null, "Employee", "EMPLOYEE" }
                 });
 
             migrationBuilder.CreateIndex(

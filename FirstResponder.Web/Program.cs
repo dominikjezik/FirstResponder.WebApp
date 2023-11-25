@@ -1,5 +1,6 @@
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Aeds.Queries;
+using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.Identity;
 using FirstResponder.Infrastructure.Repositories;
@@ -25,6 +26,8 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 }).AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, CustomUserClaimsPrincipalFactory>();
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/login";
@@ -35,6 +38,12 @@ builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
+
+// Authorization
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsEmployee", policy => policy.RequireClaim("UserType", UserType.Employee.ToString()));
 });
 
 // Add MediatR

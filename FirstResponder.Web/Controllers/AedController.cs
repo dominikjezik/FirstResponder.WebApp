@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FirstResponder.Web.Controllers;
 
-[Authorize]
+[Authorize(Policy = "IsEmployee")]
 [Route("[controller]")]
 public class AedController : Controller
 {

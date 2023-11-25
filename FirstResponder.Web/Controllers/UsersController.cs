@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FirstResponder.Web.Controllers;
 
-[Authorize]
+[Authorize(Policy = "IsEmployee")]
 [Route("[controller]")]
 public class UsersController : Controller
 {

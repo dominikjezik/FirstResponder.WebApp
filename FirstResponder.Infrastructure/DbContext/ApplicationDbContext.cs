@@ -1,7 +1,6 @@
 ﻿using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
-using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -36,8 +35,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .WithMany()
             .HasForeignKey(a => a.OwnerId)
             .IsRequired();
-        
-        modelBuilder.SeedUserRoles();
     }
     
     public override int SaveChanges()

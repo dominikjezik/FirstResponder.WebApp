@@ -1,10 +1,11 @@
+@using FirstResponder.Web.Extensions
 @model IEnumerable<FirstResponder.ApplicationCore.Entities.User>
 @{
     ViewBag.Title = "Prehľad responderov / zamestnancov";
 }
 
 <header class="main-header">
-    <h1>Prehľad responderov / zamestnancov</h1>
+    <h1>Prehľad používateľov</h1>
     <div class="buttons">
         <a asp-controller="Users" asp-action="Create" class="button button-with-icon">
             <span class="icon">
@@ -62,7 +63,7 @@
 <table class="table is-striped is-narrow is-hoverable is-fullwidth table-with-clickable-link">
     <thead>
     <tr>
-        <th>Responder</th>
+        <th>Meno</th>
         <th>Email</th>
         <th>Telefón</th>
         <th>Evidencia</th>
@@ -79,7 +80,7 @@
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Email</a></td>
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.PhoneNumber</a></td>
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.CreatedAt</a></td>
-            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Type</a></td>
+            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Type.GetDisplayAttributeValue()</a></td>
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Region</a></td>
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Address</a></td>
         </tr>
