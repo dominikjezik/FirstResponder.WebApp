@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.Infrastructu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.ApplicationCore", "FirstResponder.ApplicationCore\FirstResponder.ApplicationCore.csproj", "{452A3C2D-4DC3-44E9-BC05-A471786D52B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.ApplicationCoreTests", "FirstResponder.ApplicationCoreTests\FirstResponder.ApplicationCoreTests.csproj", "{F79E4C77-C3A2-4C24-98DC-E7AB9A421E15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{452A3C2D-4DC3-44E9-BC05-A471786D52B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{452A3C2D-4DC3-44E9-BC05-A471786D52B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{452A3C2D-4DC3-44E9-BC05-A471786D52B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F79E4C77-C3A2-4C24-98DC-E7AB9A421E15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F79E4C77-C3A2-4C24-98DC-E7AB9A421E15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F79E4C77-C3A2-4C24-98DC-E7AB9A421E15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F79E4C77-C3A2-4C24-98DC-E7AB9A421E15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 		{2F1880A1-C34B-4502-8AD5-20706622BF86} = {07523733-7033-4519-8495-94F99821453D}
 		{E944C069-5FC4-496D-8BD3-FB0A9499BCE7} = {07523733-7033-4519-8495-94F99821453D}
 		{452A3C2D-4DC3-44E9-BC05-A471786D52B2} = {07523733-7033-4519-8495-94F99821453D}
+		{F79E4C77-C3A2-4C24-98DC-E7AB9A421E15} = {71AEB712-E56D-4E29-8566-6293A527068E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7CDEDC8F-D2E2-4F3D-BE88-61A1AE88769D}
