@@ -4,6 +4,7 @@ using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.Identity;
+using FirstResponder.Web.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,13 +21,6 @@ public class UsersRepository : IUsersRepository
         _userManager = userManager;
     }
     
-    public async Task<IEnumerable<User>> GetAllUsers()
-    {
-        var applicationUsers = await _dbContext.Users.ToListAsync();
-        var users = applicationUsers.Select(user => user.ToDomainUser());
-        return users;
-    }
-
     public async Task<User?> GetUserById(Guid? id)
     {
         if (id == null)
@@ -97,6 +91,7 @@ public class UsersRepository : IUsersRepository
                 a.FullName.Contains(searchQuery) || 
                 a.Email.Contains(searchQuery)
             )
+            .OrderByDescending(a => a.CreatedAt)
             .Select(a => new UserSearchResultDTO
             {
                 UserId = a.Id,
@@ -112,6 +107,26 @@ public class UsersRepository : IUsersRepository
     public async Task<bool> UserExists(Guid? id)
     {
         return await _dbContext.Users.Where(a => a.Id == id).CountAsync() == 1;
+    }
+
+    public async Task<IEnumerable<UserItemDTO>> GetUserItems(int pageNumber, int pageSize)
+    {
+        return await _dbContext.Users
+            .OrderByDescending(a => a.CreatedAt)
+            .Select(u => new UserItemDTO
+            {
+                Id = u.Id,
+                FullName = u.FullName,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                CreatedAt = u.CreatedAt.ToString("dd.MM.yyyy HH:mm").ToUpper(),
+                Type = u.Type.GetDisplayAttributeValue(),
+                Region = u.Region.GetDisplayAttributeValue(),
+                Address = u.Address,
+            })
+            .Skip(pageNumber * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
     }
     
 }

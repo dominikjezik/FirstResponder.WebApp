@@ -23,8 +23,8 @@ public class UsersController : Controller
     [Route("")]
     public async Task<IActionResult> Index()
     {
-        var users = await _mediator.Send(new GetAllUsersQuery());
-        return View(users);
+        var items = await _mediator.Send(new GetUserItems() { PageNumber = 0 });
+        return View(items);
     }
     
     [Route("[action]")]

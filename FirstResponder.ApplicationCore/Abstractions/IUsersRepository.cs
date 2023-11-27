@@ -5,8 +5,6 @@ namespace FirstResponder.ApplicationCore.Abstractions;
 
 public interface IUsersRepository
 {
-    Task<IEnumerable<User>> GetAllUsers();
-
     Task AddUser(User user, string password);
 
     Task<User?> GetUserById(Guid? id);
@@ -18,4 +16,6 @@ public interface IUsersRepository
     Task<IEnumerable<UserSearchResultDTO>> GetUsersBySearch(string searchQuery, int limitResultsCount);
     
     Task<bool> UserExists(Guid? id);
+    
+    Task<IEnumerable<UserItemDTO>> GetUserItems(int pageNumber, int pageSize);
 }

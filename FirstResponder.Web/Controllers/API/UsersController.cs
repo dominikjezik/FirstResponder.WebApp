@@ -23,8 +23,16 @@ public class UsersController : ControllerBase
     public async Task<IEnumerable<UserSearchResultDTO>> Search(string query)
     {
         var searchResults = await _mediator.Send(new GetUsersBySearchQuery(query));
-
         return searchResults;
+    }
+    
+    [HttpGet]
+    [Route("filtered-table-items")]
+    [Authorize(Policy = "IsEmployee")]
+    public async Task<IEnumerable<UserItemDTO>> FilteredTableItems(int pageNumber = 0)
+    {
+        var items = await _mediator.Send(new GetUserItems() { PageNumber = pageNumber });
+        return items;
     }
     
 }

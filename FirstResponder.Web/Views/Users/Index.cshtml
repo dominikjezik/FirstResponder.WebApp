@@ -1,5 +1,4 @@
-@using FirstResponder.Web.Extensions
-@model IEnumerable<FirstResponder.ApplicationCore.Entities.User>
+@model IEnumerable<UserItemDTO>
 @{
     ViewBag.Title = "Prehľad responderov / zamestnancov";
 }
@@ -72,7 +71,7 @@
         <th>Adresa</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="users-table-body">
     @foreach (var user in Model)
     {
         <tr>
@@ -80,10 +79,17 @@
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Email</a></td>
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.PhoneNumber</a></td>
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.CreatedAt</a></td>
-            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Type.GetDisplayAttributeValue()</a></td>
+            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Type</a></td>
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Region</a></td>
             <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Address</a></td>
         </tr>
     }
     </tbody>
 </table>
+
+<p id="loading-text" class="has-text-centered" style="display: none">Načítavam ďalších používateľov...</p>
+
+@section Scripts
+{
+    <script src="~/js/pagination-users.js"></script>
+}
