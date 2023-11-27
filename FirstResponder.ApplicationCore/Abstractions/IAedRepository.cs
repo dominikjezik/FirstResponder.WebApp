@@ -4,7 +4,7 @@ namespace FirstResponder.ApplicationCore.Abstractions;
 
 public interface IAedRepository
 {
-    Task<IEnumerable<Aed>> GetAllAeds();
+    Task<IEnumerable<Aed>> GetAllAedsWithOwners();
 
     Task AddAed(Aed aed);
 

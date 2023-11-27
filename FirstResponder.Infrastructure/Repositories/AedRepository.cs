@@ -1,6 +1,7 @@
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.Infrastructure.DbContext;
+using FirstResponder.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FirstResponder.Infrastructure.Repositories;
@@ -14,11 +15,26 @@ public class AedRepository : IAedRepository
         _dbContext = dbContext;
     }
     
-    public async Task<IEnumerable<Aed>> GetAllAeds()
+    public async Task<IEnumerable<Aed>> GetAllAedsWithOwners()
     {
-        return await _dbContext.Aeds
+        var aeds =  await _dbContext.Aeds
             .OrderByDescending(a => a.CreatedAt)
             .ToListAsync();
+
+        var personalAeds = aeds.OfType<PersonalAed>().ToList();
+        
+        var owners = (await _dbContext.Users
+            .Where(u => personalAeds.Select(a => a.OwnerId).Contains(u.Id))
+            .ToListAsync())
+            .Select(user => user.ToDomainUser())
+            .ToList();
+        
+        foreach (var personalAed in personalAeds)
+        {
+            personalAed.Owner = owners.Find(u => u.Id == personalAed.OwnerId);
+        }
+        
+        return aeds;
     }
 
     public async Task AddAed(Aed aed)

@@ -16,6 +16,6 @@ public class GetAllAedsQueryHandler : IRequestHandler<GetAllAedsQuery, IEnumerab
     
     public async Task<IEnumerable<Aed>> Handle(GetAllAedsQuery request, CancellationToken cancellationToken)
     {
-        return await _aedRepository.GetAllAeds();
+        return await _aedRepository.GetAllAedsWithOwners();
     }
 }

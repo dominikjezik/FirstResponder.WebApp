@@ -31,5 +31,8 @@ public abstract class Aed : AuditableEntity<Guid>
     public DateTime? BatteryExpiration { get; set; }
     
     public string? Notes { get; set; }
+
+
+    public abstract string GetDisplayHolder();
     
 }

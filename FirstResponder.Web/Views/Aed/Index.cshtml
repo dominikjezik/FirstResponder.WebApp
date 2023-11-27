@@ -84,7 +84,7 @@
     <tr>
         <th></th>
         <th>Registrácia</th>
-        @*<th>Držateľ</th>*@
+        <th>Držateľ</th>
         @*<th>Adresa</th>*@
         @*<th>Kraj</th>*@
         @* <th>Dostupnosť</th> *@
@@ -97,6 +97,7 @@
     @foreach (var aed in Model)
     {
         string createAt = aed.CreatedAt.ToString("dd.MM.yyyy HH:mm").ToUpper();
+        
         <tr>
             <td class="table-icon">
                 <a asp-controller="Aed" asp-action="Edit" asp-route-aedId="aa7dbacd-b067-4400-99e0-2fce0982d6f3">
@@ -106,7 +107,7 @@
                 </a>
             </td>
             <td><a asp-controller="Aed" asp-action="Edit" asp-route-aedId="@aed.Id">@createAt</a></td>
-            @*<td><a asp-controller="AED" asp-action="Edit" asp-route-aedId="@aed.Id"></a></td>*@
+            <td><a asp-controller="AED" asp-action="Edit" asp-route-aedId="@aed.Id">@aed.GetDisplayHolder()</a></td>
             @*<td><a asp-controller="AED" asp-action="Edit" asp-route-aedId="@aed.Id"></a></td>*@
             @*<td><a asp-controller="AED" asp-action="Edit" asp-route-aedId="@aed.Id"></a></td>*@
             @* <td><a asp-controller="AED" asp-action="Edit" asp-route-aedId="@aed.Id"></a></td> *@

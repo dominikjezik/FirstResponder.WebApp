@@ -78,8 +78,7 @@
                     <label class="label">Kraj</label>
                     <div class="control">
                         <div class="select select-full-width">
-                            <select>
-                                <option>Trenčiansky kraj</option>
+                            <select asp-items="Html.GetEnumSelectList<RegionOfState>()">
                             </select>
                         </div>
                     </div>

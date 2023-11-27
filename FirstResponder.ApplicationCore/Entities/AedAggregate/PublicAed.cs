@@ -8,4 +8,6 @@ public class PublicAed : Aed
     public string? Holder { get; set; }
     
     // TODO: Pridať ostatné vlastnosti
+    
+    public override string GetDisplayHolder() => Holder;
 }
