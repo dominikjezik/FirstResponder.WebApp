@@ -16,72 +16,7 @@
 
 <div class="user-details-page">
     <form asp-controller="Users" asp-action="Edit" class="user-details-form">
-        <div asp-validation-summary="All" class="text-red"></div>
-        <div class="field">
-            <label asp-for="Email" class="label">Email *</label>
-            <div class="control">
-                <input asp-for="Email" class="input" placeholder="john@example.com">
-            </div>
-        </div>
-
-        <div class="field">
-            <label asp-for="FullName" class="label">Meno *</label>
-            <div class="control">
-                <input asp-for="FullName" class="input" placeholder="John Doe">
-            </div>
-        </div>
-
-        <div  class="field">
-            <label asp-for="PhoneNumber" class="label">Mobil *</label>
-            <div class="control">
-                <input asp-for="PhoneNumber" class="input" placeholder="0901234567">
-            </div>
-        </div>
-
-        <div class="field">
-            <label asp-for="DateOfBirth" class="label">Dátum narodenia *</label>
-            <div class="control">
-                <input asp-for="DateOfBirth" class="input">
-            </div>
-        </div>
-
-        <div class="field">
-            <label asp-for="Address" class="label">Adresa</label>
-            <div class="control">
-                <input asp-for="Address" class="input" placeholder="Adresa 123">
-            </div>
-        </div>
-
-        <div class="field">
-            <label asp-for="PostalCode" class="label">PSČ</label>
-            <div class="control">
-                <input asp-for="PostalCode" class="input" placeholder="123 45">
-            </div>
-        </div>
-
-        <div class="field">
-            <label asp-for="City" class="label">Mesto</label>
-            <div class="control">
-                <input asp-for="City" class="input" placeholder="Mesto">
-            </div>
-        </div>
-
-        <div class="field">
-            <label asp-for="Region" class="label">Kraj *</label>
-            <div class="control">
-                <div class="select select-full-width">
-                    <select asp-for="Region" asp-items="Html.GetEnumSelectList<RegionOfState>()">
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="field">
-            <label asp-for="Notes" class="label">Poznámka</label>
-            <div class="control">
-                <textarea asp-for="Notes" class="textarea"></textarea>
-            </div>
-        </div>
+        <partial name="_UserFormPartial" model="Model" />
 
         <div class="field">
             <label asp-for="CreatedAt" class="label">Dátum registrácie</label>

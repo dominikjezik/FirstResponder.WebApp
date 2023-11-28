@@ -1,0 +1,164 @@
+@model AedFormDTO
+
+<section class="form-section">
+    <h2>Umiestnenie</h2>
+    <div class="field">
+        <label asp-for="Holder" class="label">Držateľ *</label>
+        <div class="control">
+            <input class="input" asp-for="Holder" required>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="Address" class="label">Ulica, číslo *</label>
+        <div class="control">
+            <input class="input" asp-for="Address" required>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="City" class="label">Mesto *</label>
+        <div class="control">
+            <input class="input" asp-for="City" required>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="PostalCode" class="label">PSČ *</label>
+        <div class="control">
+            <input class="input" asp-for="PostalCode" required>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="Region" class="label">Kraj *</label>
+        <div class="control">
+            <div class="select select-full-width">
+                <select asp-for="Region" asp-items="Html.GetEnumSelectList<RegionOfState>()">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="Latitude" class="label">Zemepisná šírka</label>
+        <div class="control">
+            <input class="input" asp-for="Latitude" type="number" step=".000001" min="-90" max="90">
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="Longitude" class="label">Zemepisná dĺžka</label>
+        <div class="control">
+            <input class="input" asp-for="Longitude" type="number" step=".000001" min="-90" max="90">
+        </div>
+    </div>
+        
+    <div class="field">
+        <label asp-for="DescriptionLocation" class="label">Popis</label>
+        <div class="control">
+            <textarea class="textarea" asp-for="DescriptionLocation"></textarea>
+        </div>
+    </div>
+</section>
+
+<section class="form-section" style="opacity: 0.2">
+    <h2>Dostupnosť</h2>
+    <div class="field">
+        <label class="label">Dostupnosť</label>
+        <div class="control">
+            <div class="select select-full-width">
+                <select>
+                    <option>Prevádzkové časy</option>
+                    <option>???</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field">
+        <label class="label">Dostupnosť v termíne (od - do)</label>
+        <div class="control control-multiple-inputs">
+            <input class="input" type="date">
+            <input class="input" type="date">
+        </div>
+    </div>
+    
+    <div class="field">
+        <label class="label">Dostupnosť v čase (od - do)</label>
+        <div class="control control-multiple-inputs">
+            <input class="input" type="time">
+            <input class="input" type="time">
+        </div>
+    </div>
+    
+    <div class="field">
+        <label class="label">Dostupnosť v dňoch</label>
+        <div class="control">
+            <label class="checkbox">
+                <input type="checkbox">
+                Pondelok
+            </label>
+        </div>
+        <div class="control">
+            <label class="checkbox">
+                <input type="checkbox">
+                Utorok
+            </label>
+        </div>
+        <div class="control">
+            <label class="checkbox">
+                <input type="checkbox">
+                Streda
+            </label>
+        </div>
+        <div class="control">
+            <label class="checkbox">
+                <input type="checkbox">
+                Štvrtok
+            </label>
+        </div>
+        <div class="control">
+            <label class="checkbox">
+                <input type="checkbox">
+                Piatok
+            </label>
+        </div>
+        <div class="control">
+            <label class="checkbox">
+                <input type="checkbox">
+                Sobota
+            </label>
+        </div>
+        <div class="control">
+            <label class="checkbox">
+                <input type="checkbox">
+                Nedeľa
+            </label>
+        </div>
+    </div>
+</section>
+
+<section class="form-section">
+    <h2>Kontaktná osoba</h2>
+    <div class="field">
+        <label asp-for="ContactPerson" class="label">Meno</label>
+        <div class="control">
+            <input class="input" asp-for="ContactPerson">
+        </div>
+    </div>
+    
+    <div class="field">
+        <label asp-for="ContactPersonPhone" class="label">Telefón</label>
+        <div class="control">
+            <input class="input" asp-for="ContactPersonPhone">
+        </div>
+    </div>
+    
+    <div class="field">
+        <label asp-for="ContactPersonEmail"  class="label">Email</label>
+        <div class="control">
+            <input class="input" asp-for="ContactPersonEmail">
+        </div>
+    </div>
+</section>

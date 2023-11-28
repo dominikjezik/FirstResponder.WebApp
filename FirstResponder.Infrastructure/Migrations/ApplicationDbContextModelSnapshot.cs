@@ -373,9 +373,42 @@ namespace FirstResponder.Infrastructure.Migrations
                 {
                     b.HasBaseType("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactPerson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactPersonEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactPersonPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionLocation")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Holder")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Region")
+                        .HasColumnType("int");
 
                     b.ToTable("PublicAeds");
                 });

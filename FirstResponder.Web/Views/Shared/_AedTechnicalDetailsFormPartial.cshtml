@@ -1,0 +1,101 @@
+@model AedFormDTO
+
+<section class="form-section">
+    <h2>Technické detaily</h2>
+    <div class="field">
+        <label asp-for="ManufacturerId" class="label"></label>
+        <div class="control">
+            <div class="select select-full-width">
+                <select asp-for="ManufacturerId" asp-items="@ViewBag.Manufacturers">
+                    <option value="">-</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="ModelId" class="label"></label>
+        <div class="control">
+            <div class="select select-full-width">
+                <select asp-for="ModelId" asp-items="@ViewBag.Models">
+                    <option value="">-</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="FullyAutomatic" class="label"></label>
+        <div class="control">
+            <label class="radio">
+                <input type="radio" asp-for="FullyAutomatic" value="true" checked>
+                Plne automatický
+            </label>
+            <label class="radio">
+                <input type="radio" asp-for="FullyAutomatic" value="false">
+                Poloautomatický
+            </label>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="SerialNumber" class="label"></label>
+        <div class="control">
+            <input class="input" asp-for="SerialNumber">
+        </div>
+    </div>
+    
+    <div class="field">
+        <label asp-for="LanguageId" class="label"></label>
+        <div class="control">
+            <div class="select select-full-width">
+                <select asp-for="LanguageId" asp-items="@ViewBag.Languages">
+                    <option value="">-</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="field">
+        <div class="control">
+            <label asp-for="ElectrodesAdults" class="checkbox">
+                <input asp-for="ElectrodesAdults">
+                Elektródy pre dospelých
+            </label>
+        </div>
+        <div class="control">
+            <label asp-for="ElectrodesChildren" class="checkbox">
+                <input asp-for="ElectrodesChildren">
+                Elektródy pre deti
+            </label>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="ElectrodesAdultsExpiration" class="label"></label>
+        <div class="control">
+            <input class="input" asp-for="ElectrodesAdultsExpiration">
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="ElectrodesChildrenExpiration" class="label"></label>
+        <div class="control">
+            <input class="input" asp-for="ElectrodesChildrenExpiration">
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="BatteryExpiration" class="label"></label>
+        <div class="control">
+            <input class="input" asp-for="BatteryExpiration">
+        </div>
+    </div>
+</section>
+
+<div class="field">
+    <label asp-for="Notes" class="label"></label>
+    <div class="control">
+        <textarea class="textarea" asp-for="Notes"></textarea>
+    </div>
+</div>

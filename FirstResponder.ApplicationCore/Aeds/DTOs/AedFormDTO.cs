@@ -48,8 +48,33 @@ public class AedFormDTO
     #endregion
 
     #region Public Aed properties
-
+    
     public string? Holder { get; set; }
+    
+    public string? Address { get; set; }
+    
+    public string? City { get; set; }
+
+    public string? PostalCode { get; set; }
+    
+    public RegionOfState Region { get; set; }
+    
+    [Range(-90, 90)]
+    public double? Latitude { get; set; }
+
+    [Range(-180, 180)]
+    public double? Longitude { get; set; }
+
+    public string? DescriptionLocation { get; set; }
+    
+    // TODO: Dostupnost polia
+
+    public string? ContactPerson { get; set; }
+
+    public string? ContactPersonPhone { get; set; }
+
+    [EmailAddress]
+    public string? ContactPersonEmail { get; set; }
 
     #endregion
 
@@ -101,6 +126,16 @@ public class AedFormDTO
         {
             var publicAed = (PublicAed)aed;
             publicAed.Holder = Holder;
+            publicAed.Address = Address;
+            publicAed.City = City;
+            publicAed.PostalCode = PostalCode;
+            publicAed.Region = Region;
+            publicAed.Latitude = Latitude;
+            publicAed.Longitude = Longitude;
+            publicAed.DescriptionLocation = DescriptionLocation;
+            publicAed.ContactPerson = ContactPerson;
+            publicAed.ContactPersonPhone = ContactPersonPhone;
+            publicAed.ContactPersonEmail = ContactPersonEmail;
         }
         else
         {
@@ -158,9 +193,17 @@ public static class AedExtensions
             var publicAed = (PublicAed)aed;
             dto.GeneralType = AedGeneralType.Public;
             dto.Holder = publicAed.Holder;
+            dto.Address = publicAed.Address;
+            dto.City = publicAed.City;
+            dto.PostalCode = publicAed.PostalCode;
+            dto.Region = publicAed.Region;
+            dto.Latitude = publicAed.Latitude;
+            dto.Longitude = publicAed.Longitude;
+            dto.DescriptionLocation = publicAed.DescriptionLocation;
+            dto.ContactPerson = publicAed.ContactPerson;
+            dto.ContactPersonPhone = publicAed.ContactPersonPhone;
+            dto.ContactPersonEmail = publicAed.ContactPersonEmail;
         }
-        
-        // TODO: ďalšie vlastnosti špecifické pre daný typ aed (osobné/verejné)
 
         return dto;
     }
