@@ -1,0 +1,6 @@
+@{
+    ViewBag.Title = ViewBag.TitleMessage ?? ViewBag.StatusCode;
+}
+
+<h1>@(ViewBag.TitleMessage ?? ViewBag.StatusCode)</h1>
+<p>@ViewBag.Message</p>
