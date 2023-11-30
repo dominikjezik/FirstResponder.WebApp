@@ -22,7 +22,7 @@
                 <label class="label">Typ</label>
                 <div class="control">
                     <label class="radio">
-                        <input type="radio" name="GeneralType" value="@AedGeneralType.Public" x-model="formType" checked>
+                        <input type="radio" name="GeneralType" value="@AedGeneralType.Public" id="radio-public-aed" x-model="formType" checked>
                         Verejný
                     </label>
                     <label class="radio">
@@ -57,7 +57,7 @@
 
         <div class="field">
             <div class="control">
-                <button class="button is-link" type="submit">Uložiť</button>
+                <button id="submit-btn" class="button is-link" type="submit">Uložiť</button>
             </div>
         </div>
     </form>

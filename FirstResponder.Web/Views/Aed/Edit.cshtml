@@ -30,7 +30,7 @@
                     <label class="label">Typ</label>
                     <div class="control">
                         <label class="radio">
-                            <input type="radio" disabled @(Model.GeneralType == AedGeneralType.Public ? "checked" : "")>
+                            <input type="radio" id="radio-public-aed" disabled @(Model.GeneralType == AedGeneralType.Public ? "checked" : "")>
                             Verejný
                         </label>
                         <label class="radio">
@@ -65,7 +65,7 @@
 
             <div class="field">
                 <div class="control">
-                    <button type="submit" class="button is-link">Uložiť</button>
+                    <button id="submit-btn" type="submit" class="button is-link">Uložiť</button>
                     <button type="submit" class="button is-danger is-light" form="formDelete">Odstrániť AED</button>
                 </div>
             </div>

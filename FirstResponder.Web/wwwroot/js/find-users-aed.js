@@ -1,4 +1,6 @@
 const radioPersonalAed = document.getElementById('radio-personal-aed')
+const radioPublicAed = document.getElementById('radio-public-aed')
+const submitBtn = document.getElementById('submit-btn')
 
 if (radioPersonalAed.checked) {
     setupSearchBox()
@@ -6,7 +8,20 @@ if (radioPersonalAed.checked) {
 
 radioPersonalAed.onchange = (ev) => {
     if (ev.target.checked) {
-        setTimeout(() => setupSearchBox(), 0) // obicyklovanie bugu
+        setTimeout(() => {
+            setupSearchBox()
+
+            if (document.getElementById('owner-id').value === "") {
+                submitBtn.disabled = true;
+            }
+            
+        }, 0) // obicyklovanie bugu
+    }
+}
+
+radioPublicAed.onchange = (ev) => {
+    if (ev.target.checked) {
+        submitBtn.disabled = false;
     }
 }
 
@@ -27,6 +42,7 @@ function setupSearchBox() {
         document.getElementById('owner-id').value = ''
         searchField.style.display = 'block'
         selectedOwner.style.display = 'none'
+        submitBtn.disabled = true;
     }
 }
 
@@ -76,6 +92,7 @@ function selectOwner(ev) {
     searchBox.value = ''
     searchResults.innerHTML = ''
     searchField.style.display = 'none'
+    submitBtn.disabled = false;
 }
 
 function addSearchItemIntoHtml(user) {
