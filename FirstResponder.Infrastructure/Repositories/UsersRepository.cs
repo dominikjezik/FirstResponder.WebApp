@@ -109,10 +109,24 @@ public class UsersRepository : IUsersRepository
         return await _dbContext.Users.Where(a => a.Id == id).CountAsync() == 1;
     }
 
-    public async Task<IEnumerable<UserItemDTO>> GetUserItems(int pageNumber, int pageSize)
+    public async Task<IEnumerable<UserItemDTO>> GetUserItems(int pageNumber, int pageSize, UserItemFiltersDTO? filtersDTO = null)
     {
-        return await _dbContext.Users
-            .OrderByDescending(a => a.CreatedAt)
+        var userItemsQueryable = _dbContext.Users
+            .OrderByDescending(u => u.CreatedAt)
+            .AsQueryable();
+
+        if (filtersDTO != null)
+        {
+            userItemsQueryable = userItemsQueryable
+                .Where(u =>
+                        (string.IsNullOrEmpty(filtersDTO.FullName) ||u.FullName.Contains(filtersDTO.FullName)) &&
+                        (string.IsNullOrEmpty(filtersDTO.PhoneNumber) || u.PhoneNumber.Contains(filtersDTO.PhoneNumber)) &&
+                        (filtersDTO.Type == null || filtersDTO.Type == u.Type) &&
+                        (filtersDTO.Region == null || filtersDTO.Region == u.Region)
+                );
+        }
+        
+        return await userItemsQueryable
             .Select(u => new UserItemDTO
             {
                 Id = u.Id,

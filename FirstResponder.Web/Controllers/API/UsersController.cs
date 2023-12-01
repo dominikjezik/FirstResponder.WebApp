@@ -29,9 +29,9 @@ public class UsersController : ControllerBase
     [HttpGet]
     [Route("filtered-table-items")]
     [Authorize(Policy = "IsEmployee")]
-    public async Task<IEnumerable<UserItemDTO>> FilteredTableItems(int pageNumber = 0)
+    public async Task<IEnumerable<UserItemDTO>> FilteredTableItems(int pageNumber, [FromQuery] UserItemFiltersDTO filtersDto)
     {
-        var items = await _mediator.Send(new GetUserItems() { PageNumber = pageNumber });
+        var items = await _mediator.Send(new GetUserItems() { PageNumber = pageNumber, Filters = filtersDto });
         return items;
     }
     

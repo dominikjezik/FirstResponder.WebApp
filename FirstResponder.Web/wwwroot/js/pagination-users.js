@@ -1,9 +1,26 @@
 const tableBody = document.querySelector('#users-table-body')
 const loadingText = document.querySelector('#loading-text')
 
+const filterFieldName = document.querySelector('#filter-field-name')
+const filterFieldPhone = document.querySelector('#filter-field-phone')
+const filterSelectType = document.querySelector('#filter-select-type')
+const filterSelectRegion = document.querySelector('#filter-select-region')
+
 let currentPage = 1;
 let loading = false;
 let lastPage = false;
+
+filterFieldName.oninput = filterChanged
+filterFieldPhone.oninput = filterChanged
+filterSelectType.onchange = filterChanged
+filterSelectRegion.onchange = filterChanged
+
+function filterChanged() {
+    currentPage = 0;
+    lastPage = false;
+    tableBody.innerHTML = '';
+    getUsers();
+}
 
 function getUsers() {
     if (loading || lastPage) {
@@ -14,10 +31,36 @@ function getUsers() {
     loadingText.style.display = 'block';
     loadingText.innerHTML = 'Načítavam ďalších používateľov...'
     
-    fetch('/api/users/filtered-table-items?pageNumber=' + currentPage)
+    let url = new URL('/api/users/filtered-table-items', window.location.href)
+    url.searchParams.append('pageNumber', currentPage)
+    
+    if (filterFieldName.value) {
+        url.searchParams.append('fullName', filterFieldName.value)
+    }
+    
+    if (filterFieldPhone.value) {
+        url.searchParams.append('phoneNumber', filterFieldPhone.value)
+    }
+    
+    if (filterSelectType.value) {
+        url.searchParams.append('type', filterSelectType.value)
+    }
+    
+    if (filterSelectRegion.value) {
+        url.searchParams.append('region', filterSelectRegion.value)
+    }
+    
+    fetch(url)
         .then((response) => response.json())
         .then(data => {
             if (data.length === 0) {
+                if (currentPage === 0) {
+                    loadingText.style.display = 'block';
+                    loadingText.innerHTML = 'Nenašli sa žiadni používatelia.'
+                } else {
+                    loadingText.style.display = 'none';
+                }
+                
                 lastPage = true;
                 return;
             }
@@ -39,6 +82,7 @@ function getUsers() {
                 tableBody.appendChild(tr)
             })
 
+            loadingText.style.display = 'none';
         })
         .catch((error) => {
             loadingText.style.display = 'block';
@@ -47,7 +91,6 @@ function getUsers() {
         })
         .finally(() => {
             loading = false
-            loadingText.style.display = 'none';
         })
 }
 

@@ -17,18 +17,18 @@
     </div>
 </header>
 
-<div class="filter-table-form" style="opacity: 0.2">
+<div class="filter-table-form">
     <div class="field">
         <label class="label">Podľa&nbsp;mena</label>
         <div class="control">
-            <input class="input" type="text">
+            <input id="filter-field-name" class="input" type="text">
         </div>
     </div>
     
     <div class="field">
         <label class="label">Podľa&nbsp;telefónu</label>
         <div class="control">
-            <input class="input" type="text">
+            <input id="filter-field-phone" class="input" type="text">
         </div>
     </div>
     
@@ -36,11 +36,8 @@
         <label class="label">Podľa&nbsp;stavu</label>
         <div class="control">
             <div class="select">
-                <select>
-                    <option>-</option>
-                    <option>Nezaradený</option>
-                    <option>Responder</option>
-                    <option>Zamestnanec</option>
+                <select id="filter-select-type" asp-items="Html.GetEnumSelectList<UserType>()">
+                    <option value="">-</option>
                 </select>
             </div>
         </div>
@@ -50,9 +47,8 @@
         <label class="label">Podľa&nbsp;kraju</label>
         <div class="control">
             <div class="select">
-                <select>
-                    <option>-</option>
-                    <option>Trenčiansky kraj</option>
+                <select id="filter-select-region" asp-items="Html.GetEnumSelectList<RegionOfState>()">
+                    <option value="">-</option>
                 </select>
             </div>
         </div>
