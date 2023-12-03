@@ -1,32 +1,37 @@
 @model UserFormDTO
 
-<div asp-validation-summary="All" class="text-red"></div>
+@if(!ViewData.ModelState.IsValid)
+{
+    <div class="message is-danger">
+        <div asp-validation-summary="All" class="message-body mb-1"></div>
+    </div>
+}
 
 <div class="field">
     <label asp-for="Email" class="label">Email *</label>
     <div class="control">
-        <input asp-for="Email" class="input" placeholder="john@example.com">
+        <input asp-for="Email" class="input" placeholder="john@example.com" required>
     </div>
 </div>
 
 <div class="field">
     <label asp-for="FullName" class="label">Meno *</label>
     <div class="control">
-        <input asp-for="FullName" class="input" placeholder="John Doe">
+        <input asp-for="FullName" class="input" placeholder="John Doe" required>
     </div>
 </div>
 
 <div class="field">
     <label asp-for="PhoneNumber" class="label">Mobil *</label>
     <div class="control">
-        <input asp-for="PhoneNumber" class="input" placeholder="0901234567">
+        <input asp-for="PhoneNumber" class="input" placeholder="0901234567" required>
     </div>
 </div>
 
 <div class="field">
     <label asp-for="DateOfBirth" class="label">Dátum narodenia *</label>
     <div class="control">
-        <input asp-for="DateOfBirth" class="input">
+        <input asp-for="DateOfBirth" class="input" required>
     </div>
 </div>
 
@@ -55,7 +60,7 @@
     <label asp-for="Region" class="label">Kraj *</label>
     <div class="control">
         <div class="select select-full-width">
-            <select asp-for="Region" asp-items="Html.GetEnumSelectList<RegionOfState>()">
+            <select asp-for="Region" asp-items="Html.GetEnumSelectList<RegionOfState>()" required>>
             </select>
         </div>
     </div>

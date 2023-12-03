@@ -86,6 +86,7 @@ public class CreateAedCommandTests
         var aedFormDto = _fixture.Build<AedFormDTO>()
             .With(a => a.GeneralType, AedGeneralType.Public)
             .With(a => a.OwnerId, Guid.Empty)
+            .With(a => a.ContactPersonEmail, "test@example.com")
             .Create();
         
         var command = new CreateAedCommand(aedFormDto);

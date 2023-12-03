@@ -37,29 +37,7 @@ public class DeleteAedCommandTests
         // Assert
         await action.Should().ThrowAsync<EntityNotFoundException>();
         
-        _aedRepositoryMock.Verify(foo => foo.DeleteAed(It.IsAny<Aed>()), Times.Never());
-    }
-    
-    [Fact]
-    public async Task AedFound_DeletesAed()
-    {
-        // Arrange
-        var aedId = Guid.NewGuid();
-        
-        var command = new DeleteAedCommand(aedId.ToString());
-        var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object);
-        
-        var aed = _fixture.Create<PublicAed>();
-        
-        _aedRepositoryMock
-            .Setup(r => r.GetAedById(It.IsAny<Guid>()))
-            .ReturnsAsync(aed);
-        
-        //Act
-        await handler.Handle(command, CancellationToken.None);
-        
-        // Assert
-        _aedRepositoryMock.Verify(foo => foo.DeleteAed(aed), Times.Once());
+        _aedRepositoryMock.Verify(r => r.DeleteAed(It.IsAny<Aed>()), Times.Never());
     }
     
     [Fact]
@@ -81,7 +59,31 @@ public class DeleteAedCommandTests
         await action.Should().ThrowAsync<ArgumentException>()
             .Where(e => e.Message == "Invalid aedId Guid format.");
         
-        _aedRepositoryMock.Verify(foo => foo.DeleteAed(It.IsAny<Aed>()), Times.Never());
+        _aedRepositoryMock.Verify(r => r.DeleteAed(It.IsAny<Aed>()), Times.Never());
     }
+    
+    [Fact]
+    public async Task AedFound_DeletesAed()
+    {
+        // Arrange
+        var aedId = Guid.NewGuid();
+        
+        var command = new DeleteAedCommand(aedId.ToString());
+        var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object);
+        
+        var aed = _fixture.Create<PublicAed>();
+        
+        _aedRepositoryMock
+            .Setup(r => r.GetAedById(It.IsAny<Guid>()))
+            .ReturnsAsync(aed);
+        
+        //Act
+        await handler.Handle(command, CancellationToken.None);
+        
+        // Assert
+        _aedRepositoryMock.Verify(r => r.DeleteAed(aed), Times.Once());
+    }
+    
+    
     
 }

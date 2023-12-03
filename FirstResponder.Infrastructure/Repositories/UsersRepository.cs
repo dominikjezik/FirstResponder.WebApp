@@ -46,6 +46,8 @@ public class UsersRepository : IUsersRepository
         }
     
         user.Id = applicationUser.Id;
+        user.CreatedAt = applicationUser.CreatedAt;
+        user.UpdatedAt = applicationUser.UpdatedAt;
     }
 
     public async Task UpdateUser(User user)

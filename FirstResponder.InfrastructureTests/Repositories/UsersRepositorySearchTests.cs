@@ -14,7 +14,7 @@ public class UsersRepositorySearchTests : IDisposable
 {
     private readonly DbContextOptions<ApplicationDbContext> dbContextOptions = 
         new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "FirstResponderTestDatabase")
+            .UseInMemoryDatabase(databaseName: "FirstResponderTestDatabase"+ nameof(UsersRepositorySearchTests))
             .Options;
     
     private readonly IFixture _fixture = new Fixture();

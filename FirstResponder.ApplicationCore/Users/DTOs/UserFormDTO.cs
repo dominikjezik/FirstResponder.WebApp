@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Enums;
 
@@ -5,6 +6,7 @@ namespace FirstResponder.ApplicationCore.Users.DTOs;
 
 public class UserFormDTO
 {
+    [EmailAddress]
     public required string Email { get; set; }
 
     public required string FullName { get; set; }

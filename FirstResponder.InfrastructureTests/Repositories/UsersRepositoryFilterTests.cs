@@ -15,7 +15,7 @@ public class UsersRepositoryFilterTests : IDisposable
 {
     private readonly DbContextOptions<ApplicationDbContext> dbContextOptions = 
         new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "FirstResponderTestDatabase")
+            .UseInMemoryDatabase(databaseName: "FirstResponderTestDatabase" + nameof(UsersRepositoryFilterTests))
             .Options;
     
     private readonly Mock<UserManager<ApplicationUser>> _userManagerMock = new(Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);

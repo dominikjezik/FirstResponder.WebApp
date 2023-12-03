@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.ApplicationC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.InfrastructureTests", "FirstResponder.InfrastructureTests\FirstResponder.InfrastructureTests.csproj", "{6AFDE500-C234-4F27-8397-8100FDBA8F0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.WebTests", "FirstResponder.WebTests\FirstResponder.WebTests.csproj", "{8C9C83EF-CF77-4663-9974-80432B58A59A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{6AFDE500-C234-4F27-8397-8100FDBA8F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AFDE500-C234-4F27-8397-8100FDBA8F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AFDE500-C234-4F27-8397-8100FDBA8F0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C9C83EF-CF77-4663-9974-80432B58A59A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C9C83EF-CF77-4663-9974-80432B58A59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C9C83EF-CF77-4663-9974-80432B58A59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C9C83EF-CF77-4663-9974-80432B58A59A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{452A3C2D-4DC3-44E9-BC05-A471786D52B2} = {07523733-7033-4519-8495-94F99821453D}
 		{F79E4C77-C3A2-4C24-98DC-E7AB9A421E15} = {71AEB712-E56D-4E29-8566-6293A527068E}
 		{6AFDE500-C234-4F27-8397-8100FDBA8F0D} = {71AEB712-E56D-4E29-8566-6293A527068E}
+		{8C9C83EF-CF77-4663-9974-80432B58A59A} = {71AEB712-E56D-4E29-8566-6293A527068E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7CDEDC8F-D2E2-4F3D-BE88-61A1AE88769D}

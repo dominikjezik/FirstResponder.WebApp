@@ -17,7 +17,13 @@
 <div class="user-details-page">
     <div class="user-details-form">
         <form asp-controller="Aed" asp-action="Edit" asp-route-aedId="@Model.AedId">
-            <div asp-validation-summary="All" class="text-red"></div>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="message is-danger">
+                    <div asp-validation-summary="All" class="message-body mb-1"></div>
+                </div>
+            }
+            
             <section class="form-section">
                 <div class="field">
                     <label class="label">Registrácia</label>
@@ -53,15 +59,15 @@
 
             @if (Model.GeneralType == AedGeneralType.Public)
             {
-                <partial name="_PublicAedFormPartial" model="Model" />
+                <partial name="_PublicAedFormPartial" model="Model"/>
             }
 
             @if (Model.GeneralType == AedGeneralType.Personal)
             {
-                <partial name="_PersonalAedFormPartial" model="Model" />
+                <partial name="_PersonalAedFormPartial" model="Model"/>
             }
 
-            <partial name="_AedTechnicalDetailsFormPartial" model="Model" />
+            <partial name="_AedTechnicalDetailsFormPartial" model="Model"/>
 
             <div class="field">
                 <div class="control">

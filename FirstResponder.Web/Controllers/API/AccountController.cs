@@ -29,16 +29,16 @@ public class AccountController : ControllerBase
         
         try
         {
-            await _mediator.Send(new CreateUserCommand(model, model.Password));
+            var user = await _mediator.Send(new CreateUserCommand(model, model.Password));
+            
+            // TODO: Vrátiť API token
+
+            return Ok(user);
         }
         catch (EntityValidationException exception)
         {
             return BadRequest(exception.ValidationErrors);
         }
-        
-        // TODO: Vrátiť API token
-
-        return Ok();
     }
 
     #endregion
