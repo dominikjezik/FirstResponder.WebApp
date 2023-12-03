@@ -42,14 +42,7 @@ public class UsersRepository : IUsersRepository
 
         if (!result.Succeeded)
         {
-            var errors = new Dictionary<string, string>();
-        
-            foreach (var error in result.Errors)
-            {
-                errors.Add(error.Code, error.Description);
-            }
-
-            throw new EntityValidationException(errors);
+            HandleIdentityErrors(result);
         }
     
         user.Id = applicationUser.Id;
@@ -66,6 +59,7 @@ public class UsersRepository : IUsersRepository
         
         applicationUser.FullName = user.FullName;
         applicationUser.Email = user.Email;
+        applicationUser.UserName = user.Email;
         applicationUser.PhoneNumber = user.PhoneNumber;
         applicationUser.DateOfBirth = user.DateOfBirth;
         applicationUser.Address = user.Address;
@@ -74,9 +68,13 @@ public class UsersRepository : IUsersRepository
         applicationUser.Region = user.Region;
         applicationUser.Notes = user.Notes;
         applicationUser.Type = user.Type;
+
+        var result = await _userManager.UpdateAsync(applicationUser);
         
-        _dbContext.Update(applicationUser);
-        await _dbContext.SaveChangesAsync();
+        if (!result.Succeeded)
+        {
+            HandleIdentityErrors(result);
+        }
     }
 
     public Task DeleteUser(User user)
@@ -142,5 +140,26 @@ public class UsersRepository : IUsersRepository
             .Take(pageSize)
             .ToListAsync();
     }
+
+    #region Helpers
+
+    private void HandleIdentityErrors(IdentityResult result)
+    {
+        var errors = new Dictionary<string, string>();
+        
+        foreach (var error in result.Errors)
+        {
+            // Odstranenie duplicitnej chyby, ktoru vyhodi Identity ak sa pokusame vytvorit uzivatela s rovnakym emailom
+            if (error.Code == "DuplicateUserName" && error.Description.Contains("is already taken."))
+            {
+                continue;
+            }
+            errors.Add(error.Code, error.Description);
+        }
+
+        throw new EntityValidationException(errors);
+    }
+
+    #endregion
     
 }
