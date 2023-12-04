@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Enums;
 
@@ -11,6 +12,7 @@ public class User : AuditableEntity<Guid>
 
     public required string PhoneNumber { get; set; }
 
+    [Required]
     public DateTime DateOfBirth { get; set; }
 
     public string? Address { get; set; }

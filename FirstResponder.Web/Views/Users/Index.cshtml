@@ -70,14 +70,14 @@
     <tbody id="users-table-body">
     @foreach (var user in Model)
     {
-        <tr>
-            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.FullName</a></td>
-            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Email</a></td>
-            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.PhoneNumber</a></td>
-            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.CreatedAt</a></td>
-            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Type</a></td>
-            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Region</a></td>
-            <td><a asp-controller="Users" asp-action="Edit" asp-route-userId="@user.Id">@user.Address</a></td>
+        <tr onclick="window.location = '@Url.Action("Edit", "Users", new { userId = user.Id })'">
+            <td>@user.FullName</td>
+            <td>@user.Email</td>
+            <td>@user.PhoneNumber</td>
+            <td>@user.CreatedAt</td>
+            <td>@user.Type</td>
+            <td>@user.Region</td>
+            <td>@user.Address</td>
         </tr>
     }
     </tbody>

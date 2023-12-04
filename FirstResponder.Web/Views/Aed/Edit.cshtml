@@ -35,11 +35,11 @@
                 <div class="field">
                     <label class="label">Typ</label>
                     <div class="control">
-                        <label class="radio">
+                        <label style="margin-right: .5rem;">
                             <input type="radio" id="radio-public-aed" disabled @(Model.GeneralType == AedGeneralType.Public ? "checked" : "")>
                             Verejný
                         </label>
-                        <label class="radio">
+                        <label>
                             <input type="radio" id="radio-personal-aed" disabled @(Model.GeneralType == AedGeneralType.Personal ? "checked" : "")>
                             Osobný
                         </label>
@@ -82,16 +82,19 @@
     <aside class="user-details-aside">
         @if (Model.GeneralType == AedGeneralType.Public)
         {
-            <section>
-                <h2 class="heading-with-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                    </svg>
-                    Umiestnenie
-                </h2>
-                <div id="map" style="height: 300px; margin-bottom: 1rem;"></div>
-            </section>
+            @if (Model.GeneralType == AedGeneralType.Public && Model.Latitude != null && Model.Longitude != null)
+            {
+                <section>
+                    <h2 class="heading-with-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                            <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                            <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        </svg>
+                        Umiestnenie
+                    </h2>
+                    <div id="map" style="height: 300px; margin-bottom: 1rem;"></div>
+                </section>
+            }
         
             <section>
                 <header class="section-header">
@@ -112,7 +115,7 @@
         }
         
         
-        <header class="section-header">
+        <header class="section-header" style="opacity: 0.2;">
             <h2 class="heading-with-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
@@ -123,7 +126,7 @@
             <button class="button" disabled>Pridať udalosť</button>
         </header>
         
-        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth" style="opacity: 0.2;">
             <thead>
             <tr>
                 <th>Dátum</th>
@@ -151,7 +154,7 @@
             </tbody>
         </table>
         
-        <header class="section-header">
+        <header class="section-header" style="opacity: 0.2;">
             <h2 class="heading-with-icon">
                 <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
@@ -161,7 +164,7 @@
             <button class="button" disabled>Odoslať notifikáciu</button>
         </header>
         
-        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth" style="opacity: 0.2;">
             <thead>
             <tr>
                 <th>Dátum</th>
@@ -187,22 +190,31 @@
 
 @section StyleSheets
 {
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    @if (Model.GeneralType == AedGeneralType.Public && Model.Latitude != null && Model.Longitude != null)
+    {
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    }
 }
 
 @section Scripts
 {
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script>
-        let map = L.map('map').setView([48.684, 19.677], 16);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+    @if(Model.GeneralType == AedGeneralType.Public && Model.Latitude != null && Model.Longitude != null)
+    {
+        var lat = Model.Latitude.ToString().Replace(",", ".");
+        var lon = Model.Longitude.ToString().Replace(",", ".");
         
-        let marker = L.marker([48.684, 19.677]).addTo(map);
-        //marker.bindPopup("Môj marker").openPopup();
-    </script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <script>
+            let map = L.map('map').setView([48.684, 19.677], 7);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            let marker = L.marker([@lat, @lon]).addTo(map);
+            map.setView([@lat, @lon], 16);
+        </script>
+    }
     
     <script src="~/js/find-users-aed.js"></script>
 }

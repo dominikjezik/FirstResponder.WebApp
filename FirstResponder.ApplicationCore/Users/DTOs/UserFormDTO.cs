@@ -13,7 +13,9 @@ public class UserFormDTO
     
     public required string PhoneNumber { get; set; }
 
-    public DateTime DateOfBirth { get; set; }
+    [Required]
+    [DataType(DataType.Date)]
+    public DateTime? DateOfBirth { get; set; }
 
     public string? Address { get; set; }
 
@@ -45,7 +47,7 @@ public class UserFormDTO
                 Email = Email,
                 FullName = FullName,
                 PhoneNumber = PhoneNumber,
-                DateOfBirth = DateOfBirth,
+                DateOfBirth = (DateTime)DateOfBirth,
                 Address = Address,
                 PostalCode = PostalCode,
                 City = City,
@@ -59,7 +61,7 @@ public class UserFormDTO
         targetUser.Email = Email;
         targetUser.FullName = FullName;
         targetUser.PhoneNumber = PhoneNumber;
-        targetUser.DateOfBirth = DateOfBirth;
+        targetUser.DateOfBirth = (DateTime)DateOfBirth;
         targetUser.Address = Address;
         targetUser.PostalCode = PostalCode;
         targetUser.City = City;
