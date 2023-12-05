@@ -30,8 +30,8 @@ function setupSearchBox() {
     const searchResults = document.getElementById('search-results')
     const removeSelectedOwner = document.getElementById('remove-selected-owner')
 
-    searchBox.addEventListener('keyup', searchForResults)
-    searchBox.addEventListener('focusin', searchForResults)
+    searchBox.addEventListener('keyup', searchForResultsDebounced())
+    searchBox.addEventListener('focusin', searchForResultsDebounced())
     searchBox.addEventListener('focusout', () => searchResults.innerHTML = '')
 
     removeSelectedOwner.onclick = (ev) => {
@@ -46,9 +46,20 @@ function setupSearchBox() {
     }
 }
 
+function searchForResultsDebounced() {
+    let timer = null;
+    return function() {
+        clearTimeout(timer);
+        timer = setTimeout(searchForResults, 200);
+    }
+}
+
 function searchForResults() {
+    console.log('searching for results')
     const searchResults = document.getElementById('search-results')
     const searchBox = document.getElementById('search-box')
+    const searchBoxControl = document.getElementById('search-box-control')
+        
     let query = searchBox.value.trim()
 
     if (query === '') {
@@ -56,10 +67,16 @@ function searchForResults() {
         document.getElementById('owner-id').value = ''
         return
     }
+    
+    // Show spinner
+    searchBoxControl.className += " is-loading";
 
     fetch('/api/users/search?query=' + query)
         .then((response) => response.json())
         .then(data => {
+            // Hide spinner
+            searchBoxControl.className = searchBoxControl.className.replace("is-loading", "");
+            
             // clear previeous results
             searchResults.innerHTML = ''
             

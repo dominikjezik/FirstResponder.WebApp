@@ -14,9 +14,15 @@
     </div>
 </header>
 
-<div class="user-details-page" x-data="{ formType: '@AedGeneralType.Public' }">
+<div class="user-details-page" x-data="{ formType: '@(Model != null ? Model.GeneralType : AedGeneralType.Public)' }">
     <form asp-controller="Aed" asp-action="Create" class="user-details-form">
-        <div asp-validation-summary="All" class="text-red"></div>
+        @if(!ViewData.ModelState.IsValid)
+        {
+            <div class="message is-danger">
+                <div asp-validation-summary="All" class="message-body mb-1"></div>
+            </div>
+        }
+        
         <section class="form-section">
             <div class="field">
                 <label class="label">Typ</label>

@@ -4,7 +4,7 @@
     <h2>Vlastník AED (First responder)</h2>
     <div id="search-field" class="field aed-responder-search-field" style="@(Model?.Owner != null ? "display: none" : "" )">
         <label class="label">Používateľ *</label>
-        <div class="control">
+        <div id="search-box-control" class="control">
             <input id="search-box" class="input" placeholder="Vyhľadávanie podľa mena alebo emailu" autocomplete="off">
         </div>
         <ul id="search-results" class="results panel"></ul>
