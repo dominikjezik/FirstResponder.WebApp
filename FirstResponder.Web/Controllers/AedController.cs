@@ -3,7 +3,9 @@ using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Aeds.Queries;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Shared;
 using FirstResponder.Web.Extensions;
+using FirstResponder.Web.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +43,7 @@ public class AedController : Controller
 
     [HttpPost]
     [Route("[action]")]
-    public async Task<IActionResult> Create(AedFormDTO model)
+    public async Task<IActionResult> Create(AedFormViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -51,6 +53,15 @@ public class AedController : Controller
         
         try
         {
+            if (model.AedPhotoFormFile != null)
+            {
+                model.AedPhotoFileUploadDTO = new FileUploadDTO 
+                { 
+                    Extension = Path.GetExtension(model.AedPhotoFormFile.FileName),
+                    FileStream = model.AedPhotoFormFile.OpenReadStream()
+                };
+            }
+            
             var aed = await _mediator.Send(new CreateAedCommand(model));
             return RedirectToAction(nameof(Edit), "Aed", new { aedId = aed.Id });
         }

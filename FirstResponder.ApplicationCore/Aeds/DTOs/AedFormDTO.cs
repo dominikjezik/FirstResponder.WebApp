@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Enums;
+using FirstResponder.ApplicationCore.Shared;
 
 namespace FirstResponder.ApplicationCore.Aeds.DTOs;
 
@@ -75,6 +76,8 @@ public class AedFormDTO
 
     [EmailAddress]
     public string? ContactPersonEmail { get; set; }
+    
+    public FileUploadDTO? AedPhotoFileUploadDTO { get; set; }
 
     #endregion
 

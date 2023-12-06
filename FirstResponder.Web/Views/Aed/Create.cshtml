@@ -1,4 +1,4 @@
-@model AedFormDTO
+@model AedFormViewModel
 
 <header class="main-header">
     <h1>Pridať nové AED</h1>
@@ -15,7 +15,7 @@
 </header>
 
 <div class="user-details-page" x-data="{ formType: '@(Model != null ? Model.GeneralType : AedGeneralType.Public)' }">
-    <form asp-controller="Aed" asp-action="Create" class="user-details-form">
+    <form asp-controller="Aed" asp-action="Create" enctype="multipart/form-data" class="user-details-form">
         @if(!ViewData.ModelState.IsValid)
         {
             <div class="message is-danger">
@@ -49,6 +49,8 @@
             </div>
         </section>
         
+        <input type="file" asp-for="AedPhotoFormFile" id="photo">
+        
         <template x-if="formType == '@AedGeneralType.Public'">
             <div>
                 <partial name="_PublicAedFormPartial" />
@@ -80,7 +82,7 @@
                             </svg>
                             Fotografie
                         </h2>
-                        <button class="button" disabled>Pridať fotografiu</button>
+                        <button class="button">Pridať fotografiu</button>
                     </header>
                 </template>
 

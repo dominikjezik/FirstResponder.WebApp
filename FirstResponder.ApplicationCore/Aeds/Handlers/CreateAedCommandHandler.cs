@@ -12,11 +12,13 @@ public class CreateAedCommandHandler : IRequestHandler<CreateAedCommand, Aed>
 {
     private readonly IAedRepository _aedRepository;
     private readonly IUsersRepository _usersRepository;
+    private readonly IFileService _fileService;
 
-    public CreateAedCommandHandler(IAedRepository aedRepository, IUsersRepository usersRepository)
+    public CreateAedCommandHandler(IAedRepository aedRepository, IUsersRepository usersRepository, IFileService fileService)
     {
         _aedRepository = aedRepository;
         _usersRepository = usersRepository;
+        _fileService = fileService;
     }
     
     public async Task<Aed> Handle(CreateAedCommand request, CancellationToken cancellationToken)
@@ -38,6 +40,15 @@ public class CreateAedCommandHandler : IRequestHandler<CreateAedCommand, Aed>
         }
         
         await _aedRepository.AddAed(aed);
+        
+        if (request.AedFormDto.AedPhotoFileUploadDTO != null)
+        {
+            var image = await _fileService.StoreFile(request.AedFormDto.AedPhotoFileUploadDTO);
+            
+            // TODO: priradit fotku k aed
+            
+            await _aedRepository.UpdateAed(aed);
+        }
 
         return aed;
     }

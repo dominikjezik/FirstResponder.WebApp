@@ -17,6 +17,7 @@ public class CreateAedCommandTests
     
     private readonly Mock<IAedRepository> _aedRepositoryMock = new();
     private readonly Mock<IUsersRepository> _usersRepositoryMock = new();
+    private readonly Mock<IFileService> _fileServiceMock = new();
     
     [Fact]
     public async Task InvalidOwnerId_ThrowsValidationException()
@@ -28,7 +29,7 @@ public class CreateAedCommandTests
             .Create();
         
         var command = new CreateAedCommand(aedFormDto);
-        var handler = new CreateAedCommandHandler(_aedRepositoryMock.Object, _usersRepositoryMock.Object);
+        var handler = new CreateAedCommandHandler(_aedRepositoryMock.Object, _usersRepositoryMock.Object, _fileServiceMock.Object);
         
         _usersRepositoryMock
             .Setup(r => r.UserExists(It.IsAny<Guid>()))
@@ -59,7 +60,7 @@ public class CreateAedCommandTests
             .Create();
         
         var command = new CreateAedCommand(aedFormDto);
-        var handler = new CreateAedCommandHandler(_aedRepositoryMock.Object, _usersRepositoryMock.Object);
+        var handler = new CreateAedCommandHandler(_aedRepositoryMock.Object, _usersRepositoryMock.Object, _fileServiceMock.Object);
 
         var expectedAedId = Guid.NewGuid();
         
@@ -90,7 +91,7 @@ public class CreateAedCommandTests
             .Create();
         
         var command = new CreateAedCommand(aedFormDto);
-        var handler = new CreateAedCommandHandler(_aedRepositoryMock.Object, _usersRepositoryMock.Object);
+        var handler = new CreateAedCommandHandler(_aedRepositoryMock.Object, _usersRepositoryMock.Object, _fileServiceMock.Object);
 
         var expectedAedId = Guid.NewGuid();
         

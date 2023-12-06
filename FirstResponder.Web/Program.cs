@@ -2,6 +2,7 @@ using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Aeds.Queries;
 using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.Infrastructure.DbContext;
+using FirstResponder.Infrastructure.FileStorage;
 using FirstResponder.Infrastructure.Identity;
 using FirstResponder.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -49,11 +50,18 @@ builder.Services.AddAuthorization(options =>
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetAllAedsQuery>());
 
+// LocalFileService configuration
+builder.Services.Configure<LocalFileServiceOptions>(options =>
+{
+    options.UploadsFolderPath = Path.Combine(builder.Environment.WebRootPath, "uploads");
+});
+
 // Custom repositories and services
 builder.Services.AddScoped<IAedRepository, AedRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddSingleton<IFileService, LocalFileService>();
 
 var app = builder.Build();
 
