@@ -294,6 +294,32 @@ namespace FirstResponder.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AedPhotos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PublicAedId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PhotoName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AedPhotos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AedPhotos_PublicAeds_PublicAedId",
+                        column: x => x.PublicAedId,
+                        principalTable: "PublicAeds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AedPhotos_PublicAedId",
+                table: "AedPhotos",
+                column: "PublicAedId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Aeds_LanguageId",
                 table: "Aeds",
@@ -357,6 +383,9 @@ namespace FirstResponder.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AedPhotos");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 

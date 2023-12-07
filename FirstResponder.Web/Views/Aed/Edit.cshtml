@@ -82,7 +82,7 @@
     <aside class="user-details-aside">
         @if (Model.GeneralType == AedGeneralType.Public)
         {
-            @if (Model.GeneralType == AedGeneralType.Public && Model.Latitude != null && Model.Longitude != null)
+            @if (Model.Latitude != null && Model.Longitude != null)
             {
                 <section>
                     <h2 class="heading-with-icon">
@@ -109,7 +109,19 @@
                 </header>
             
                 <div class="mb-5">
-                    Neboli nahraté žiadne fotografie.
+                    @if (Model.Photos != null && Model.Photos.Count > 0)
+                    {
+                        foreach (var photo in Model.Photos)
+                        {
+                            <div class="image-container">
+                                <img src="~/uploads/@photo.PhotoName" alt="Fotografia AED">
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <text>Neboli nahraté žiadne fotografie.</text>
+                    }
                 </div>
             </section>
         }

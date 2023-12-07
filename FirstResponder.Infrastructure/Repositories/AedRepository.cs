@@ -74,4 +74,15 @@ public class AedRepository : IAedRepository
         _dbContext.Aeds.Remove(aed);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task AddAedPhoto(AedPhoto aedPhoto)
+    {
+        _dbContext.Add(aedPhoto);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<ICollection<AedPhoto>> GetAedPhotos(Guid aedId)
+    {
+        return await _dbContext.AedPhotos.Where(p => p.PublicAedId == aedId).ToListAsync();
+    }
 }

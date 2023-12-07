@@ -49,11 +49,10 @@
             </div>
         </section>
         
-        <input type="file" asp-for="AedPhotoFormFile" id="photo">
-        
         <template x-if="formType == '@AedGeneralType.Public'">
             <div>
-                <partial name="_PublicAedFormPartial" />
+                <input type="file" asp-for="AedPhotoFormFile" id="photo">
+                <partial name="_PublicAedFormPartial"/>
             </div>
         </template> 
     

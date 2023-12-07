@@ -5,6 +5,7 @@ using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Aeds.Handlers;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Shared;
 using FluentAssertions;
 using Moq;
 
@@ -17,6 +18,11 @@ public class UpdateAedCommandTests
     private readonly Mock<IAedRepository> _aedRepositoryMock = new();
     private readonly Mock<IUsersRepository> _usersRepositoryMock = new();
 
+    public UpdateAedCommandTests()
+    {
+        _fixture.Register<FileUploadDTO>(() => null);
+    }
+    
     [Fact]
     public async Task AedNotFound_ThrowsEntityNotFoundException()
     {

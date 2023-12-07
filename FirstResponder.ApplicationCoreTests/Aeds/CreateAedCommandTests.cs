@@ -6,6 +6,7 @@ using FirstResponder.ApplicationCore.Aeds.Handlers;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Shared;
 using FluentAssertions;
 using Moq;
 
@@ -18,6 +19,11 @@ public class CreateAedCommandTests
     private readonly Mock<IAedRepository> _aedRepositoryMock = new();
     private readonly Mock<IUsersRepository> _usersRepositoryMock = new();
     private readonly Mock<IFileService> _fileServiceMock = new();
+
+    public CreateAedCommandTests()
+    {
+        _fixture.Register<FileUploadDTO>(() => null);
+    }
     
     [Fact]
     public async Task InvalidOwnerId_ThrowsValidationException()

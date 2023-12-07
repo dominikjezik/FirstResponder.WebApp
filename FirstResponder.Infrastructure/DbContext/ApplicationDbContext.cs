@@ -22,6 +22,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Manufacturer> AedManufacturers { get; set; }
     public DbSet<Language> AedLanguages { get; set; }
     public DbSet<Model> AedModels { get; set; }
+    public DbSet<AedPhoto> AedPhotos { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

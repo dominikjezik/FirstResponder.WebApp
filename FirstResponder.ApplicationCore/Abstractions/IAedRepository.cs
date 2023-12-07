@@ -19,4 +19,8 @@ public interface IAedRepository
     Task UpdateAed(Aed aed);
 
     Task DeleteAed(Aed aed);
+    
+    Task AddAedPhoto(AedPhoto aedPhoto);
+    
+    Task<ICollection<AedPhoto>> GetAedPhotos(Guid aedId);
 }

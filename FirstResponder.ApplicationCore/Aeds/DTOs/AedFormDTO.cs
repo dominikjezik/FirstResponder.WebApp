@@ -79,6 +79,8 @@ public class AedFormDTO
     
     public FileUploadDTO? AedPhotoFileUploadDTO { get; set; }
 
+    public ICollection<AedPhoto>? Photos { get; set; }
+
     #endregion
 
     #region Personal Aed properties
@@ -206,6 +208,7 @@ public static class AedExtensions
             dto.ContactPerson = publicAed.ContactPerson;
             dto.ContactPersonPhone = publicAed.ContactPersonPhone;
             dto.ContactPersonEmail = publicAed.ContactPersonEmail;
+            dto.Photos = publicAed.Photos;
         }
 
         return dto;

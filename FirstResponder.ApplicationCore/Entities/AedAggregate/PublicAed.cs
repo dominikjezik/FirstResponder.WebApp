@@ -36,4 +36,6 @@ public class PublicAed : Aed
 
     [EmailAddress]
     public string? ContactPersonEmail { get; set; }
+    
+    public ICollection<AedPhoto>? Photos { get; set; }
 }

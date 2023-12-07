@@ -83,6 +83,32 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.UseTptMappingStrategy();
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.AedPhoto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhotoName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PublicAedId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PublicAedId");
+
+                    b.ToTable("AedPhotos");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Language", b =>
                 {
                     b.Property<Guid>("Id")
@@ -434,6 +460,15 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Navigation("Model");
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.AedPhoto", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("PublicAedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationRole", null)
@@ -507,6 +542,11 @@ namespace FirstResponder.Infrastructure.Migrations
                         .HasForeignKey("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>
+                {
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

@@ -31,6 +31,11 @@ public class GetAedByIdHandler : IRequestHandler<GetAedByIdQuery, Aed?>
             {
                 personalAed.Owner = await _usersRepository.GetUserById(personalAed.OwnerId);
             }
+            else
+            {
+                var publicAed = (PublicAed)aed;
+                publicAed.Photos = await _aedRepository.GetAedPhotos(aed.Id);
+            }
 
             return aed;
         }
