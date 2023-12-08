@@ -4,8 +4,10 @@ using FirstResponder.Web.Validation;
 
 namespace FirstResponder.Web.ViewModels;
 
-public class AedFormViewModel : AedFormDTO
+public class AedFormViewModel
 {
+    public AedFormDTO AedFormDTO { get; set; } = new AedFormDTO();
+    
     [Display(Name = "Banner image")]
     [AllowedMimeTypes("image/jpeg", "image/png")]
     public IFormFile? AedPhotoFormFile { get; set; }

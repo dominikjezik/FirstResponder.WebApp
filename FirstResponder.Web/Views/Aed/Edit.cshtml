@@ -1,4 +1,4 @@
-@model AedFormDTO
+@model AedFormViewModel
 
 <header class="main-header">
     <h1>AED Adresa 123</h1>
@@ -16,7 +16,7 @@
 
 <div class="user-details-page">
     <div class="user-details-form">
-        <form asp-controller="Aed" asp-action="Edit" asp-route-aedId="@Model.AedId">
+        <form asp-controller="Aed" asp-action="Edit" asp-route-aedId="@Model.AedFormDTO.AedId">
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="message is-danger">
@@ -28,7 +28,7 @@
                 <div class="field">
                     <label class="label">Registrácia</label>
                     <div class="control">
-                        <input class="input" asp-for="CreatedAt" disabled>
+                        <input class="input" asp-for="AedFormDTO.CreatedAt" disabled>
                     </div>
                 </div>
 
@@ -36,11 +36,11 @@
                     <label class="label">Typ</label>
                     <div class="control">
                         <label style="margin-right: .5rem;">
-                            <input type="radio" id="radio-public-aed" disabled @(Model.GeneralType == AedGeneralType.Public ? "checked" : "")>
+                            <input type="radio" id="radio-public-aed" disabled @(Model.AedFormDTO.GeneralType == AedGeneralType.Public ? "checked" : "")>
                             Verejný
                         </label>
                         <label>
-                            <input type="radio" id="radio-personal-aed" disabled @(Model.GeneralType == AedGeneralType.Personal ? "checked" : "")>
+                            <input type="radio" id="radio-personal-aed" disabled @(Model.AedFormDTO.GeneralType == AedGeneralType.Personal ? "checked" : "")>
                             Osobný
                         </label>
                     </div>
@@ -50,19 +50,19 @@
                     <label class="label">Stav *</label>
                     <div class="control">
                         <div class="select select-full-width">
-                            <select asp-for="State" asp-items="Html.GetEnumSelectList<AedState>()">
+                            <select asp-for="AedFormDTO.State" asp-items="Html.GetEnumSelectList<AedState>()">
                             </select>
                         </div>
                     </div>
                 </div>
             </section>
 
-            @if (Model.GeneralType == AedGeneralType.Public)
+            @if (Model.AedFormDTO.GeneralType == AedGeneralType.Public)
             {
                 <partial name="_PublicAedFormPartial" model="Model"/>
             }
 
-            @if (Model.GeneralType == AedGeneralType.Personal)
+            @if (Model.AedFormDTO.GeneralType == AedGeneralType.Personal)
             {
                 <partial name="_PersonalAedFormPartial" model="Model"/>
             }
@@ -76,13 +76,13 @@
                 </div>
             </div>
         </form>
-        <form asp-controller="Aed" asp-action="Delete" asp-route-aedId="@Model.AedId" id="formDelete" onSubmit="return confirm('Naozaj chcete odstrániť toto AED?') "></form>
+        <form asp-controller="Aed" asp-action="Delete" asp-route-aedId="@Model.AedFormDTO.AedId" id="formDelete" onSubmit="return confirm('Naozaj chcete odstrániť toto AED?') "></form>
     </div>
 
     <aside class="user-details-aside">
-        @if (Model.GeneralType == AedGeneralType.Public)
+        @if (Model.AedFormDTO.GeneralType == AedGeneralType.Public)
         {
-            @if (Model.Latitude != null && Model.Longitude != null)
+            @if (Model.AedFormDTO.Latitude != null && Model.AedFormDTO.Longitude != null)
             {
                 <section>
                     <h2 class="heading-with-icon">
@@ -109,9 +109,9 @@
                 </header>
             
                 <div class="mb-5">
-                    @if (Model.Photos != null && Model.Photos.Count > 0)
+                    @if (Model.AedFormDTO.Photos != null && Model.AedFormDTO.Photos.Count > 0)
                     {
-                        foreach (var photo in Model.Photos)
+                        foreach (var photo in Model.AedFormDTO.Photos)
                         {
                             <div class="image-container">
                                 <img src="~/uploads/@photo.PhotoName" alt="Fotografia AED">
@@ -202,7 +202,7 @@
 
 @section StyleSheets
 {
-    @if (Model.GeneralType == AedGeneralType.Public && Model.Latitude != null && Model.Longitude != null)
+    @if (Model.AedFormDTO.GeneralType == AedGeneralType.Public && Model.AedFormDTO.Latitude != null && Model.AedFormDTO.Longitude != null)
     {
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     }
@@ -210,10 +210,10 @@
 
 @section Scripts
 {
-    @if(Model.GeneralType == AedGeneralType.Public && Model.Latitude != null && Model.Longitude != null)
+    @if(Model.AedFormDTO.GeneralType == AedGeneralType.Public && Model.AedFormDTO.Latitude != null && Model.AedFormDTO.Longitude != null)
     {
-        var lat = Model.Latitude.ToString().Replace(",", ".");
-        var lon = Model.Longitude.ToString().Replace(",", ".");
+        var lat = Model.AedFormDTO.Latitude.ToString().Replace(",", ".");
+        var lon = Model.AedFormDTO.Longitude.ToString().Replace(",", ".");
         
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
         <script>

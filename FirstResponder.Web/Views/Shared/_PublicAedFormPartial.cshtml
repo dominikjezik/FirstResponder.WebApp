@@ -1,63 +1,63 @@
-@model AedFormDTO
+@model AedFormViewModel
 
 <section class="form-section">
     <h2>Umiestnenie</h2>
     <div class="field">
-        <label asp-for="Holder" class="label">Držateľ *</label>
+        <label asp-for="AedFormDTO.Holder" class="label">Držateľ *</label>
         <div class="control">
-            <input class="input" asp-for="Holder" required>
+            <input class="input" asp-for="AedFormDTO.Holder" required>
         </div>
     </div>
 
     <div class="field">
-        <label asp-for="Address" class="label">Ulica, číslo *</label>
+        <label asp-for="AedFormDTO.Address" class="label">Ulica, číslo *</label>
         <div class="control">
-            <input class="input" asp-for="Address" required>
+            <input class="input" asp-for="AedFormDTO.Address" required>
         </div>
     </div>
 
     <div class="field">
-        <label asp-for="City" class="label">Mesto *</label>
+        <label asp-for="AedFormDTO.City" class="label">Mesto *</label>
         <div class="control">
-            <input class="input" asp-for="City" required>
+            <input class="input" asp-for="AedFormDTO.City" required>
         </div>
     </div>
 
     <div class="field">
-        <label asp-for="PostalCode" class="label">PSČ *</label>
+        <label asp-for="AedFormDTO.PostalCode" class="label">PSČ *</label>
         <div class="control">
-            <input class="input" asp-for="PostalCode" required>
+            <input class="input" asp-for="AedFormDTO.PostalCode" required>
         </div>
     </div>
 
     <div class="field">
-        <label asp-for="Region" class="label">Kraj *</label>
+        <label asp-for="AedFormDTO.Region" class="label">Kraj *</label>
         <div class="control">
             <div class="select select-full-width">
-                <select asp-for="Region" asp-items="Html.GetEnumSelectList<RegionOfState>()">
+                <select asp-for="AedFormDTO.Region" asp-items="Html.GetEnumSelectList<RegionOfState>()">
                 </select>
             </div>
         </div>
     </div>
 
     <div class="field">
-        <label asp-for="Latitude" class="label">Zemepisná šírka</label>
+        <label asp-for="AedFormDTO.Latitude" class="label">Zemepisná šírka</label>
         <div class="control">
-            <input class="input" asp-for="Latitude" type="number" step=".000001" min="-90" max="90">
+            <input class="input" asp-for="AedFormDTO.Latitude" type="number" step=".000001" min="-90" max="90">
         </div>
     </div>
 
     <div class="field">
-        <label asp-for="Longitude" class="label">Zemepisná dĺžka</label>
+        <label asp-for="AedFormDTO.Longitude" class="label">Zemepisná dĺžka</label>
         <div class="control">
-            <input class="input" asp-for="Longitude" type="number" step=".000001" min="-90" max="90">
+            <input class="input" asp-for="AedFormDTO.Longitude" type="number" step=".000001" min="-90" max="90">
         </div>
     </div>
         
     <div class="field">
-        <label asp-for="DescriptionLocation" class="label">Popis</label>
+        <label asp-for="AedFormDTO.DescriptionLocation" class="label">Popis</label>
         <div class="control">
-            <textarea class="textarea" asp-for="DescriptionLocation"></textarea>
+            <textarea class="textarea" asp-for="AedFormDTO.DescriptionLocation"></textarea>
         </div>
     </div>
 </section>
@@ -142,23 +142,23 @@
 <section class="form-section">
     <h2>Kontaktná osoba</h2>
     <div class="field">
-        <label asp-for="ContactPerson" class="label">Meno</label>
+        <label asp-for="AedFormDTO.ContactPerson" class="label">Meno</label>
         <div class="control">
-            <input class="input" asp-for="ContactPerson">
+            <input class="input" asp-for="AedFormDTO.ContactPerson">
         </div>
     </div>
     
     <div class="field">
-        <label asp-for="ContactPersonPhone" class="label">Telefón</label>
+        <label asp-for="AedFormDTO.ContactPersonPhone" class="label">Telefón</label>
         <div class="control">
-            <input class="input" asp-for="ContactPersonPhone">
+            <input class="input" asp-for="AedFormDTO.ContactPersonPhone">
         </div>
     </div>
     
     <div class="field">
-        <label asp-for="ContactPersonEmail"  class="label">Email</label>
+        <label asp-for="AedFormDTO.ContactPersonEmail"  class="label">Email</label>
         <div class="control">
-            <input class="input" asp-for="ContactPersonEmail">
+            <input class="input" asp-for="AedFormDTO.ContactPersonEmail">
         </div>
     </div>
 </section>

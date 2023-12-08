@@ -14,7 +14,7 @@
     </div>
 </header>
 
-<div class="user-details-page" x-data="{ formType: '@(Model != null ? Model.GeneralType : AedGeneralType.Public)' }">
+<div class="user-details-page" x-data="{ formType: '@(Model != null ? Model.AedFormDTO.GeneralType : AedGeneralType.Public)' }">
     <form asp-controller="Aed" asp-action="Create" enctype="multipart/form-data" class="user-details-form">
         @if(!ViewData.ModelState.IsValid)
         {
@@ -28,11 +28,11 @@
                 <label class="label">Typ</label>
                 <div class="control">
                     <label class="radio">
-                        <input type="radio" name="GeneralType" value="@AedGeneralType.Public" id="radio-public-aed" x-model="formType" checked>
+                        <input type="radio" asp-for="AedFormDTO.GeneralType" value="@AedGeneralType.Public" id="radio-public-aed" x-model="formType" checked>
                         Verejný
                     </label>
                     <label class="radio">
-                        <input type="radio" name="GeneralType" value="@AedGeneralType.Personal" id="radio-personal-aed" x-model="formType">
+                        <input type="radio" asp-for="AedFormDTO.GeneralType" value="@AedGeneralType.Personal" id="radio-personal-aed" x-model="formType">
                         Osobný
                     </label>
                 </div>
@@ -42,7 +42,7 @@
                 <label class="label">Stav *</label>
                 <div class="control">
                     <div class="select select-full-width">
-                        <select asp-for="State" asp-items="Html.GetEnumSelectList<AedState>()">
+                        <select asp-for="AedFormDTO.State" asp-items="Html.GetEnumSelectList<AedState>()">
                         </select>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
         <template x-if="formType == '@AedGeneralType.Public'">
             <div>
                 <input type="file" asp-for="AedPhotoFormFile" id="photo">
-                <partial name="_PublicAedFormPartial"/>
+                <partial name="_PublicAedFormPartial" />
             </div>
         </template> 
     
@@ -60,7 +60,7 @@
             <partial name="_PersonalAedFormPartial" />
         </template>
     
-        <partial name="_AedTechnicalDetailsFormPartial"/>
+        <partial name="_AedTechnicalDetailsFormPartial" />
 
         <div class="field">
             <div class="control">

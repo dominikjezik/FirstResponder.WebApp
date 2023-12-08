@@ -1,8 +1,8 @@
-@model AedFormDTO
+@model AedFormViewModel
 
 <section class="form-section">
     <h2>Vlastník AED (First responder)</h2>
-    <div id="search-field" class="field aed-responder-search-field" style="@(Model?.Owner != null ? "display: none" : "" )">
+    <div id="search-field" class="field aed-responder-search-field" style="@(Model?.AedFormDTO.Owner != null ? "display: none" : "" )">
         <label class="label">Používateľ *</label>
         <div id="search-box-control" class="control">
             <input id="search-box" class="input" placeholder="Vyhľadávanie podľa mena alebo emailu" autocomplete="off">
@@ -10,11 +10,11 @@
         <ul id="search-results" class="results panel"></ul>
     </div>
     
-    <div class="card" id="selected-owner" style="@(Model?.Owner == null ? "display: none" : "" )">
+    <div class="card" id="selected-owner" style="@(Model?.AedFormDTO.Owner == null ? "display: none" : "" )">
         <footer class="card-content aed-responder-selected-owner">
-            <p id="owner-name"><b>@Model?.Owner?.FullName</b> (@Model?.Owner?.Email)</p>
+            <p id="owner-name"><b>@Model?.AedFormDTO.Owner?.FullName</b> (@Model?.AedFormDTO.Owner?.Email)</p>
             <button id="remove-selected-owner" class="delete" aria-label="delete"></button>
         </footer>
     </div>
-    <input type="hidden" asp-for="OwnerId" id="owner-id">
+    <input type="hidden" asp-for="AedFormDTO.OwnerId" id="owner-id">
 </section>

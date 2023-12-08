@@ -55,14 +55,14 @@ public class AedController : Controller
         {
             if (model.AedPhotoFormFile != null)
             {
-                model.AedPhotoFileUploadDTO = new FileUploadDTO 
+                model.AedFormDTO.AedPhotoFileUploadDTO = new FileUploadDTO 
                 { 
                     Extension = Path.GetExtension(model.AedPhotoFormFile.FileName),
                     FileStream = model.AedPhotoFormFile.OpenReadStream()
                 };
             }
             
-            var aed = await _mediator.Send(new CreateAedCommand(model));
+            var aed = await _mediator.Send(new CreateAedCommand(model.AedFormDTO));
             return RedirectToAction(nameof(Edit), "Aed", new { aedId = aed.Id });
         }
         catch (EntityValidationException exception)
@@ -83,14 +83,17 @@ public class AedController : Controller
             return NotFound();
         }
 
-        var model = aed.ToAedFormDTO();
+        var model = new AedFormViewModel
+        {
+            AedFormDTO = aed.ToAedFormDTO()
+        };
         
         return View(model);
     }
 
     [HttpPost]
     [Route("{aedId}")]
-    public async Task<IActionResult> Edit(string aedId, AedFormDTO model)
+    public async Task<IActionResult> Edit(string aedId, AedFormViewModel model)
     {
         var aed = await _mediator.Send(new GetAedByIdQuery(aedId));
 
@@ -99,13 +102,16 @@ public class AedController : Controller
             return NotFound();
         }
         
+        model.AedFormDTO.AedId = aed.Id;
+        
         if (!ModelState.IsValid)
         {
-            model.CreatedAt = aed.CreatedAt;
+            model.AedFormDTO.CreatedAt = aed.CreatedAt;
+            
             
             if (aed is PersonalAed personalAed)
             {
-                model.Owner = personalAed.Owner;
+                model.AedFormDTO.Owner = personalAed.Owner;
             }
             
             await LoadOptionsForSelectionsToViewBag();
@@ -114,7 +120,7 @@ public class AedController : Controller
 
         try
         {
-            var updatedAed = await _mediator.Send(new UpdateAedCommand(model));
+            var updatedAed = await _mediator.Send(new UpdateAedCommand(model.AedFormDTO));
             return RedirectToAction(nameof(Edit), "Aed", new { aedId = updatedAed.Id });
         }
         catch (EntityNotFoundException)
@@ -125,10 +131,10 @@ public class AedController : Controller
         {
             this.MapErrorsToModelState(exception);
             
-            model.CreatedAt = aed.CreatedAt;
+            model.AedFormDTO.CreatedAt = aed.CreatedAt;
             if (aed is PersonalAed personalAed)
             {
-                model.Owner = personalAed.Owner;
+                model.AedFormDTO.Owner = personalAed.Owner;
             }
 
             await LoadOptionsForSelectionsToViewBag();
