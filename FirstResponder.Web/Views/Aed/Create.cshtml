@@ -49,9 +49,10 @@
             </div>
         </section>
         
+        <input type="file" asp-for="AedPhotoFormFile" id="AedPhotoFormFile" style="display: none">
+        
         <template x-if="formType == '@AedGeneralType.Public'">
             <div>
-                <input type="file" asp-for="AedPhotoFormFile" id="photo">
                 <partial name="_PublicAedFormPartial" />
             </div>
         </template> 
@@ -81,11 +82,15 @@
                             </svg>
                             Fotografie
                         </h2>
-                        <button class="button">Pridať fotografiu</button>
+                        
+                        <button class="button" id="upload-photo-btn" onclick="document.getElementById('AedPhotoFormFile').click()">
+                            Pridať fotografiu
+                        </button>
+                        
                     </header>
                 </template>
 
-                <div class="mb-5">
+                <div class="mb-5 images-container" id="uploaded-images-preview-root">
                     Neboli nahraté žiadne fotografie.
                 </div>
             </section>
@@ -96,4 +101,5 @@
 @section Scripts
 {
     <script src="~/js/find-users-aed.js"></script>
+    <script src="~/js/aed-image-upload.js"></script>
 }

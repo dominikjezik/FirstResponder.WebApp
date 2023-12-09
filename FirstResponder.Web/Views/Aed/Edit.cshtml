@@ -108,13 +108,20 @@
                     <button class="button" disabled>Pridať fotografiu</button>
                 </header>
             
-                <div class="mb-5">
+                <div class="mb-5 images-container">
                     @if (Model.AedFormDTO.Photos != null && Model.AedFormDTO.Photos.Count > 0)
                     {
                         foreach (var photo in Model.AedFormDTO.Photos)
                         {
-                            <div class="image-container">
-                                <img src="~/uploads/@photo.PhotoName" alt="Fotografia AED">
+                            <div class="card">
+                                <div class="card-image">
+                                    <figure class="image">
+                                        <img src="~/uploads/@photo.PhotoName" alt="Fotografia AED">
+                                    </figure>
+                                </div>
+                                @* <div class="card-footer"> *@
+                                @*     <a class="card-footer-item">Odstrániť</a> *@
+                                @* </div> *@
                             </div>
                         }
                     }
