@@ -17,6 +17,7 @@ public class UpdateAedCommandTests
     
     private readonly Mock<IAedRepository> _aedRepositoryMock = new();
     private readonly Mock<IUsersRepository> _usersRepositoryMock = new();
+    private readonly Mock<IFileService> _fileServiceMock = new();
 
     public UpdateAedCommandTests()
     {
@@ -30,7 +31,7 @@ public class UpdateAedCommandTests
         var aedFormDto = _fixture.Create<AedFormDTO>();
         
         var command = new UpdateAedCommand(aedFormDto);
-        var handler = new UpdateAedCommandHandler(_aedRepositoryMock.Object, _usersRepositoryMock.Object);
+        var handler = new UpdateAedCommandHandler(_aedRepositoryMock.Object, _usersRepositoryMock.Object, _fileServiceMock.Object);
         
         _aedRepositoryMock
             .Setup(r => r.GetAedById(It.IsAny<Guid>()))

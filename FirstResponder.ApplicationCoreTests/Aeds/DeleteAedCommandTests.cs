@@ -4,6 +4,7 @@ using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.Handlers;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Shared;
 using FluentAssertions;
 using Moq;
 
@@ -14,6 +15,12 @@ public class DeleteAedCommandTests
     private readonly IFixture _fixture = new Fixture();
     
     private readonly Mock<IAedRepository> _aedRepositoryMock = new();
+    private readonly Mock<IFileService> _fileServiceMock = new();
+
+    public DeleteAedCommandTests()
+    {
+        _fixture.Register<FileUploadDTO>(() => null);
+    }
     
     [Fact]
     public async Task AedNotFound_ThrowsEntityNotFoundException()
@@ -22,7 +29,7 @@ public class DeleteAedCommandTests
         var aedId = Guid.NewGuid();
         
         var command = new DeleteAedCommand(aedId.ToString());
-        var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object);
+        var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object, _fileServiceMock.Object);
         
         _aedRepositoryMock
             .Setup(r => r.GetAedById(It.IsAny<Guid>()))
@@ -47,7 +54,7 @@ public class DeleteAedCommandTests
         var aedId = "totoUrciteNieJeGuid";
         
         var command = new DeleteAedCommand(aedId);
-        var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object);
+        var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object, _fileServiceMock.Object);
         
         //Act
         var action = async () =>
@@ -69,13 +76,17 @@ public class DeleteAedCommandTests
         var aedId = Guid.NewGuid();
         
         var command = new DeleteAedCommand(aedId.ToString());
-        var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object);
+        var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object, _fileServiceMock.Object);
         
         var aed = _fixture.Create<PublicAed>();
         
         _aedRepositoryMock
             .Setup(r => r.GetAedById(It.IsAny<Guid>()))
             .ReturnsAsync(aed);
+        
+        _aedRepositoryMock
+            .Setup(r => r.GetAedPhotos(It.IsAny<Guid>()))
+            .ReturnsAsync(new List<AedPhoto>());
         
         //Act
         await handler.Handle(command, CancellationToken.None);

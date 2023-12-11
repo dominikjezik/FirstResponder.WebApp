@@ -7,9 +7,12 @@ namespace FirstResponder.ApplicationCore.Aeds.Commands;
 public class UpdateAedCommand : IRequest<Aed>
 {
     public AedFormDTO AedFormDto { get; private set; }
+
+    public string[]? PhotosToDelete { get; set; }
     
-    public UpdateAedCommand(AedFormDTO aedFormDto)
+    public UpdateAedCommand(AedFormDTO aedFormDto, string[]? photosToDelete = null)
     {
         AedFormDto = aedFormDto;
+        PhotosToDelete = photosToDelete;
     }
 }

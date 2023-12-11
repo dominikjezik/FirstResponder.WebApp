@@ -23,4 +23,7 @@ public interface IAedRepository
     Task AddAedPhoto(AedPhoto aedPhoto);
     
     Task<ICollection<AedPhoto>> GetAedPhotos(Guid aedId);
+    
+    Task DeleteAedPhotosByIds(Guid aedId, string[] photosIdsForDelete);
+    
 }

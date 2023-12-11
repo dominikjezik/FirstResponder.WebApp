@@ -120,7 +120,16 @@ public class AedController : Controller
 
         try
         {
-            var updatedAed = await _mediator.Send(new UpdateAedCommand(model.AedFormDTO));
+            if (model.AedPhotoFormFile != null)
+            {
+                model.AedFormDTO.AedPhotoFileUploadDTO = new FileUploadDTO 
+                { 
+                    Extension = Path.GetExtension(model.AedPhotoFormFile.FileName),
+                    FileStream = model.AedPhotoFormFile.OpenReadStream()
+                };
+            }
+            
+            var updatedAed = await _mediator.Send(new UpdateAedCommand(model.AedFormDTO, model.AedPhotosToDelete));
             return RedirectToAction(nameof(Edit), "Aed", new { aedId = updatedAed.Id });
         }
         catch (EntityNotFoundException)

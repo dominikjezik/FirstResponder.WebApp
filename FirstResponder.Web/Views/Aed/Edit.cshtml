@@ -16,7 +16,7 @@
 
 <div class="user-details-page">
     <div class="user-details-form">
-        <form asp-controller="Aed" asp-action="Edit" asp-route-aedId="@Model.AedFormDTO.AedId">
+        <form asp-controller="Aed" asp-action="Edit" asp-route-aedId="@Model.AedFormDTO.AedId" enctype="multipart/form-data">
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="message is-danger">
@@ -56,6 +56,9 @@
                     </div>
                 </div>
             </section>
+            
+            <input type="file" asp-for="AedPhotoFormFile" id="AedPhotoFormFile" style="display: none">
+            <div id="remove-photo-inputs"></div>
 
             @if (Model.AedFormDTO.GeneralType == AedGeneralType.Public)
             {
@@ -105,30 +108,38 @@
                         </svg>
                         Fotografie
                     </h2>
-                    <button class="button" disabled>Pridať fotografiu</button>
+                    
+                    <button class="button" id="upload-photo-btn" onclick="document.getElementById('AedPhotoFormFile').click()">
+                        Pridať fotografiu
+                    </button>
+                    
                 </header>
             
-                <div class="mb-5 images-container">
-                    @if (Model.AedFormDTO.Photos != null && Model.AedFormDTO.Photos.Count > 0)
-                    {
-                        foreach (var photo in Model.AedFormDTO.Photos)
+                <div class="mb-5">
+                    <div class="photos-preview" id="uploaded-images-preview-root">
+                        @if (Model.AedFormDTO.Photos == null || Model.AedFormDTO.Photos.Count <= 0)
                         {
-                            <div class="card">
-                                <div class="card-image">
-                                    <figure class="image">
-                                        <img src="~/uploads/@photo.PhotoName" alt="Fotografia AED">
-                                    </figure>
-                                </div>
-                                @* <div class="card-footer"> *@
-                                @*     <a class="card-footer-item">Odstrániť</a> *@
-                                @* </div> *@
-                            </div>
+                            @:Neboli nahraté žiadne fotografie.
                         }
-                    }
-                    else
-                    {
-                        <text>Neboli nahraté žiadne fotografie.</text>
-                    }
+                    </div>
+                    <div class="photos-preview">
+                        @if (Model.AedFormDTO.Photos != null && Model.AedFormDTO.Photos.Count > 0)
+                        {
+                            foreach (var photo in Model.AedFormDTO.Photos)
+                            {
+                                <div class="card">
+                                    <div class="card-image">
+                                        <figure class="image">
+                                            <img src="~/uploads/@photo.PhotoName" alt="Fotografia AED">
+                                        </figure>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a class="card-footer-item btn-remove-current-image" data-aedphotoid="@photo.Id">Odstrániť</a>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
                 </div>
             </section>
         }
@@ -236,4 +247,5 @@
     }
     
     <script src="~/js/find-users-aed.js"></script>
+    <script src="~/js/aed-image-upload.js"></script>
 }

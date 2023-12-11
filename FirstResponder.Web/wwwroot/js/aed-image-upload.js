@@ -43,3 +43,22 @@ aedPhotoFormFile.onchange = event => {
 
     }
 }
+
+// Edit AED, uprava existujucich obrazkov
+const removePhotoInputs = document.getElementById('remove-photo-inputs')
+const removeImageBtns = document.getElementsByClassName('btn-remove-current-image')
+
+for (let i = 0; i < removeImageBtns.length; i++) {
+    removeImageBtns[i].onclick = event => {
+        const card = event.target.parentElement.parentElement
+        card.remove()
+        
+        const aedPhotoId = event.target.dataset.aedphotoid
+        if (aedPhotoId) {
+            removePhotoInputs.innerHTML += `<input type="hidden" name="AedPhotosToDelete" value="${aedPhotoId}" />`
+        }
+    }
+}
+
+
+

@@ -11,4 +11,8 @@ public class AedFormViewModel
     [Display(Name = "Banner image")]
     [AllowedMimeTypes("image/jpeg", "image/png")]
     public IFormFile? AedPhotoFormFile { get; set; }
+    
+    // Edit Aed fields
+    public string[]? AedPhotosToDelete { get; set; }
+    
 }

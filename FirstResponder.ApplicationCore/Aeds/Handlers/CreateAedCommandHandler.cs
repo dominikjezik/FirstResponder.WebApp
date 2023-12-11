@@ -41,19 +41,26 @@ public class CreateAedCommandHandler : IRequestHandler<CreateAedCommand, Aed>
         
         await _aedRepository.AddAed(aed);
         
-        if (request.AedFormDto.AedPhotoFileUploadDTO != null && request.AedFormDto.GeneralType == AedGeneralType.Public)
-        {
-            var photo = await _fileService.StoreFile(request.AedFormDto.AedPhotoFileUploadDTO);
-            
-            var aedPhoto = new AedPhoto
-            {
-                PublicAedId = aed.Id,
-                PhotoName = photo
-            };
-            
-            await _aedRepository.AddAedPhoto(aedPhoto);
-        }
-
+        await HandlePhotoUpload(request, aed);
+        
         return aed;
+    }
+    
+    private async Task HandlePhotoUpload(CreateAedCommand request, Aed aed)
+    {
+        if (request.AedFormDto.AedPhotoFileUploadDTO == null || request.AedFormDto.GeneralType != AedGeneralType.Public)
+        {
+            return;
+        }
+        
+        var photo = await _fileService.StoreFile(request.AedFormDto.AedPhotoFileUploadDTO);
+
+        var aedPhoto = new AedPhoto
+        {
+            PublicAedId = aed.Id,
+            PhotoName = photo
+        };
+
+        await _aedRepository.AddAedPhoto(aedPhoto);
     }
 }
