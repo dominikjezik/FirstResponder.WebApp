@@ -100,4 +100,10 @@ public class AedRepository : IAedRepository
             
     }
 
+    public async Task<IEnumerable<PublicAed>> GetAllPublicAeds()
+    {
+        return await _dbContext.PublicAeds
+            .OrderByDescending(a => a.CreatedAt)
+            .ToListAsync();
+    }
 }
