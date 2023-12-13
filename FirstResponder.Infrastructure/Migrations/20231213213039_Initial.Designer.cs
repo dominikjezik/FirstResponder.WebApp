@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FirstResponder.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231207214447_Initial")]
+    [Migration("20231213213039_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -446,15 +446,18 @@ namespace FirstResponder.Infrastructure.Migrations
                 {
                     b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Language", "Language")
                         .WithMany()
-                        .HasForeignKey("LanguageId");
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Manufacturer", "Manufacturer")
                         .WithMany()
-                        .HasForeignKey("ManufacturerId");
+                        .HasForeignKey("ManufacturerId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Model", "Model")
                         .WithMany()
-                        .HasForeignKey("ModelId");
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Language");
 

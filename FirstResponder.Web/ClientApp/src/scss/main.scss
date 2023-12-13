@@ -402,6 +402,39 @@ $mobile-top-menu-bar-height: 60px;
     }
 }
 
+// Settings
+.in-place-edit-form {
+    display: flex;
+    align-items: center;
+    
+    .save-edit-btn {
+        display: none;
+    }
+    
+    .input-edit {
+        flex: 1;
+        margin-right: 1rem;
+        padding: .5rem;
+        
+        &:focus {
+            outline: none;
+        }
+
+        &:not(:focus) {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+        }
+    }
+    
+    &.is-editing {
+        .save-edit-btn {
+            display: flex;
+        }
+    }
+}
+
+
 // Login page
 .guest-layout {
     .main-logo {

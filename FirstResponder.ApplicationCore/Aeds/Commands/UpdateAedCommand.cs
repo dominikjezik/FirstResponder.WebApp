@@ -8,7 +8,7 @@ public class UpdateAedCommand : IRequest<Aed>
 {
     public AedFormDTO AedFormDto { get; private set; }
 
-    public string[]? PhotosToDelete { get; set; }
+    public string[]? PhotosToDelete { get; private set; }
     
     public UpdateAedCommand(AedFormDTO aedFormDto, string[]? photosToDelete = null)
     {

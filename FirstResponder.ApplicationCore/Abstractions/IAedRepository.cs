@@ -5,16 +5,12 @@ namespace FirstResponder.ApplicationCore.Abstractions;
 public interface IAedRepository
 {
     Task<IEnumerable<Aed>> GetAllAedsWithOwners();
+    
+    Task<IEnumerable<PublicAed>> GetAllPublicAeds();
+    
+    Task<Aed?> GetAedById(Guid id);
 
     Task AddAed(Aed aed);
-
-    Task<IEnumerable<Manufacturer>> GetAllManufacturers();
-    
-    Task<IEnumerable<Model>> GetAllModels();
-    
-    Task<IEnumerable<Language>> GetAllLanguages();
-
-    Task<Aed?> GetAedById(Guid id);
     
     Task UpdateAed(Aed aed);
 
@@ -26,5 +22,19 @@ public interface IAedRepository
     
     Task DeleteAedPhotosByIds(Guid aedId, string[] photosIdsForDelete);
 
-    Task<IEnumerable<PublicAed>> GetAllPublicAeds();
+    Task<IEnumerable<Model>> GetAllModels();
+    
+    Task<IEnumerable<Language>> GetAllLanguages();
+    
+    Task<IEnumerable<Manufacturer>> GetAllManufacturers();
+    
+    Task<Manufacturer?> GetManufacturerById(Guid manufacturerId);
+
+    Task<bool> ManufacturerExists(string name);
+    
+    Task AddManufacturer(Manufacturer manufacturer);
+    
+    Task UpdateManufacturer(Manufacturer manufacturer);
+    
+    Task DeleteManufacturer(Manufacturer manufacturer);
 }

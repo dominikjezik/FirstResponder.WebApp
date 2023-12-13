@@ -36,6 +36,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .WithMany()
             .HasForeignKey(a => a.OwnerId)
             .IsRequired();
+        
+        modelBuilder.Entity<Manufacturer>()
+            .HasMany<Aed>()
+            .WithOne(a => a.Manufacturer)
+            .HasForeignKey(a => a.ManufacturerId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        modelBuilder.Entity<Model>()
+            .HasMany<Aed>()
+            .WithOne(a => a.Model)
+            .HasForeignKey(a => a.ModelId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        modelBuilder.Entity<Language>()
+            .HasMany<Aed>()
+            .WithOne(a => a.Language)
+            .HasForeignKey(a => a.LanguageId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
     
     public override int SaveChanges()

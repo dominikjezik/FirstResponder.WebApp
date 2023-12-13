@@ -83,6 +83,8 @@ public class AedController : Controller
         {
             return NotFound();
         }
+        
+        await LoadOptionsForSelectionsToViewBag();
 
         var model = new AedFormViewModel
         {
@@ -108,7 +110,6 @@ public class AedController : Controller
         if (!ModelState.IsValid)
         {
             model.AedFormDTO.CreatedAt = aed.CreatedAt;
-            
             
             if (aed is PersonalAed personalAed)
             {

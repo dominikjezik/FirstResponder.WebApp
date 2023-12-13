@@ -123,17 +123,20 @@ namespace FirstResponder.Infrastructure.Migrations
                         name: "FK_Aeds_AedLanguages_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "AedLanguages",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Aeds_AedManufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
                         principalTable: "AedManufacturers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Aeds_AedModels_ModelId",
                         column: x => x.ModelId,
                         principalTable: "AedModels",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

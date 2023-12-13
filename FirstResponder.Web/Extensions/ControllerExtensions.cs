@@ -19,4 +19,17 @@ public static class ControllerExtensions
             controller.ModelState.AddModelError(string.Empty, exception.Message);
         }
     }
+    
+    public static void MapErrorsToErrorMessages(this Controller controller, EntityValidationException exception)
+    {
+        if (exception.ValidationErrors != null)
+        {
+            controller.TempData["ErrorMessages"] = exception.ValidationErrors.Select(err => err.Value).ToArray();
+        }
+    }
+    
+    public static void DisplaySuccessMessage(this Controller controller, string message)
+    {
+        controller.TempData["SuccessMessage"] = message;
+    }
 }
