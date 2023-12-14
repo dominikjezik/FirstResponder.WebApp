@@ -1,0 +1,47 @@
+// Helpers
+.select-full-width {
+    width: 100%;
+    select {
+        width: 100%;
+    }
+}
+
+.heading-with-icon {
+    display: flex;
+    align-items: center;
+    svg {
+        margin-right: .75rem;
+    }
+}
+
+.button-with-icon {
+    display: flex;
+    align-items: center;
+}
+
+.temporary-disabled {
+    cursor: not-allowed;
+    opacity: .5;
+}
+
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.message ul{
+    list-style: none;
+    margin: 0;
+}
+
+.table-with-clickable-link.table {
+    td {
+        cursor: pointer;
+    }
+}
+
+.table td.table-icon {
+    svg {
+        transform: translate(0, .2rem);
+    }
+}

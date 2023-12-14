@@ -14,8 +14,8 @@
     </div>
 </header>
 
-<div class="user-details-page" x-data="{ formType: '@(Model != null ? Model.AedFormDTO.GeneralType : AedGeneralType.Public)' }">
-    <form asp-controller="Aed" asp-action="Create" enctype="multipart/form-data" class="user-details-form">
+<div class="entity-details-page" x-data="{ formType: '@(Model != null ? Model.AedFormDTO.GeneralType : AedGeneralType.Public)' }">
+    <form asp-controller="Aed" asp-action="Create" enctype="multipart/form-data" class="entity-details-form">
         @if(!ViewData.ModelState.IsValid)
         {
             <div class="message is-danger">
@@ -70,7 +70,7 @@
         </div>
     </form>
     
-    <aside class="user-details-aside">
+    <aside class="entity-details-aside">
         <template x-if="formType == '@AedGeneralType.Public'">
             <section>
                 <template x-if="formType == '@AedGeneralType.Public'">

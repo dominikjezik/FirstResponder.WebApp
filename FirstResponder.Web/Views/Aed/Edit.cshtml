@@ -16,8 +16,8 @@
 
 <partial name="_SuccessMessage" />
 
-<div class="user-details-page">
-    <div class="user-details-form">
+<div class="entity-details-page">
+    <div class="entity-details-form">
         <form asp-controller="Aed" asp-action="Edit" asp-route-aedId="@Model.AedFormDTO.AedId" enctype="multipart/form-data">
             @if (!ViewData.ModelState.IsValid)
             {
@@ -84,7 +84,7 @@
         <form asp-controller="Aed" asp-action="Delete" asp-route-aedId="@Model.AedFormDTO.AedId" id="formDelete" onSubmit="return confirm('Naozaj chcete odstrániť toto AED?') "></form>
     </div>
 
-    <aside class="user-details-aside">
+    <aside class="entity-details-aside">
         @if (Model.AedFormDTO.GeneralType == AedGeneralType.Public)
         {
             @if (Model.AedFormDTO.Latitude != null && Model.AedFormDTO.Longitude != null)

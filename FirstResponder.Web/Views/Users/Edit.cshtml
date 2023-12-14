@@ -16,8 +16,8 @@
 
 <partial name="_SuccessMessage" />
 
-<div class="user-details-page">
-    <form asp-controller="Users" asp-action="Edit" class="user-details-form">
+<div class="entity-details-page">
+    <form asp-controller="Users" asp-action="Edit" class="entity-details-form">
         <partial name="_UserFormPartial" model="Model" />
 
         <div class="field">
@@ -44,7 +44,7 @@
         </div>
     </form>
     
-    <aside class="user-details-aside" style="opacity: 0.2">
+    <aside class="entity-details-aside" style="opacity: 0.2">
         <h2 class="heading-with-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-heart-pulse" viewBox="0 0 16 16">
                 <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053.918 3.995.78 5.323 1.508 7H.43c-2.128-5.697 4.165-8.83 7.394-5.857.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17c3.23-2.974 9.522.159 7.394 5.856h-1.078c.728-1.677.59-3.005.108-3.947C13.486.878 10.4.28 8.717 2.01L8 2.748ZM2.212 10h1.315C4.593 11.183 6.05 12.458 8 13.795c1.949-1.337 3.407-2.612 4.473-3.795h1.315c-1.265 1.566-3.14 3.25-5.788 5-2.648-1.75-4.523-3.434-5.788-5Z"/>

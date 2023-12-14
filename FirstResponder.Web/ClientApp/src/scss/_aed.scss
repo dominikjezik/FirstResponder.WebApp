@@ -1,0 +1,53 @@
+// AED Create/Edit
+.aed-responder-search-field {
+    position: relative;
+
+    ul.results {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        background: #fff;
+        margin: 0;
+        width: 100%;
+        transform: translate(0, 100%);
+
+        li {
+            list-style: none;
+        }
+    }
+
+}
+
+.aed-responder-selected-owner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    #owner-name {
+        margin-bottom: 0;
+    }
+}
+
+.photos-preview {
+    .card {
+        margin-bottom: 1rem;
+    }
+}
+
+
+// AED stavy
+$icon-colors: (
+    Registered: #0000FF,
+    Ready: #009140,
+    NotReady: #FF5600,
+    OutOfService: #999999,
+    ServiceRequired: #870082,
+    Cancelled: #000000
+);
+
+@each $class, $color in $icon-colors {
+    .aed-icon-#{$class} {
+        color: $color;
+    }
+}
