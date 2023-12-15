@@ -58,6 +58,8 @@ builder.Services.Configure<LocalFileServiceOptions>(options =>
 
 // Custom repositories and services
 builder.Services.AddScoped<IAedRepository, AedRepository>();
+builder.Services.AddScoped<IAedManufacturersRepository, AedManufacturersRepository>();
+builder.Services.AddScoped<IAedModelsRepository, AedModelsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();

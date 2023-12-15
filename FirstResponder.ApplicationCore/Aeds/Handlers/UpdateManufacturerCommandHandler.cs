@@ -7,16 +7,16 @@ namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 
 public class UpdateManufacturerCommandHandler : IRequestHandler<UpdateManufacturerCommand>
 {
-    private readonly IAedRepository _aedRepository;
+    private readonly IAedManufacturersRepository _aedManufacturersRepository;
 
-    public UpdateManufacturerCommandHandler(IAedRepository aedRepository)
+    public UpdateManufacturerCommandHandler(IAedManufacturersRepository aedManufacturersRepository)
     {
-        _aedRepository = aedRepository;
+        _aedManufacturersRepository = aedManufacturersRepository;
     }
     
     public async Task Handle(UpdateManufacturerCommand request, CancellationToken cancellationToken)
     {
-        var manufacturer = await _aedRepository.GetManufacturerById(request.ManufacturerId);
+        var manufacturer = await _aedManufacturersRepository.GetManufacturerById(request.ManufacturerId);
         
         if (manufacturer == null)
         {
@@ -28,7 +28,7 @@ public class UpdateManufacturerCommandHandler : IRequestHandler<UpdateManufactur
             return;
         }
         
-        if (await _aedRepository.ManufacturerExists(request.Name))
+        if (await _aedManufacturersRepository.ManufacturerExists(request.Name))
         {
             var errors = new Dictionary<string, string>();
             errors["Name"] = "Výrobca s týmto názvom už existuje!";
@@ -38,6 +38,6 @@ public class UpdateManufacturerCommandHandler : IRequestHandler<UpdateManufactur
         
         manufacturer.Name = request.Name;
         
-        await _aedRepository.UpdateManufacturer(manufacturer);
+        await _aedManufacturersRepository.UpdateManufacturer(manufacturer);
     }
 }

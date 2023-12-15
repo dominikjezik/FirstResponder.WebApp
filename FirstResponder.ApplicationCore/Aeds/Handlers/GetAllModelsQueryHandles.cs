@@ -7,15 +7,15 @@ namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 
 public class GetAllModelsQueryHandles : IRequestHandler<GetAllModelsQuery, IEnumerable<Model>>
 {
-    private readonly IAedRepository _aedRepository;
+    private readonly IAedModelsRepository _aedModelsRepository;
 
-    public GetAllModelsQueryHandles(IAedRepository aedRepository)
+    public GetAllModelsQueryHandles(IAedModelsRepository aedModelsRepository)
     {
-        _aedRepository = aedRepository;
+        _aedModelsRepository = aedModelsRepository;
     }
 
     public async Task<IEnumerable<Model>> Handle(GetAllModelsQuery request, CancellationToken cancellationToken)
     {
-        return await _aedRepository.GetAllModels();
+        return await _aedModelsRepository.GetAllModels();
     }
 }

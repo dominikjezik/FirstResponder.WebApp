@@ -1,6 +1,6 @@
 namespace FirstResponder.Web.ViewModels;
 
-public class ManufacturerFormViewModel
+public class AedManufacturerFormViewModel
 {
     public string Name { get; set; }
 }

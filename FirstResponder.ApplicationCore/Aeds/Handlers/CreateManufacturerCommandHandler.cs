@@ -8,11 +8,11 @@ namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 
 public class CreateManufacturerCommandHandler : IRequestHandler<CreateManufacturerCommand>
 {
-    private readonly IAedRepository _aedRepository;
+    private readonly IAedManufacturersRepository _aedManufacturersRepository;
 
-    public CreateManufacturerCommandHandler(IAedRepository aedRepository)
+    public CreateManufacturerCommandHandler(IAedManufacturersRepository aedManufacturersRepository)
     {
-        _aedRepository = aedRepository;
+        _aedManufacturersRepository = aedManufacturersRepository;
     }
     
     public async Task Handle(CreateManufacturerCommand request, CancellationToken cancellationToken)
@@ -22,7 +22,7 @@ public class CreateManufacturerCommandHandler : IRequestHandler<CreateManufactur
             Name = request.Name
         };
         
-        if (await _aedRepository.ManufacturerExists(manufacturer.Name))
+        if (await _aedManufacturersRepository.ManufacturerExists(manufacturer.Name))
         {
             var errors = new Dictionary<string, string>();
             errors["Name"] = "Výrobca s týmto názvom už existuje!";
@@ -30,6 +30,6 @@ public class CreateManufacturerCommandHandler : IRequestHandler<CreateManufactur
             throw new EntityValidationException(errors);
         }
         
-        await _aedRepository.AddManufacturer(manufacturer);
+        await _aedManufacturersRepository.AddManufacturer(manufacturer);
     }
 }

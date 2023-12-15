@@ -29,7 +29,7 @@ public class AedManufacturersController : Controller
 
     [HttpPost]
     [Route("")]
-    public async Task<IActionResult> Create(ManufacturerFormViewModel model)
+    public async Task<IActionResult> Create(AedManufacturerFormViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -53,7 +53,7 @@ public class AedManufacturersController : Controller
 
     [HttpPost]
     [Route("{manufacturerId}")]
-    public async Task<IActionResult> Update(Guid manufacturerId, ManufacturerFormViewModel model)
+    public async Task<IActionResult> Update(Guid manufacturerId, AedManufacturerFormViewModel model)
     {
         if (!ModelState.IsValid)
         {

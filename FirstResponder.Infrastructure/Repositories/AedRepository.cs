@@ -90,53 +90,9 @@ public class AedRepository : IAedRepository
         _dbContext.AedPhotos.RemoveRange(photos);
         await _dbContext.SaveChangesAsync();
     }
-    
-    public async Task<IEnumerable<Model>> GetAllModels()
-    {
-        return await _dbContext.AedModels.ToListAsync();
-    }
 
     public async Task<IEnumerable<Language>> GetAllLanguages()
     {
         return await _dbContext.AedLanguages.ToListAsync();
-    }
-    
-    public async Task<IEnumerable<Manufacturer>> GetAllManufacturers()
-    {
-        return await _dbContext.AedManufacturers
-            .OrderByDescending(m => m.Name)
-            .ToListAsync();
-    }
-
-    public async Task<Manufacturer?> GetManufacturerById(Guid manufacturerId)
-    {
-        return await _dbContext.AedManufacturers
-            .Where(m => m.Id == manufacturerId)
-            .FirstOrDefaultAsync();
-    }
-    
-    public async Task<bool> ManufacturerExists(string name)
-    {
-        return await _dbContext.AedManufacturers
-            .Where(m => m.Name == name)
-            .AnyAsync();
-    }
-
-    public Task AddManufacturer(Manufacturer manufacturer)
-    {
-        _dbContext.AedManufacturers.Add(manufacturer);
-        return _dbContext.SaveChangesAsync();
-    }
-
-    public async Task UpdateManufacturer(Manufacturer manufacturer)
-    {
-        _dbContext.Update(manufacturer);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteManufacturer(Manufacturer manufacturer)
-    {
-        _dbContext.AedManufacturers.Remove(manufacturer);
-        await _dbContext.SaveChangesAsync();
     }
 }

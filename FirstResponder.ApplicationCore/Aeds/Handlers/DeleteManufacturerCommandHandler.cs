@@ -7,22 +7,22 @@ namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 
 public class DeleteManufacturerCommandHandler : IRequestHandler<DeleteManufacturerCommand>
 {
-    private readonly IAedRepository _aedRepository;
+    private readonly IAedManufacturersRepository _aedManufacturersRepository;
 
-    public DeleteManufacturerCommandHandler(IAedRepository aedRepository)
+    public DeleteManufacturerCommandHandler(IAedManufacturersRepository aedManufacturersRepository)
     {
-        _aedRepository = aedRepository;
+        _aedManufacturersRepository = aedManufacturersRepository;
     }
     
     public async Task Handle(DeleteManufacturerCommand request, CancellationToken cancellationToken)
     {
-        var manufacturer = await _aedRepository.GetManufacturerById(request.ManufacturerId);
+        var manufacturer = await _aedManufacturersRepository.GetManufacturerById(request.ManufacturerId);
         
         if (manufacturer == null)
         {
             throw new EntityNotFoundException();
         }
         
-        await _aedRepository.DeleteManufacturer(manufacturer);
+        await _aedManufacturersRepository.DeleteManufacturer(manufacturer);
     }
 }
