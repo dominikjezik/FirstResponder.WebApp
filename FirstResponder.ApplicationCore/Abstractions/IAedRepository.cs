@@ -22,6 +22,4 @@ public interface IAedRepository
     
     Task DeleteAedPhotosByIds(Guid aedId, string[] photosIdsForDelete);
     
-    Task<IEnumerable<Language>> GetAllLanguages();
-    
 }

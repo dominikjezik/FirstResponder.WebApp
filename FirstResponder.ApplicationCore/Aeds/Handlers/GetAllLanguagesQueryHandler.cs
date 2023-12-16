@@ -7,15 +7,15 @@ namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 
 public class GetAllLanguagesQueryHandler : IRequestHandler<GetAllLanguagesQuery, IEnumerable<Language>>
 {
-    private readonly IAedRepository _aedRepository;
+    private readonly IAedLanguagesRepository _aedLanguagesRepository;
 
-    public GetAllLanguagesQueryHandler(IAedRepository aedRepository)
+    public GetAllLanguagesQueryHandler(IAedLanguagesRepository aedLanguagesRepository)
     {
-        _aedRepository = aedRepository;
+        _aedLanguagesRepository = aedLanguagesRepository;
     }
     
     public async Task<IEnumerable<Language>> Handle(GetAllLanguagesQuery request, CancellationToken cancellationToken)
     {
-        return await _aedRepository.GetAllLanguages();
+        return await _aedLanguagesRepository.GetAllLanguages();
     }
 }

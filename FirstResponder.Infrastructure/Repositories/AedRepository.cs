@@ -91,8 +91,4 @@ public class AedRepository : IAedRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Language>> GetAllLanguages()
-    {
-        return await _dbContext.AedLanguages.ToListAsync();
-    }
 }
