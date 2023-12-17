@@ -20,6 +20,8 @@ public interface IAedRepository
     
     Task<ICollection<AedPhoto>> GetAedPhotos(Guid aedId);
     
+    Task<ICollection<AedPhoto>> GetAedPhotosByIds(Guid aedId, string[] photosIdsForDelete);
+    
     Task DeleteAedPhotosByIds(Guid aedId, string[] photosIdsForDelete);
     
 }

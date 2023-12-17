@@ -6,14 +6,18 @@
     <h1>Nastavenia AED</h1>
 </header>
 
-<ul>
-    <li>
-        <a asp-controller="AedManufacturers" asp-action="Index">Výrobcovia AED</a>
-    </li>
-    <li>
-        <a asp-controller="AedModels" asp-action="Index">Modely AED</a>
-    </li>
-    <li>
-        <a asp-controller="AedLanguages" asp-action="Index">Jazyky AED</a>
-    </li>
-</ul>
+<div class="menu">
+    <p class="menu-label">Úprava možností</p>
+    <ul class="menu-list" style="list-style: none; margin: 0">
+        <li>
+            <a asp-controller="AedManufacturers" asp-action="Index">Výrobcovia AED</a>
+        </li>
+        <li>
+            <a asp-controller="AedModels" asp-action="Index">Modely AED</a>
+        </li>
+        <li>
+            <a asp-controller="AedLanguages" asp-action="Index">Jazyky AED</a>
+        </li>
+    </ul>
+</div>
+

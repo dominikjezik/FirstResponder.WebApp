@@ -63,7 +63,14 @@ public class UpdateAedCommandHandler : IRequestHandler<UpdateAedCommand, Aed?>
             return;
         }
         
+        var photosForDelete = await _aedRepository.GetAedPhotosByIds(aed.Id, photosIdsForDelete);
+        
         await _aedRepository.DeleteAedPhotosByIds(aed.Id, photosIdsForDelete);
+        
+        foreach (var photo in photosForDelete)
+        {
+            await _fileService.DeleteFile(photo.PhotoName);
+        }
     }
 
     private async Task HandlePhotoUpload(UpdateAedCommand request, Aed aed)

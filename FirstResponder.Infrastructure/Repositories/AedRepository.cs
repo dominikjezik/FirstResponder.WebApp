@@ -81,6 +81,14 @@ public class AedRepository : IAedRepository
             .ToListAsync();
     }
 
+    public async Task<ICollection<AedPhoto>> GetAedPhotosByIds(Guid aedId, string[] photosIdsForDelete)
+    {
+        return await _dbContext.AedPhotos
+            .Where(p => p.PublicAedId == aedId)
+            .Where(p => photosIdsForDelete.Contains(p.Id.ToString()))
+            .ToListAsync();
+    }
+
     public async Task DeleteAedPhotosByIds(Guid aedId, string[] photosIdsForDelete)
     {
         var photos =  await _dbContext.AedPhotos

@@ -70,14 +70,16 @@ function getUsers() {
             data.forEach(user => {
                 const tr = document.createElement('tr')
                 
+                tr.onclick = () => window.location = `/users/${user.id}`
+                
                 tr.innerHTML = `
-                    <td><a href="/users/${user.id}">${user.fullName}</a></td>
-                    <td><a href="/users/${user.id}">${user.email}</a></td>
-                    <td><a href="/users/${user.id}">${user.phoneNumber}</a></td>
-                    <td><a href="/users/${user.id}">${user.createdAt}</a></td>
-                    <td><a href="/users/${user.id}">${user.type}</a></td>
-                    <td><a href="/users/${user.id}">${user.region}</a></td>
-                    <td><a href="/users/${user.id}">${user.address ?? ""}</a></td>
+                    <td>${user.fullName}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phoneNumber}</td>
+                    <td>${user.createdAt}</td>
+                    <td>${user.type}</td>
+                    <td>${user.region}</td>
+                    <td>${user.address ?? ""}</td>
                 `
                 tableBody.appendChild(tr)
             })
