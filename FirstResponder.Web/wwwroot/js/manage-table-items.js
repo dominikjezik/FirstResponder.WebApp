@@ -58,5 +58,21 @@ btnCreateNewItem.addEventListener('click', function () {
         isCreated = false;
         newRow.remove();
     });
-
 })
+
+const searchInput = document.getElementById('search-input');
+
+searchInput.oninput = function () {
+    const rows = tableBody.querySelectorAll('tr.result-item');
+    const searchValue = searchInput.value.toLowerCase();
+    
+    rows.forEach(row => {
+        const input = row.querySelector('.input-edit');
+        const value = input.value.toLowerCase();
+        if (value.includes(searchValue)) {
+            row.style.display = 'table-row';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}

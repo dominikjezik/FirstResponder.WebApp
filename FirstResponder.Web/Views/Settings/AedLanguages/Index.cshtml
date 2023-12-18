@@ -47,10 +47,10 @@
     }
 }
 
-<div class="field" style="opacity: 0.2;">
+<div class="field">
     <label class="label">Jazyk</label>
     <div class="control">
-        <input class="input" type="text">
+        <input class="input" type="text" id="search-input">
     </div>
 </div>
 
@@ -64,7 +64,7 @@
     <tbody id="table-body">
     @foreach (var language in Model)
     {
-        <tr>
+        <tr class="result-item">
             <td>
                 <form asp-controller="AedLanguages" asp-action="Update" asp-route-languageId="@language.Id" method="post" class="in-place-edit-form">
                     <input type="text" name="Name" value="@language.Name" required class="input input-edit">
@@ -99,9 +99,9 @@
 {
     <script>
         // Parametre pre manage-table-items.js
-        const defaultNewItemInputValue = 'Jazyk';
-        const newItemFormAction = '@Url.Action("Create", "AedLanguages")';
-        const antiForgeryToken = '@Html.AntiForgeryToken()';
+        const defaultNewItemInputValue = 'Jazyk'
+        const newItemFormAction = '@Url.Action("Create", "AedLanguages")'
+        const antiForgeryToken = '@Html.AntiForgeryToken()'
     </script>
     <script src="~/js/manage-table-items.js"></script>
 }
