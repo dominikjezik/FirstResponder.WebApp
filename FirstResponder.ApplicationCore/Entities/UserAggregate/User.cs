@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Enums;
 
-namespace FirstResponder.ApplicationCore.Entities;
+namespace FirstResponder.ApplicationCore.Entities.UserAggregate;
 
 public class User : AuditableEntity<Guid>
 {
@@ -26,5 +26,7 @@ public class User : AuditableEntity<Guid>
     public string? Notes { get; set; }
 
     public UserType Type { get; set; } = UserType.Default;
-
+    
+    public ICollection<Group> Groups { get; set; } = new List<Group>();
+    
 }

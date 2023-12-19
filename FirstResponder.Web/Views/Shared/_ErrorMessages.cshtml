@@ -1,0 +1,18 @@
+@if(!ViewData.ModelState.IsValid)
+{
+    <div class="message is-danger">
+        <div asp-validation-summary="All" class="message-body mb-1"></div>
+    </div>
+}
+
+@if(TempData["ErrorMessages"] != null)
+{
+    var errorMessages = (object[])TempData["ErrorMessages"]!;
+
+    foreach (var message in errorMessages)
+    {
+        <div class="message is-danger">
+            <div class="message-body mb-1">@message</div>
+        </div>
+    }
+}

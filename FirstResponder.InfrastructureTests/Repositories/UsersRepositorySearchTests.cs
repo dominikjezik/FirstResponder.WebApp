@@ -1,5 +1,6 @@
 using AutoFixture;
 using FirstResponder.ApplicationCore.Entities;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.Identity;
 using FirstResponder.Infrastructure.Repositories;

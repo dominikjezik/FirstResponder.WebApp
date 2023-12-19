@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.ApplicationCore.Shared;
 

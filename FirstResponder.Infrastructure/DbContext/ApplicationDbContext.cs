@@ -1,6 +1,7 @@
 ﻿using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Language> AedLanguages { get; set; }
     public DbSet<Model> AedModels { get; set; }
     public DbSet<AedPhoto> AedPhotos { get; set; }
+    
+    // User Aggregate
+    public DbSet<Group> Groups { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,6 +58,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .WithOne(a => a.Language)
             .HasForeignKey(a => a.LanguageId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<GroupUser>()
+            .HasOne<ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(a => a.UserId)
+            .IsRequired();
     }
     
     public override int SaveChanges()

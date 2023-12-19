@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
 
 namespace FirstResponder.ApplicationCore.Entities.AedAggregate;
 

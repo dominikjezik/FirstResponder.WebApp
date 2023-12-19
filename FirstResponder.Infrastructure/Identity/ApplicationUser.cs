@@ -1,5 +1,6 @@
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Enums;
 using Microsoft.AspNetCore.Identity;
 
@@ -21,7 +22,7 @@ public class ApplicationUser : IdentityUser<Guid>, IAuditable
 
     public string? Notes { get; set; }
     
-    public UserType Type { get; set; }
+    public UserType Type { get; set; } = UserType.Default;
     
     public DateTime CreatedAt { get; set; }
     

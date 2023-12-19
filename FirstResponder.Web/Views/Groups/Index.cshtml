@@ -1,0 +1,184 @@
+@model IEnumerable<FirstResponder.ApplicationCore.Entities.UserAggregate.Group>
+@{
+    ViewBag.Title = "Skupiny responderov";
+}
+
+<header class="main-header">
+    <h1>Skupiny responderov</h1>
+    <div class="buttons">
+        <button href="#" class="button button-with-icon js-modal-trigger" data-target="js-create-modal">
+            <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </span>
+            <span>Pridať skupinu</span>
+        </button>
+    </div>
+</header>
+
+<partial name="_SuccessMessage" />
+<partial name="_ErrorMessages"/>
+
+<div class="field" style="opacity: 0.2">
+    <label class="label">Skupina</label>
+    <div class="control">
+        <input id="filter-field-name" class="input" type="text">
+    </div>
+</div>
+
+<table class="table is-striped is-narrow is-hoverable is-fullwidth table-with-clickable-link">
+    <thead>
+    <tr>
+        <th>Skupina</th>
+        <th>Popis</th>
+    </tr>
+    </thead>
+    <tbody id="table-body">
+    @foreach (var group in Model)
+    {
+        <tr data-GroupId="@group.Id">
+            <td>@group.Name</td>
+            <td>@group.Description</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p class="has-text-centered">Žiadne skupiny responderov neboli nájdené.</p>
+}
+
+<div class="modal" id="js-create-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <partial name="_CreateGroupFormPartial" model="@null" />
+    </div>
+</div>
+
+<div class="modal" id="js-edit-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <form asp-controller="Groups" asp-action="Update">
+            <input type="hidden" name="GroupId" id="edit-id" />
+            <header class="modal-card-head">
+                <p class="modal-card-title" style="margin-bottom: 0">Upraviť skupinu</p>
+                <button type="button" class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field">
+                    <label class="label">Skupina *</label>
+                    <div class="control">
+                        <input name="Name" class="input" type="text" id="edit-name" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Popis</label>
+                    <div class="control">
+                        <textarea name="Description" class="textarea" id="edit-description"></textarea>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot flex-space-between">
+                <div class="control">
+                    <button type="submit" class="button is-link" id="btn-submit-update">Aktualizovať</button>
+                    <button type="button" class="button">Zrušiť</button>
+                </div>
+                
+                <button type="submit" class="button is-danger is-light" id="btn-submit-delete">Odstrániť skupinu</button>
+            </footer>
+        </form>
+        <form asp-controller="Groups" asp-action="Delete" id="formDelete">
+            <input type="hidden" name="GroupId" id="delete-id" />
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Uprava poloziek tabulky
+            const tableBody = document.getElementById('table-body');
+            (tableBody.querySelectorAll('tr') || []).forEach((row) => {
+                row.addEventListener('click', () => {
+                    const groupId = row.dataset.groupid;
+                    const name = row.querySelector('td').innerText;
+                    const description = row.querySelector('td:nth-child(2)').innerText;
+                    
+                    const editName = document.getElementById('edit-name');
+                    const editDescription = document.getElementById('edit-description');
+                    const editId = document.getElementById('edit-id');
+                    
+                    editName.value = name;
+                    editDescription.value = description;
+                    editId.value = groupId;
+                    
+                    openModal(document.getElementById('js-edit-modal'));
+                });
+            });
+            
+            // Odstarnenie skupiny
+            const btnSubmitDelete = document.getElementById('btn-submit-delete');
+            btnSubmitDelete.addEventListener('click', (e) => {
+                e.preventDefault()
+                
+                const deleteId = document.getElementById('delete-id');
+                deleteId.value = document.getElementById('edit-id').value;
+                
+                if (confirm('Naozaj chcete odstrániť túto skupinu?')) {
+                    document.getElementById('formDelete').submit();
+                }
+                
+            });
+            
+            // Kod prevzaty z dokumentacie: https://bulma.io/documentation/components/modal/
+            // Functions to open and close a modal
+            function openModal(el) {
+                el.classList.add('is-active');
+            }
+            
+            function closeModal(el) {
+                el.classList.remove('is-active');
+            }
+            
+            function closeAllModals() {
+                (document.querySelectorAll('.modal') || []).forEach((modal) => {
+                  closeModal(modal);
+                });
+            }
+            
+            // Add a click event on buttons to open a specific modal
+            (document.querySelectorAll('.js-modal-trigger') || []).forEach((trigger) => {
+                const modal = trigger.dataset.target;
+                const target = document.getElementById(modal);
+
+                trigger.addEventListener('click', () => {
+                    openModal(target);
+                });
+            });
+            
+            // Add a click event on various child elements to close the parent modal
+            (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach((close) => {
+                const target = close.closest('.modal');
+                
+                if (close.id === 'btn-submit-create' || close.id === 'btn-submit-update' || close.id === 'btn-submit-delete') {
+                    return;
+                }
+                
+                close.addEventListener('click', () => {
+                    closeModal(target);
+                });
+            });
+            
+            // Add a keyboard event to close all modals
+            document.addEventListener('keydown', (event) => {
+                if (event.code === 'Escape') {
+                    closeAllModals();
+                }
+            });
+        });
+    </script>
+}

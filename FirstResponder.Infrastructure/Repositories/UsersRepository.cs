@@ -1,5 +1,5 @@
 using FirstResponder.ApplicationCore.Abstractions;
-using FirstResponder.ApplicationCore.Entities;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.Infrastructure.DbContext;
