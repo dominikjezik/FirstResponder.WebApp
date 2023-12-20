@@ -92,4 +92,20 @@ public class GroupsController : Controller
 		this.DisplaySuccessMessage("Skupina bola úspešne odstránená!");
 		return RedirectToAction(nameof(Index));
 	}
+	
+	[HttpGet]
+	[Route("{groupId}/users")]
+	public async Task<IEnumerable<UserWithGroupInfoDTO>> Users(Guid groupId, string? query = null)
+	{
+		var users = await _mediator.Send(new GetUsersWithGroupInfoQuery(groupId, query));
+		return users;
+	}
+
+	[HttpPost]
+	[Route("{groupId}/users")]
+	public async Task<IActionResult> ChangeUsers(Guid groupId, IEnumerable<Guid> checkedOnUserIds, IEnumerable<Guid> checkedOffUserIds)
+	{
+		// TODO: Implement
+		return Ok();
+	}
 }

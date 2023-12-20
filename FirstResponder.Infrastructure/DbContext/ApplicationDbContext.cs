@@ -27,6 +27,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     
     // User Aggregate
     public DbSet<Group> Groups { get; set; }
+    public DbSet<GroupUser> GroupUser { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

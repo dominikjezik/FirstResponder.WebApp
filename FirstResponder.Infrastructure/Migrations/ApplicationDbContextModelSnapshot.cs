@@ -78,7 +78,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("Aeds");
+                    b.ToTable("Aeds", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
@@ -106,7 +106,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasIndex("PublicAedId");
 
-                    b.ToTable("AedPhotos");
+                    b.ToTable("AedPhotos", (string)null);
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Language", b =>
@@ -121,7 +121,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AedLanguages");
+                    b.ToTable("AedLanguages", (string)null);
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Manufacturer", b =>
@@ -136,7 +136,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AedManufacturers");
+                    b.ToTable("AedManufacturers", (string)null);
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Model", b =>
@@ -151,7 +151,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AedModels");
+                    b.ToTable("AedModels", (string)null);
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.Group", b =>
@@ -175,7 +175,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.GroupUser", b =>
@@ -196,7 +196,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GroupUser");
+                    b.ToTable("GroupUser", (string)null);
                 });
 
             modelBuilder.Entity("FirstResponder.Infrastructure.Identity.ApplicationRole", b =>
@@ -437,7 +437,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("PersonalAeds");
+                    b.ToTable("PersonalAeds", (string)null);
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>
@@ -481,7 +481,7 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Property<int>("Region")
                         .HasColumnType("int");
 
-                    b.ToTable("PublicAeds");
+                    b.ToTable("PublicAeds", (string)null);
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed", b =>
