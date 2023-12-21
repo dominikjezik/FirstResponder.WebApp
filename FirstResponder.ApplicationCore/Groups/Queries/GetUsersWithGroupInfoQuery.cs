@@ -7,9 +7,9 @@ public class GetUsersWithGroupInfoQuery : IRequest<IEnumerable<UserWithGroupInfo
 {
 	public Guid GroupId { get; set; }
 
-	public string? Query { get; set; }
+	public string Query { get; set; }
 
-	public GetUsersWithGroupInfoQuery(Guid groupId, string? query = null)
+	public GetUsersWithGroupInfoQuery(Guid groupId, string query)
 	{
 		Query = query;
 		GroupId = groupId;

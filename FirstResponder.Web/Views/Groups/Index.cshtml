@@ -44,7 +44,7 @@
             <td>@group.Name</td>
             <td data-fulldescription="@group.Description">@description</td>
             <td>
-                <a href="#" class="btn-users-list">Responderi</a>
+                <a class="btn-users-list">Responderi</a>
             </td>
         </tr>
     }
@@ -236,7 +236,9 @@
             // Vyhladavanie responderov
             const searchUsersInput = document.getElementById('search-users-input');
             
-            searchUsersInput.oninput = function () {
+            searchUsersInput.oninput = searchForResultsDebounced();
+            
+            function searchForResults() {
                 const searchValue = searchUsersInput.value.toLowerCase();
                 const groupId = document.getElementById('users-group-id').value;
                 
@@ -246,6 +248,14 @@
                         parseUsersIntoTable(data);
                     })
                     .catch((error) => console.log(error))
+            }
+            
+            function searchForResultsDebounced() {
+                let timer = null;
+                return function() {
+                    clearTimeout(timer);
+                    timer = setTimeout(searchForResults, 200);
+                }
             }
             
             function parseUsersIntoTable(users) {
@@ -267,7 +277,7 @@
                     }
                     
                     row.innerHTML = `
-                        <td>${user.fullName}</td>
+                        <td>${user.fullName} (${user.email})</td>
                         <td><input type="checkbox" class="user-checkbox" data-userId="${user.userId}" ${checked ? 'checked' : ''}></td>
                     `;
                     
@@ -301,7 +311,23 @@
                 
                 const groupId = document.getElementById('users-group-id').value;
                 
-                // TODO: implement
+                const data = {
+                    groupId: groupId,
+                    checkedOnUserIds: checkedOnUserIds,
+                    checkedOffUserIds: checkedOffUserIds
+                };
+                
+                fetch(`/groups/${groupId}/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then(response => {
+                        closeAllModals();
+                    })
+                    .catch((error) => console.log(error))
                 
             });
             
@@ -336,7 +362,7 @@
             (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach((close) => {
                 const target = close.closest('.modal');
                 
-                if (close.id === 'btn-submit-create' || close.id === 'btn-submit-update' || close.id === 'btn-submit-delete') {
+                if (close.id === 'btn-submit-create' || close.id === 'btn-submit-update' || close.id === 'btn-submit-delete' || close.id === 'btn-submit-users-update') {
                     return;
                 }
                 

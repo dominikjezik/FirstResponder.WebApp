@@ -1,7 +1,6 @@
 using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Exceptions;
-using FirstResponder.ApplicationCore.Groups.DTOs;
 using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.Identity;
@@ -143,32 +142,6 @@ public class UsersRepository : IUsersRepository
             .Take(pageSize)
             .ToListAsync();
     }
-
-    public async Task<IEnumerable<UserWithGroupInfoDTO>> GetUsersWithGroupInfoAsync(Guid groupId, string searchQuery = "", bool includeNotInGroup = false)
-    {
-        var result = await _dbContext.Users
-            .GroupJoin(
-                _dbContext.GroupUser.Where(groupUser => groupUser.GroupId == groupId),
-                user => user.Id,
-                groupUser => groupUser.UserId,
-                (user, groupUsers) => new { User = user, GroupUsers = groupUsers }
-            )
-            .Where(userGroup => userGroup.User.FullName.Contains(searchQuery))
-            .Where(userGroup => includeNotInGroup || userGroup.GroupUsers.Any())
-            .SelectMany(
-                userGroup => userGroup.GroupUsers.DefaultIfEmpty(),
-                (userGroup, groupUser) => new UserWithGroupInfoDTO
-                {
-                    UserId = userGroup.User.Id,
-                    FullName = userGroup.User.FullName,
-                    IsInGroup = groupUser != null
-                }
-            )
-            .ToListAsync();
-        
-        return result;
-    }
-
 
     #region Helpers
 

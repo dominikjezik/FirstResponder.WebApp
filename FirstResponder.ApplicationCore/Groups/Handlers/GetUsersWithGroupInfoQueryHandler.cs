@@ -7,15 +7,18 @@ namespace FirstResponder.ApplicationCore.Groups.Handlers;
 
 public class GetUsersWithGroupInfoQueryHandler : IRequestHandler<GetUsersWithGroupInfoQuery, IEnumerable<UserWithGroupInfoDTO>>
 {
-	private readonly IUsersRepository _usersRepository;
+	private readonly IGroupsRepository _groupsRepository;
 
-	public GetUsersWithGroupInfoQueryHandler(IUsersRepository usersRepository)
+	public GetUsersWithGroupInfoQueryHandler(IGroupsRepository groupsRepository)
 	{
-		_usersRepository = usersRepository;
+		_groupsRepository = groupsRepository;
 	}
 	
 	public async Task<IEnumerable<UserWithGroupInfoDTO>> Handle(GetUsersWithGroupInfoQuery request, CancellationToken cancellationToken)
 	{
-		return await _usersRepository.GetUsersWithGroupInfoAsync(request.GroupId, request.Query ?? "", request.Query != null);
+		bool includeNotInGroup = request.Query != "";
+		int limitResultsCount = request.Query != "" ? 30 : 0;
+		
+		return await _groupsRepository.GetUsersWithGroupInfoAsync(request.GroupId, request.Query, limitResultsCount, includeNotInGroup);
 	}
 }

@@ -264,13 +264,12 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "GroupUser",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GroupUser", x => x.Id);
+                    table.PrimaryKey("PK_GroupUser", x => new { x.GroupId, x.UserId });
                     table.ForeignKey(
                         name: "FK_GroupUser_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -416,11 +415,6 @@ namespace FirstResponder.Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GroupUser_GroupId",
-                table: "GroupUser",
-                column: "GroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GroupUser_UserId",

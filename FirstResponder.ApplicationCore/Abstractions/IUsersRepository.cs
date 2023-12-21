@@ -20,5 +20,4 @@ public interface IUsersRepository
     
     Task<IEnumerable<UserItemDTO>> GetUserItems(int pageNumber, int pageSize, UserItemFiltersDTO? filtersDTO = null);
     
-    Task<IEnumerable<UserWithGroupInfoDTO>> GetUsersWithGroupInfoAsync(Guid groupId, string searchQuery = "", bool includeNotInGroup = false);
 }

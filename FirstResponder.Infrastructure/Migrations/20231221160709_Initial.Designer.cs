@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FirstResponder.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231219193331_Initial")]
+    [Migration("20231221160709_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -183,19 +183,13 @@ namespace FirstResponder.Infrastructure.Migrations
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.GroupUser", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
+                    b.HasKey("GroupId", "UserId");
 
                     b.HasIndex("UserId");
 

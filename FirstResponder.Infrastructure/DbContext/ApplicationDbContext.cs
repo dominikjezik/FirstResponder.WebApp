@@ -61,6 +61,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<GroupUser>()
+            .HasKey(groupUser => new { groupUser.GroupId, groupUser.UserId });
+        
+        modelBuilder.Entity<GroupUser>()
             .HasOne<ApplicationUser>()
             .WithMany()
             .HasForeignKey(a => a.UserId)
