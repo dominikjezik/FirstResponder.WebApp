@@ -1,5 +1,4 @@
 using FirstResponder.ApplicationCore.Abstractions;
-using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Enums;
 using Microsoft.AspNetCore.Identity;
@@ -27,6 +26,8 @@ public class ApplicationUser : IdentityUser<Guid>, IAuditable
     public DateTime CreatedAt { get; set; }
     
     public DateTime UpdatedAt { get; set; }
+    
+    public ICollection<GroupUser> GroupUser { get; set; } = new List<GroupUser>();
 }
 
 public static class ApplicationUserExtensions
@@ -36,7 +37,7 @@ public static class ApplicationUserExtensions
         if (applicationUser == null)
             return null;
 
-        return new User
+        var user = new User
         {
             Id = applicationUser.Id,
             Email = applicationUser.Email,
@@ -52,6 +53,10 @@ public static class ApplicationUserExtensions
             CreatedAt = applicationUser.CreatedAt,
             UpdatedAt = applicationUser.UpdatedAt
         };
+
+        user.Groups = applicationUser.GroupUser.Select(groupUser => groupUser.Group).ToList();
+        
+        return user;
     }
 }
 

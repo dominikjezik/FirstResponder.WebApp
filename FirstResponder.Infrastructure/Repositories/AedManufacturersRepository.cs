@@ -35,10 +35,10 @@ public class AedManufacturersRepository : IAedManufacturersRepository
             .AnyAsync();
     }
 
-    public Task AddManufacturer(Manufacturer manufacturer)
+    public async Task AddManufacturer(Manufacturer manufacturer)
     {
         _dbContext.AedManufacturers.Add(manufacturer);
-        return _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateManufacturer(Manufacturer manufacturer)

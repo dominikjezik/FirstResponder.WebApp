@@ -1,5 +1,3 @@
-using FirstResponder.ApplicationCore.Abstractions;
-
 namespace FirstResponder.ApplicationCore.Entities.UserAggregate;
 
 public class GroupUser

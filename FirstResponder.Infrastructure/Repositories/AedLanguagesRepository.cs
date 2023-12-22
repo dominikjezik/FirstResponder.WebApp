@@ -35,10 +35,10 @@ public class AedLanguagesRepository : IAedLanguagesRepository
             .AnyAsync();
     }
 
-    public Task AddLanguage(Language language)
+    public async Task AddLanguage(Language language)
     {
         _dbContext.AedLanguages.Add(language);
-        return _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateLanguage(Language language)

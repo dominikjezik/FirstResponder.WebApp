@@ -1,5 +1,4 @@
 using FirstResponder.ApplicationCore.Abstractions;
-using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Users.Queries;
 using MediatR;
@@ -19,7 +18,7 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User?>
     {
         if (Guid.TryParse(request.UserId, out Guid guid))
         {
-            return await _usersRepository.GetUserById(guid);
+            return await _usersRepository.GetUserWithDetailsById(guid);
         }
 
         return null;

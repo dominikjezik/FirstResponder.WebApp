@@ -35,6 +35,8 @@ public class UserFormDTO
     public Guid UserId { get; set; }
 
     public DateTime CreatedAt { get; set; }
+    
+    public IEnumerable<Group> Groups { get; set; } = new List<Group>();
 
     #endregion
     
@@ -90,7 +92,8 @@ public static class UserExtensions
             Region = user.Region,
             Notes = user.Notes,
             UserType = user.Type,
-            CreatedAt = user.CreatedAt
+            CreatedAt = user.CreatedAt,
+            Groups = user.Groups
         };
     }
 }

@@ -65,7 +65,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         
         modelBuilder.Entity<GroupUser>()
             .HasOne<ApplicationUser>()
-            .WithMany()
+            .WithMany(user => user.GroupUser)
             .HasForeignKey(a => a.UserId)
             .IsRequired();
     }

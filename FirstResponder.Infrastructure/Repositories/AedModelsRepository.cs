@@ -35,10 +35,10 @@ public class AedModelsRepository : IAedModelsRepository
             .AnyAsync();
     }
 
-    public Task AddModel(Model model)
+    public async Task AddModel(Model model)
     {
         _dbContext.AedModels.Add(model);
-        return _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateModel(Model model)

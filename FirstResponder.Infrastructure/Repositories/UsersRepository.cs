@@ -32,7 +32,28 @@ public class UsersRepository : IUsersRepository
 
         return applicationUser.ToDomainUser();
     }
-    
+
+    public async Task<User?> GetUserWithDetailsById(Guid? id)
+    {
+        if (id == null)
+        {
+            return null;
+        }
+
+        var applicationUser = await _dbContext.Users
+            .Where(user => user.Id == id)
+            .Include(user => user.GroupUser)
+                .ThenInclude(groupUser => groupUser.Group)
+            .FirstOrDefaultAsync();
+
+        if (applicationUser == null)
+        {
+            return null;
+        }
+        
+        return applicationUser.ToDomainUser();
+    }
+
     public async Task AddUser(User user, string password)
     {
         var applicationUser = user.ToApplicationUser();
