@@ -41,6 +41,14 @@ $main-app-color: #000000;
 
     .main-nav {
         padding: 1rem;
+        
+        .sub-nav-item {
+            display: none; // Prevent that sub-nav-item will be visible after page load
+        }
+        
+        .nav-item .sub-nav-item {
+            display: block;
+        }
 
         .nav-item > a {
             width: 100%;

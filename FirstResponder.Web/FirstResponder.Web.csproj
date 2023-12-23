@@ -19,30 +19,15 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
-
-
-
-
-
-
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\FirstResponder.ApplicationCore\FirstResponder.ApplicationCore.csproj" />
       <ProjectReference Include="..\FirstResponder.Infrastructure\FirstResponder.Infrastructure.csproj" />
-
-
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="wwwroot\uploads\" />
     </ItemGroup>
-
-
-
 
 </Project>

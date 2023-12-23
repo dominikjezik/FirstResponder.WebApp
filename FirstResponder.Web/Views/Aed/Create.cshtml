@@ -22,7 +22,6 @@
                 <div asp-validation-summary="All" class="message-body mb-1"></div>
             </div>
         }
-        
         <section class="form-section">
             <div class="field">
                 <label class="label">Typ</label>
@@ -51,15 +50,24 @@
         
         <input type="file" asp-for="AedPhotoFormFile" id="AedPhotoFormFile" style="display: none">
         
-        <template x-if="formType == '@AedGeneralType.Public'">
+        @* <template x-if="formType == '@AedGeneralType.Public'"> *@
             <div>
                 <partial name="_PublicAedFormPartial" />
             </div>
-        </template> 
+        @* </template>  *@
     
-        <template x-if="formType == '@AedGeneralType.Personal'">
-            <partial name="_PersonalAedFormPartial" />
-        </template>
+        @* <template x-if="formType == '@AedGeneralType.Personal'"> *@
+        <div>
+            <personal-aed-owner-field
+                @if (Model?.AedFormDTO.Owner != null)
+                {
+                    <text>
+                        :selected-owner="{ fullName: '@Model.AedFormDTO.Owner.FullName', email: '@Model.AedFormDTO.Owner.Email' }"
+                    </text>
+                }
+            />
+        </div>
+        @* </template> *@
     
         <partial name="_AedTechnicalDetailsFormPartial" />
 
@@ -71,9 +79,9 @@
     </form>
     
     <aside class="entity-details-aside">
-        <template x-if="formType == '@AedGeneralType.Public'">
+        @* <template x-if="formType == '@AedGeneralType.Public'"> *@
             <section>
-                <template x-if="formType == '@AedGeneralType.Public'">
+                @* <template x-if="formType == '@AedGeneralType.Public'"> *@
                     <header class="section-header">
                         <h2 class="heading-with-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
@@ -88,18 +96,17 @@
                         </button>
                         
                     </header>
-                </template>
+                @* </template> *@
 
                 <div class="mb-5 photos-preview" id="uploaded-images-preview-root">
                     Neboli nahraté žiadne fotografie.
                 </div>
             </section>
-        </template>
+        @* </template> *@
     </aside>
 </div>
 
 @section Scripts
 {
-    <script src="~/js/find-users-aed.js"></script>
     <script src="~/js/aed-image-upload.js"></script>
 }
