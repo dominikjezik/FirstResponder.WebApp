@@ -53,14 +53,7 @@ public class AedController : Controller
         
         try
         {
-            if (model.AedPhotoFormFile != null)
-            {
-                model.AedFormDTO.AedPhotoFileUploadDTO = new FileUploadDTO 
-                { 
-                    Extension = Path.GetExtension(model.AedPhotoFormFile.FileName),
-                    FileStream = model.AedPhotoFormFile.OpenReadStream()
-                };
-            }
+            await HandleFileUploads(model);
             
             var aed = await _mediator.Send(new CreateAedCommand(model.AedFormDTO));
             TempData["SuccessMessage"] = "AED bolo úspešne vytvorené!";
@@ -122,14 +115,7 @@ public class AedController : Controller
 
         try
         {
-            if (model.AedPhotoFormFile != null)
-            {
-                model.AedFormDTO.AedPhotoFileUploadDTO = new FileUploadDTO 
-                { 
-                    Extension = Path.GetExtension(model.AedPhotoFormFile.FileName),
-                    FileStream = model.AedPhotoFormFile.OpenReadStream()
-                };
-            }
+            await HandleFileUploads(model);
             
             var updatedAed = await _mediator.Send(new UpdateAedCommand(model.AedFormDTO, model.AedPhotosToDelete));
             TempData["SuccessMessage"] = "AED bolo úspešne aktualizované!";
@@ -183,6 +169,25 @@ public class AedController : Controller
 
     #region Helpers
 
+    private async Task HandleFileUploads(AedFormViewModel model)
+    {
+        if (model.AedPhotoFormFiles != null)
+        {
+            model.AedFormDTO.AedPhotoFileUploadDTOs = new List<FileUploadDTO>();
+                
+            foreach (var file in model.AedPhotoFormFiles)
+            {
+                var uploadDto = new FileUploadDTO 
+                { 
+                    Extension = Path.GetExtension(file.FileName),
+                    FileStream = file.OpenReadStream()
+                };
+                    
+                model.AedFormDTO.AedPhotoFileUploadDTOs.Add(uploadDto);
+            }
+        }
+    }
+    
     private async Task LoadOptionsForSelectionsToViewBag()
     {
         await LoadManufacturersToViewBag();

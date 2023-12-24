@@ -59,7 +59,7 @@
                 </div>
             </section>
             
-            <input type="file" asp-for="AedPhotoFormFile" id="AedPhotoFormFile" style="display: none">
+            <input type="file" multiple asp-for="AedPhotoFormFiles" id="AedPhotoFormFiles" style="display: none">
             <div id="remove-photo-inputs"></div>
 
             @if (Model.AedFormDTO.GeneralType == AedGeneralType.Public)
@@ -69,7 +69,16 @@
 
             @if (Model.AedFormDTO.GeneralType == AedGeneralType.Personal)
             {
-                <partial name="_PersonalAedFormPartial" model="Model"/>
+                <div>
+                    <personal-aed-owner-field
+                        @if (Model?.AedFormDTO.Owner != null)
+                        {
+                            <text>
+                                :selected-owner="{ fullName: '@Model.AedFormDTO.Owner.FullName', email: '@Model.AedFormDTO.Owner.Email' }"
+                            </text>
+                        }
+                    />
+                </div>
             }
 
             <partial name="_AedTechnicalDetailsFormPartial" model="Model"/>
@@ -102,47 +111,15 @@
             }
         
             <section>
-                <header class="section-header">
-                    <h2 class="heading-with-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
-                            <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-                            <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"/>
-                        </svg>
-                        Fotografie
-                    </h2>
+                <aed-image-uploader
                     
-                    <button class="button" id="upload-photo-btn" onclick="document.getElementById('AedPhotoFormFile').click()">
-                        Pridať fotografiu
-                    </button>
-                    
-                </header>
-            
-                <div class="mb-5">
-                    <div class="photos-preview" id="uploaded-images-preview-root">
-                        @if (Model.AedFormDTO.Photos == null || Model.AedFormDTO.Photos.Count <= 0)
-                        {
-                            @:Neboli nahraté žiadne fotografie.
-                        }
-                    </div>
-                    <div class="photos-preview">
-                        @if (Model.AedFormDTO.Photos != null && Model.AedFormDTO.Photos.Count > 0)
-                        {
-                            foreach (var photo in Model.AedFormDTO.Photos)
-                            {
-                                <div class="card">
-                                    <div class="card-image">
-                                        <figure class="image">
-                                            <img src="~/uploads/@photo.PhotoName" alt="Fotografia AED">
-                                        </figure>
-                                    </div>
-                                    <div class="card-footer">
-                                        <a class="card-footer-item btn-remove-current-image" data-aedphotoid="@photo.Id">Odstrániť</a>
-                                    </div>
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
+                    @if (Model.AedFormDTO.Photos != null && Model.AedFormDTO.Photos.Count > 0)
+                    {
+                        <text>:current-photos-prop="@Model.GetAedPhotosJS()"</text>
+                    }
+                    input-element-id="AedPhotoFormFiles"
+                    remove-photo-inputs-id="remove-photo-inputs"
+                />
             </section>
         }
         
@@ -258,7 +235,4 @@
             map.setView([@lat, @lon], 16);
         </script>
     }
-    
-    <script src="~/js/find-users-aed.js"></script>
-    <script src="~/js/aed-image-upload.js"></script>
 }

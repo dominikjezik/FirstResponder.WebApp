@@ -78,7 +78,7 @@ public class AedFormDTO
     [EmailAddress]
     public string? ContactPersonEmail { get; set; }
     
-    public FileUploadDTO? AedPhotoFileUploadDTO { get; set; }
+    public IList<FileUploadDTO>? AedPhotoFileUploadDTOs { get; set; }
 
     public ICollection<AedPhoto>? Photos { get; set; }
 

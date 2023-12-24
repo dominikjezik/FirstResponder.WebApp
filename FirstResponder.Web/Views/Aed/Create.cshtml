@@ -14,7 +14,7 @@
     </div>
 </header>
 
-<div class="entity-details-page" x-data="{ formType: '@(Model != null ? Model.AedFormDTO.GeneralType : AedGeneralType.Public)' }">
+<div class="entity-details-page">
     <form asp-controller="Aed" asp-action="Create" enctype="multipart/form-data" class="entity-details-form">
         @if(!ViewData.ModelState.IsValid)
         {
@@ -27,11 +27,11 @@
                 <label class="label">Typ</label>
                 <div class="control">
                     <label class="radio">
-                        <input type="radio" asp-for="AedFormDTO.GeneralType" value="@AedGeneralType.Public" id="radio-public-aed" x-model="formType" checked>
+                        <input type="radio" asp-for="AedFormDTO.GeneralType" value="@AedGeneralType.Public" id="radio-public-aed">
                         Verejný
                     </label>
                     <label class="radio">
-                        <input type="radio" asp-for="AedFormDTO.GeneralType" value="@AedGeneralType.Personal" id="radio-personal-aed" x-model="formType">
+                        <input type="radio" asp-for="AedFormDTO.GeneralType" value="@AedGeneralType.Personal" id="radio-personal-aed">
                         Osobný
                     </label>
                 </div>
@@ -48,16 +48,13 @@
             </div>
         </section>
         
-        <input type="file" asp-for="AedPhotoFormFile" id="AedPhotoFormFile" style="display: none">
+        <input type="file" multiple asp-for="AedPhotoFormFiles" id="AedPhotoFormFiles" style="display: none">
         
-        @* <template x-if="formType == '@AedGeneralType.Public'"> *@
-            <div>
-                <partial name="_PublicAedFormPartial" />
-            </div>
-        @* </template>  *@
-    
-        @* <template x-if="formType == '@AedGeneralType.Personal'"> *@
-        <div>
+        <div class="public-aed-form">
+            <partial name="_PublicAedFormPartial" />
+        </div>
+        
+        <div class="personal-aed-form">
             <personal-aed-owner-field
                 @if (Model?.AedFormDTO.Owner != null)
                 {
@@ -67,7 +64,6 @@
                 }
             />
         </div>
-        @* </template> *@
     
         <partial name="_AedTechnicalDetailsFormPartial" />
 
@@ -79,34 +75,60 @@
     </form>
     
     <aside class="entity-details-aside">
-        @* <template x-if="formType == '@AedGeneralType.Public'"> *@
-            <section>
-                @* <template x-if="formType == '@AedGeneralType.Public'"> *@
-                    <header class="section-header">
-                        <h2 class="heading-with-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
-                                <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-                                <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"/>
-                            </svg>
-                            Fotografie
-                        </h2>
-                        
-                        <button class="button" id="upload-photo-btn" onclick="document.getElementById('AedPhotoFormFile').click()">
-                            Pridať fotografiu
-                        </button>
-                        
-                    </header>
-                @* </template> *@
-
-                <div class="mb-5 photos-preview" id="uploaded-images-preview-root">
-                    Neboli nahraté žiadne fotografie.
-                </div>
-            </section>
-        @* </template> *@
+        <section class="public-aed-form">
+            <aed-image-uploader
+                input-element-id="AedPhotoFormFiles"
+            />
+        </section>
     </aside>
 </div>
 
 @section Scripts
 {
-    <script src="~/js/aed-image-upload.js"></script>
+    <script>
+        /**
+        * Script for displaying the correct form based on the selected AED type.
+        * 
+        * Receives the AED type from the Razor model. If the model is null, the 
+        * form is being displayed for the first time and the default type is public.
+        * The script sets the required attribute on the fields of the displayed form.
+        */
+        let formTypIsPublic = @(Model == null ? "true" : Model.AedFormDTO.GeneralType == AedGeneralType.Public ? "true" : "false")
+    
+        const radioPublicAed = document.getElementById('radio-public-aed')
+        const radioPersonalAed = document.getElementById('radio-personal-aed')
+        
+        const publicAedForm = document.querySelector('.public-aed-form')
+        const personalAedForm = document.querySelector('.personal-aed-form')
+        
+        const publicAedFormRequiredFields = publicAedForm.querySelectorAll('[required]')
+        const personalAedFormRequiredFields = personalAedForm.querySelectorAll('[required]')
+        
+        function displayPersonalAedForm() {
+            publicAedForm.style.display = 'none'
+            personalAedForm.style.display = 'block'
+            
+            publicAedFormRequiredFields.forEach(field => field.removeAttribute('required'))
+            personalAedFormRequiredFields.forEach(field => field.setAttribute('required', 'required'))
+        }
+        
+        function displayPublicAedForm() {
+            publicAedForm.style.display = 'block'
+            personalAedForm.style.display = 'none'
+            
+            publicAedFormRequiredFields.forEach(field => field.setAttribute('required', 'required'))
+            personalAedFormRequiredFields.forEach(field => field.removeAttribute('required'))
+        }
+        
+        radioPersonalAed.onchange = displayPersonalAedForm
+        radioPublicAed.onchange = displayPublicAedForm
+        
+        if (formTypIsPublic) {
+            displayPublicAedForm()
+            radioPublicAed.checked = true
+        } else {
+            displayPersonalAedForm()
+            radioPersonalAed.checked = true
+        }
+    </script>
 }
