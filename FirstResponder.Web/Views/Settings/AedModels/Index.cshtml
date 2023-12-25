@@ -44,34 +44,22 @@
     </tr>
     </thead>
     <tbody id="table-body">
+        <tr is="vue:editable-new-table-item"
+            new-item-form-action="@Url.Action("Create", "AedModels")"
+            item-placeholder="Názov modelu">
+            <template v-slot:anti-forgery>
+                @Html.AntiForgeryToken()
+            </template>
+        </tr>
     @foreach (var aedModel in Model)
     {
-        <tr class="result-item">
-            <td>
-                <form asp-controller="AedModels" asp-action="Update" asp-route-modelId="@aedModel.Id" method="post" class="in-place-edit-form">
-                    <input type="text" name="Name" value="@aedModel.Name" required class="input input-edit">
-                    <button type="submit" class="save-edit-btn button button-with-icon is-success is-small">
-                        <span class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                            </svg>
-                        </span>
-                        <span>Uložiť</span>
-                    </button>
-                </form>
-            </td>
-            <td style="width: 0; vertical-align: middle;">
-                <form asp-controller="AedModels" asp-action="Delete" asp-route-modelId="@aedModel.Id" method="post" onSubmit="return confirm('Naozaj chcete odstrániť model AED @aedModel.Name?')">
-                    <button type="submit" class="button button-with-icon is-danger is-small">
-                        <span class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                            </svg>
-                        </span>
-                        <span>Odstrániť</span>
-                    </button>
-                </form>
-            </td>
+        <tr is="vue:editable-table-item"
+            update-item-form-action="@Url.Action("Update", "AedModels", new { modelId = aedModel.Id })"
+            delete-item-form-action="@Url.Action("Delete", "AedModels", new { modelId = aedModel.Id })"
+            item-name="@aedModel.Name">
+            <template v-slot:anti-forgery>
+                @Html.AntiForgeryToken()
+            </template>
         </tr>
     }
     </tbody>
@@ -85,10 +73,10 @@
 @section Scripts
 {
     <script>
-        // Parametre pre manage-table-items.js
-        const defaultNewItemInputValue = 'Názov modelu'
-        const newItemFormAction = '@Url.Action("Create", "AedModels")'
-        const antiForgeryToken = '@Html.AntiForgeryToken()'
+        document.getElementById('btn-create-new-item').onclick = 
+            () => window.dispatchEvent(new CustomEvent('create-new-item'))
+            
+        document.getElementById('search-input').oninput = 
+            () => window.dispatchEvent(new CustomEvent('search-input', { detail: { query: document.getElementById('search-input').value } }))
     </script>
-    <script src="~/js/manage-table-items.js"></script>
 }
