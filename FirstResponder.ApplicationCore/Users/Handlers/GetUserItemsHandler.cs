@@ -16,6 +16,13 @@ public class GetUserItemsHandler : IRequestHandler<GetUserItems, IEnumerable<Use
 
     public async Task<IEnumerable<UserItemDTO>> Handle(GetUserItems request, CancellationToken cancellationToken)
     {
-        return await _usersRepository.GetUserItems(request.PageNumber, 30, request.Filters);
+        int pageNumber = request.PageNumber;
+
+        if (pageNumber < 0)
+        {
+            pageNumber = 0;
+        }
+        
+        return await _usersRepository.GetUserItems(pageNumber, 30, request.Filters);
     }
 }
