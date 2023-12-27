@@ -101,6 +101,8 @@
     </div>
 </div>
 
+<group-members-modal />
+
 <div class="modal" id="js-edit-users-modal">
     <div class="modal-background"></div>
     <div class="modal-card" style="height: 100%">
@@ -202,135 +204,13 @@
                 });
             }
             
-            // Zobrazenie responderov
-            const btnUsersList = document.querySelectorAll('.btn-users-list');
-            btnUsersList.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // ziskanie id skupiny
-                    const groupId = btn.closest('tr').dataset.groupid;
-                    
-                    const tableUsersBody = document.getElementById('table-users-body');
-                    tableUsersBody.innerHTML = '';
-                    
-                    checkedOnUserIds = [];
-                    checkedOffUserIds = [];
-                    
-                    const usersGroupId = document.getElementById('users-group-id');
-                    usersGroupId.value = groupId;
-                    
-                    const searchUsersInput = document.getElementById('search-users-input');
-                    searchUsersInput.value = '';
-                    
-                    // ajax request na ziskanie responderov
-                    fetch(`/groups/${groupId}/users`)
-                        .then((response) => response.json())
-                        .then(data => {
-                            parseUsersIntoTable(data);
-                        })
-                        .catch((error) => console.log(error))
-                    
-                    openModal(document.getElementById('js-edit-users-modal'));
-                });
-            });
-            
-            // Vyhladavanie responderov
-            const searchUsersInput = document.getElementById('search-users-input');
-            
-            searchUsersInput.oninput = searchForResultsDebounced();
-            
-            function searchForResults() {
-                const searchValue = searchUsersInput.value.toLowerCase();
-                const groupId = document.getElementById('users-group-id').value;
-                
-                fetch(`/groups/${groupId}/users?query=${searchValue}`)
-                    .then((response) => response.json())
-                    .then(data => {
-                        parseUsersIntoTable(data);
-                    })
-                    .catch((error) => console.log(error))
-            }
-            
-            function searchForResultsDebounced() {
-                let timer = null;
-                return function() {
-                    clearTimeout(timer);
-                    timer = setTimeout(searchForResults, 200);
+            // Zobrazenie modalu na upravu pouzivatelov skupiny
+            document.querySelectorAll('.btn-users-list').forEach(btn => {
+                let groupId = btn.closest('tr').dataset.groupid
+                btn.onclick = () => {
+                    window.dispatchEvent(new CustomEvent('display-users-list-modal', { detail: { groupId: groupId } }))
                 }
-            }
-            
-            function parseUsersIntoTable(users) {
-                const tableUsersBody = document.getElementById('table-users-body');
-                tableUsersBody.innerHTML = '';
-                
-                users.forEach(user => {
-                    const row = document.createElement('tr');
-                    
-                    let checked = user.isInGroup
-                    
-                    // zosynchronizovanie checked s checkedOnUserIds a checkedOffUserIds
-                    if (checkedOnUserIds.includes(user.userId)) {
-                        checked = true;
-                    }
-                    
-                    if (checkedOffUserIds.includes(user.userId)) {
-                        checked = false;
-                    }
-                    
-                    row.innerHTML = `
-                        <td>${user.fullName} (${user.email})</td>
-                        <td><input type="checkbox" class="user-checkbox" data-userId="${user.userId}" ${checked ? 'checked' : ''}></td>
-                    `;
-                    
-                    tableUsersBody.appendChild(row);
-                });
-                
-                // Zaznamevanie zmeny v zaradeni responderov
-                const usersCheckboxes = document.querySelectorAll('.user-checkbox');
-                usersCheckboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', () => {
-                        const userId = checkbox.dataset.userid;
-                        
-                        if (checkbox.checked) {
-                            checkedOnUserIds.push(userId);
-                            checkedOffUserIds = checkedOffUserIds.filter(id => id !== userId);
-                        } else {
-                            checkedOffUserIds.push(userId);
-                            checkedOnUserIds = checkedOnUserIds.filter(id => id !== userId);
-                        }
-                    });
-                });
-            }
-            
-            let checkedOnUserIds = [];
-            let checkedOffUserIds = [];
-            
-            // Ulozenie zmeny v zaradeni responderov
-            const btnSubmitUsersUpdate = document.getElementById('btn-submit-users-update');
-            btnSubmitUsersUpdate.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                const groupId = document.getElementById('users-group-id').value;
-                
-                const data = {
-                    groupId: groupId,
-                    checkedOnUserIds: checkedOnUserIds,
-                    checkedOffUserIds: checkedOffUserIds
-                };
-                
-                fetch(`/groups/${groupId}/users`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data),
-                })
-                    .then(response => {
-                        closeAllModals();
-                    })
-                    .catch((error) => console.log(error))
-                
-            });
-            
+            })
             
             // Kod prevzaty z dokumentacie: https://bulma.io/documentation/components/modal/
             // Functions to open and close a modal
@@ -340,6 +220,7 @@
             
             function closeModal(el) {
                 el.classList.remove('is-active');
+                window.dispatchEvent(new CustomEvent('close-modal', { detail: { modalId: el.id } }))
             }
             
             function closeAllModals() {

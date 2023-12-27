@@ -8,6 +8,7 @@ import AedImageUploader from "./components/AedImageUploader.vue"
 import EditableTableItem from "./components/EditableTableItem.vue";
 import EditableNewTableItem from "./components/EditableNewTableItem.vue";
 import UsersListTableFilter from "./components/UsersListTableFilter.vue";
+import GroupMembersModal from "./components/GroupMembersModal.vue";
 
 const app = createApp({
     data() {
@@ -23,5 +24,6 @@ app.component('aed-image-uploader', AedImageUploader)
 app.component('editable-table-item', EditableTableItem)
 app.component('editable-new-table-item', EditableNewTableItem)
 app.component('users-list-table-filter', UsersListTableFilter)
+app.component('group-members-modal', GroupMembersModal)
 
 app.mount('#app')
