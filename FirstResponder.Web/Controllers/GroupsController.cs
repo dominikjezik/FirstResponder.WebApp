@@ -3,7 +3,6 @@ using FirstResponder.ApplicationCore.Groups.Commands;
 using FirstResponder.ApplicationCore.Groups.DTOs;
 using FirstResponder.ApplicationCore.Groups.Queries;
 using FirstResponder.Web.Extensions;
-using FirstResponder.Web.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

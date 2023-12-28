@@ -34,6 +34,9 @@ export default {
         }
     },
     methods: {
+        closeModal() {
+            this.isShown = false
+        },
         userCheckboxChanged (user) {
             if (user.isInGroup) {
                 this.data.checkedOnUserIds.push(user.userId)
@@ -95,23 +98,23 @@ export default {
             this.data.groupId = e.detail.groupId
             this.isShown = true
         })
-        
-        window.addEventListener('close-modal', (e) => {
-            if (e.detail.modalId === 'edit-users-modal') {
-                this.isShown = false
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Escape') {
+                this.closeModal();
             }
-        })
+        });
     }
 }
 </script>
 
 <template>
-    <div class="modal" id="edit-users-modal" :class="{'is-active': isShown}">
-        <div class="modal-background"></div>
+    <div class="modal" :class="{'is-active': isShown}">
+        <div class="modal-background" @click="closeModal"></div>
         <div class="modal-card" style="height: 100%">
             <header class="modal-card-head">
                 <p class="modal-card-title" style="margin-bottom: 0">Zaradení responderi</p>
-                <button type="button" class="delete" aria-label="close"></button>
+                <button @click="closeModal" type="button" class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
                 <div class="field">
@@ -140,7 +143,7 @@ export default {
             </section>
             <footer class="modal-card-foot">
                 <button @click="saveChanges" type="submit" class="button is-link" id="btn-submit-users-update">Uložiť zmeny</button>
-                <button type="button" class="button">Zrušiť</button>
+                <button @click="closeModal" type="button" class="button">Zrušiť</button>
             </footer>
         </div>
     </div>

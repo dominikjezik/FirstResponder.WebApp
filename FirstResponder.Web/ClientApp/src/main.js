@@ -9,6 +9,8 @@ import EditableTableItem from "./components/EditableTableItem.vue";
 import EditableNewTableItem from "./components/EditableNewTableItem.vue";
 import UsersListTableFilter from "./components/UsersListTableFilter.vue";
 import GroupMembersModal from "./components/GroupMembersModal.vue";
+import GroupCreateModal from "./components/GroupCreateModal.vue";
+import GroupEditModal from "./components/GroupEditModal.vue";
 
 const app = createApp({
     data() {
@@ -25,5 +27,7 @@ app.component('editable-table-item', EditableTableItem)
 app.component('editable-new-table-item', EditableNewTableItem)
 app.component('users-list-table-filter', UsersListTableFilter)
 app.component('group-members-modal', GroupMembersModal)
+app.component('group-create-modal', GroupCreateModal)
+app.component('group-edit-modal', GroupEditModal)
 
 app.mount('#app')
