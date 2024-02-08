@@ -90,6 +90,8 @@ public class GroupsRepository : IGroupsRepository
 
 	public async Task ChangeUsersInGroup(Guid groupId, IEnumerable<Guid> addUsers, IEnumerable<Guid> removeUsers)
 	{
+		// TODO: refaktor miesto alreadyInGroup a notInGroup do jedneho dotazu (rovnako ako v ChangeGroupsForUser)
+		
 		// Filter out users that are already in the group
 		var alreadyInGroup = await _dbContext.GroupUser
 			.Where(groupUser => groupUser.GroupId == groupId)
@@ -113,6 +115,67 @@ public class GroupsRepository : IGroupsRepository
 		});
 		
 		var removeGroupUsers = removeUsers.Select(userId => new GroupUser
+		{
+			GroupId = groupId,
+			UserId = userId
+		});
+		
+		_dbContext.GroupUser.AddRange(addGroupUsers);
+		_dbContext.GroupUser.RemoveRange(removeGroupUsers);
+		
+		await _dbContext.SaveChangesAsync();
+	}
+
+	public async Task<IEnumerable<GroupWithUserInfoDTO>> GetGroupsWithUserInfoAsync(Guid userId, string searchQuery, int limitResultsCount, bool includeNotInGroups = false)
+	{
+		var queryable = _dbContext.Groups
+			.GroupJoin(
+				_dbContext.GroupUser.Where(groupUser => groupUser.UserId == userId),
+				group => group.Id,
+				groupUser => groupUser.GroupId,
+				(group, groupUsers) => new { Group = group, GroupUsers = groupUsers }
+			)
+			.Where(groupGroup => 
+				groupGroup.Group.Name.Contains(searchQuery)
+			)
+			.Where(groupGroup => includeNotInGroups || groupGroup.GroupUsers.Any())
+			.OrderByDescending(groupGroup => groupGroup.Group.CreatedAt)
+			.SelectMany(
+				groupGroup => groupGroup.GroupUsers.DefaultIfEmpty(),
+				(groupGroup, groupUser) => new GroupWithUserInfoDTO
+				{
+					GroupId = groupGroup.Group.Id,
+					Name = groupGroup.Group.Name,
+					IsUserInGroup = groupUser != null
+				}
+			);
+
+		if (limitResultsCount > 0)
+		{
+			queryable = queryable.Take(limitResultsCount);
+		}
+        
+		return await queryable.ToListAsync();
+	}
+
+	public async Task ChangeGroupsForUser(Guid userId, IEnumerable<Guid> addGroups, IEnumerable<Guid> removeGroups)
+	{
+		// Ziska skupiny, v ktorych je sa pouzivatel nachadza
+		var userGroups = await _dbContext.GroupUser
+			.Where(groupUser => groupUser.UserId == userId)
+			.Select(groupUser => groupUser.GroupId)
+			.ToListAsync();
+		
+		addGroups = addGroups.Except(userGroups);
+		removeGroups = removeGroups.Intersect(userGroups);
+		
+		var addGroupUsers = addGroups.Select(groupId => new GroupUser
+		{
+			GroupId = groupId,
+			UserId = userId
+		});
+		
+		var removeGroupUsers = removeGroups.Select(groupId => new GroupUser
 		{
 			GroupId = groupId,
 			UserId = userId

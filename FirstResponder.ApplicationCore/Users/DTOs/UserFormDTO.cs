@@ -82,6 +82,7 @@ public static class UserExtensions
     {
         return new UserFormDTO
         {
+            UserId = user.Id,
             Email = user.Email,
             FullName = user.FullName,
             PhoneNumber = user.PhoneNumber,
