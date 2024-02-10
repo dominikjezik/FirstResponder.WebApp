@@ -32,4 +32,9 @@ public static class ControllerExtensions
     {
         controller.TempData["SuccessMessage"] = message;
     }
+    
+    public static void DisplayErrorMessage(this Controller controller, string message)
+    {
+        controller.TempData["ErrorMessages"] = new[] { message };
+    }
 }

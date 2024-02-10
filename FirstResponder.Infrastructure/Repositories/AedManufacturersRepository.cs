@@ -17,7 +17,7 @@ public class AedManufacturersRepository : IAedManufacturersRepository
     public async Task<IEnumerable<Manufacturer>> GetAllManufacturers()
     {
         return await _dbContext.AedManufacturers
-            .OrderByDescending(m => m.Name)
+            .OrderBy(m => m.Name)
             .ToListAsync();
     }
 
@@ -49,7 +49,16 @@ public class AedManufacturersRepository : IAedManufacturersRepository
 
     public async Task DeleteManufacturer(Manufacturer manufacturer)
     {
+        // V transakci odstráni výrobcu a modely patriace k nemu
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        
+        await _dbContext.AedModels
+            .Where(m => m.ManufacturerId == manufacturer.Id)
+            .ExecuteDeleteAsync();
+        
         _dbContext.AedManufacturers.Remove(manufacturer);
+        
         await _dbContext.SaveChangesAsync();
+        await transaction.CommitAsync();
     }
 }

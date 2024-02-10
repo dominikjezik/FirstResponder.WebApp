@@ -36,18 +36,6 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AedModels",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AedModels", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -112,46 +100,21 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Aeds",
+                name: "AedModels",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false),
-                    ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModelId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FullyAutomatic = table.Column<bool>(type: "bit", nullable: false),
-                    ElectrodesAdults = table.Column<bool>(type: "bit", nullable: false),
-                    ElectrodesChildren = table.Column<bool>(type: "bit", nullable: false),
-                    ElectrodesAdultsExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ElectrodesChildrenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    BatteryExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Aeds", x => x.Id);
+                    table.PrimaryKey("PK_AedModels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Aeds_AedLanguages_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "AedLanguages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Aeds_AedManufacturers_ManufacturerId",
+                        name: "FK_AedModels_AedManufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
                         principalTable: "AedManufacturers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Aeds_AedModels_ModelId",
-                        column: x => x.ModelId,
-                        principalTable: "AedModels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -285,6 +248,49 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Aeds",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false),
+                    ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModelId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FullyAutomatic = table.Column<bool>(type: "bit", nullable: false),
+                    ElectrodesAdults = table.Column<bool>(type: "bit", nullable: false),
+                    ElectrodesChildren = table.Column<bool>(type: "bit", nullable: false),
+                    ElectrodesAdultsExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ElectrodesChildrenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BatteryExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Aeds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Aeds_AedLanguages_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "AedLanguages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Aeds_AedManufacturers_ManufacturerId",
+                        column: x => x.ManufacturerId,
+                        principalTable: "AedManufacturers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Aeds_AedModels_ModelId",
+                        column: x => x.ModelId,
+                        principalTable: "AedModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PersonalAeds",
                 columns: table => new
                 {
@@ -356,6 +362,11 @@ namespace FirstResponder.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AedModels_ManufacturerId",
+                table: "AedModels",
+                column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AedPhotos_PublicAedId",
@@ -473,10 +484,10 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "AedLanguages");
 
             migrationBuilder.DropTable(
-                name: "AedManufacturers");
+                name: "AedModels");
 
             migrationBuilder.DropTable(
-                name: "AedModels");
+                name: "AedManufacturers");
         }
     }
 }

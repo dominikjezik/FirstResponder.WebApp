@@ -1,5 +1,7 @@
 import './scss/main.scss'
 
+import aedHelpers from './js/aed-helpers.js';
+
 import { createApp } from 'vue'
 
 import NavigationCategory from "./components/NavigationCategory.vue"
@@ -44,3 +46,7 @@ app.component('group-edit-modal', GroupEditModal)
 app.component('user-groups-modal', UserGroupsModal)
 
 app.mount('#app')
+
+
+// Helper functions
+window.aedHelpers = aedHelpers

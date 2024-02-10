@@ -78,7 +78,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("Aeds", (string)null);
+                    b.ToTable("Aeds");
 
                     b.UseTptMappingStrategy();
                 });
@@ -106,7 +106,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasIndex("PublicAedId");
 
-                    b.ToTable("AedPhotos", (string)null);
+                    b.ToTable("AedPhotos");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Language", b =>
@@ -121,7 +121,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AedLanguages", (string)null);
+                    b.ToTable("AedLanguages");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Manufacturer", b =>
@@ -136,7 +136,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AedManufacturers", (string)null);
+                    b.ToTable("AedManufacturers");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Model", b =>
@@ -145,13 +145,18 @@ namespace FirstResponder.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ManufacturerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AedModels", (string)null);
+                    b.HasIndex("ManufacturerId");
+
+                    b.ToTable("AedModels");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.Group", b =>
@@ -175,7 +180,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.GroupUser", b =>
@@ -190,7 +195,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GroupUser", (string)null);
+                    b.ToTable("GroupUser");
                 });
 
             modelBuilder.Entity("FirstResponder.Infrastructure.Identity.ApplicationRole", b =>
@@ -431,7 +436,7 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("PersonalAeds", (string)null);
+                    b.ToTable("PersonalAeds");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>
@@ -475,7 +480,7 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Property<int>("Region")
                         .HasColumnType("int");
 
-                    b.ToTable("PublicAeds", (string)null);
+                    b.ToTable("PublicAeds");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed", b =>
@@ -511,6 +516,15 @@ namespace FirstResponder.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Model", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Manufacturer", "Manufacturer")
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId");
+
+                    b.Navigation("Manufacturer");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.GroupUser", b =>
                 {
                     b.HasOne("FirstResponder.ApplicationCore.Entities.UserAggregate.Group", "Group")
@@ -520,7 +534,7 @@ namespace FirstResponder.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany()
+                        .WithMany("GroupUser")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -606,6 +620,11 @@ namespace FirstResponder.Infrastructure.Migrations
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.Group", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("FirstResponder.Infrastructure.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("GroupUser");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>

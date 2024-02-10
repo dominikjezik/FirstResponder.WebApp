@@ -17,7 +17,15 @@ public class AedModelsRepository : IAedModelsRepository
     public async Task<IEnumerable<Model>> GetAllModels()
     {
         return await _dbContext.AedModels
-            .OrderByDescending(m => m.Name)
+            .OrderBy(m => m.Name)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Model>> GetAllModelsByManufacturerId(Guid manufacturerId)
+    {
+        return await _dbContext.AedModels
+            .Where(m => m.ManufacturerId == manufacturerId)
+            .OrderBy(m => m.Name)
             .ToListAsync();
     }
 
@@ -27,11 +35,11 @@ public class AedModelsRepository : IAedModelsRepository
             .Where(m => m.Id == modelId)
             .FirstOrDefaultAsync();
     }
-
-    public async Task<bool> ModelExists(string name)
+    
+    public async Task<bool> ModelExists(string name, Guid manufacturerId)
     {
         return await _dbContext.AedModels
-            .Where(m => m.Name == name)
+            .Where(m => m.Name == name && m.ManufacturerId == manufacturerId)
             .AnyAsync();
     }
 

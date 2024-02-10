@@ -15,7 +15,7 @@
             </span>
             <span>Nastavenia AED</span>
         </a>
-        <button class="button button-with-icon" id="btn-create-new-item">
+        <button class="button button-with-icon" id="btn-create-new-item" @(ViewBag.ManufacturerId == null ? "disabled" : "")>
             <span class="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -29,45 +29,65 @@
 <partial name="_SuccessMessage" />
 <partial name="_ErrorMessages"/>
 
-<div class="field">
-    <label class="label">Model</label>
-    <div class="control">
-        <input class="input" type="text" id="search-input">
+<div class="filter-table-form">
+    <div class="field">
+        <label class="label">Výrobca</label>
+        <div class="control">
+            <div class="select" style="width: 100%">
+                <select style="width: 100%" asp-items="ViewBag.Manufacturers" id="manufacturer-select">
+                    <option value="">-</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field">
+        <label class="label">Model</label>
+        <div class="control">
+            <input class="input" type="text" id="search-input" @(ViewBag.ManufacturerId == null ? "disabled" : "")>
+        </div>
     </div>
 </div>
 
-<table class="table is-striped is-narrow is-hoverable is-fullwidth">
-    <thead>
-    <tr>
-        <th>Model</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody id="table-body">
+@if (ViewBag.ManufacturerId != null)
+{
+    <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+        <tr>
+            <th>Model</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
         <tr is="vue:editable-new-table-item"
-            new-item-form-action="@Url.Action("Create", "AedModels")"
+            new-item-form-action="@Url.Action("Create", "AedModels", new { manufacturerId = ViewBag.ManufacturerId })"
             item-placeholder="Názov modelu">
             <template v-slot:anti-forgery>
                 @Html.AntiForgeryToken()
             </template>
         </tr>
-    @foreach (var aedModel in Model)
+        @foreach (var aedModel in Model)
+        {
+            <tr is="vue:editable-table-item"
+                update-item-form-action="@Url.Action("Update", "AedModels", new { modelId = aedModel.Id, manufacturerId = ViewBag.ManufacturerId })"
+                delete-item-form-action="@Url.Action("Delete", "AedModels", new { modelId = aedModel.Id, manufacturerId = ViewBag.ManufacturerId })"
+                item-name="@aedModel.Name">
+                <template v-slot:anti-forgery>
+                    @Html.AntiForgeryToken()
+                </template>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    @if (!Model.Any())
     {
-        <tr is="vue:editable-table-item"
-            update-item-form-action="@Url.Action("Update", "AedModels", new { modelId = aedModel.Id })"
-            delete-item-form-action="@Url.Action("Delete", "AedModels", new { modelId = aedModel.Id })"
-            item-name="@aedModel.Name">
-            <template v-slot:anti-forgery>
-                @Html.AntiForgeryToken()
-            </template>
-        </tr>
+        <p class="has-text-centered">Neboli pridané žiadne modely.</p>
     }
-    </tbody>
-</table>
-
-@if (!Model.Any())
+}
+else
 {
-    <p class="has-text-centered">Neboli pridané žiadne modely.</p>
+    <p class="has-text-centered">Vyberte výrobcu AED.</p>
 }
 
 @section Scripts
@@ -78,5 +98,8 @@
             
         document.getElementById('search-input').oninput = 
             () => window.dispatchEvent(new CustomEvent('search-input', { detail: { query: document.getElementById('search-input').value } }))
+            
+        document.getElementById('manufacturer-select').onchange = 
+            () => window.location.href = '@Url.Action("Index", "AedModels")' + '?manufacturer=' + document.getElementById('manufacturer-select').value    
     </script>
 }

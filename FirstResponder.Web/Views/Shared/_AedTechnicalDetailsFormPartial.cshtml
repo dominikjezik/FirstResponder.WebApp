@@ -6,7 +6,7 @@
         <label asp-for="AedFormDTO.ManufacturerId" class="label"></label>
         <div class="control">
             <div class="select select-full-width">
-                <select asp-for="AedFormDTO.ManufacturerId" asp-items="@ViewBag.Manufacturers">
+                <select asp-for="AedFormDTO.ManufacturerId" asp-items="@ViewBag.Manufacturers" id="manufacturer-select">
                     <option value="">-</option>
                 </select>
             </div>
@@ -17,7 +17,7 @@
         <label asp-for="AedFormDTO.ModelId" class="label"></label>
         <div class="control">
             <div class="select select-full-width">
-                <select asp-for="AedFormDTO.ModelId" asp-items="@ViewBag.Models">
+                <select asp-for="AedFormDTO.ModelId" asp-items="@ViewBag.Models" id="model-select">
                     <option value="">-</option>
                 </select>
             </div>

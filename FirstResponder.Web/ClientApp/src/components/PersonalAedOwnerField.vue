@@ -41,7 +41,7 @@ export default {
                 .catch((error) => console.log(error))
         },
         selectOwner(userId, fullName, email) {
-            this.currentOwner = { userId: userId, fullName: fullName, email: email }
+            this.currentOwner = { id: userId, fullName: fullName, email: email }
             this.searchQuery = ""
         },
         removeSelectedOwner() {
@@ -69,7 +69,7 @@ export default {
             </div>
             <ul class="results panel">
                 <li v-for="user in searchResults">
-                    <a @click="() => selectOwner(user.userId, user.fullName, user.email)" class="panel-block search-result">
+                    <a @click="() => selectOwner(user.id, user.fullName, user.email)" class="panel-block search-result">
                         <b>{{ user.fullName }}</b> &nbsp;({{ user.email }})
                     </a>
                 </li>
@@ -81,7 +81,7 @@ export default {
                 <p class="selected-owner-p"><b>{{ currentOwner.fullName }}</b> ({{ currentOwner.email }})</p>
                 <button @click="removeSelectedOwner" type="button" class="delete" aria-label="delete"></button>
             </footer>
-            <input type="hidden" name="AedFormDTO.OwnerId" :value="currentOwner.userId">
+            <input type="hidden" name="AedFormDTO.OwnerId" :value="currentOwner.id">
         </div>
     </section>
 </template>

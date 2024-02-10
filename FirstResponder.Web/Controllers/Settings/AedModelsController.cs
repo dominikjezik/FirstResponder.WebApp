@@ -1,11 +1,13 @@
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.Queries;
+using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.Web.Extensions;
 using FirstResponder.Web.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FirstResponder.Web.Controllers.Settings;
 
@@ -21,10 +23,27 @@ public class AedModelsController : Controller
     }
     
     [Route("")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? manufacturer = null)
     {
-        var models = await _mediator.Send(new GetAllModelsQuery());
-        return View("../Settings/AedModels/Index", models);
+        try
+        {
+            IEnumerable<Model> models = new List<Model>();
+            
+            if (manufacturer != null)
+            {
+                models = await _mediator.Send(new GetAllModelsQuery { ManufacturerId = manufacturer });
+            }
+            
+            ViewBag.ManufacturerId = manufacturer;
+            await LoadManufacturersToViewBag(manufacturer);
+
+            return View("../Settings/AedModels/Index", models);
+        }
+        catch (EntityNotFoundException exception)
+        {
+            this.DisplayErrorMessage(exception.Message);
+            return RedirectToAction(nameof(Index));
+        }
     }
     
     [HttpPost]
@@ -34,21 +53,27 @@ public class AedModelsController : Controller
         if (!ModelState.IsValid)
         {
             var models = await _mediator.Send(new GetAllModelsQuery());
+            await LoadManufacturersToViewBag();
             return View("../Settings/AedModels/Index", models);
         }
 
         try
         {
-           await _mediator.Send(new CreateModelCommand(model.Name));
+            await _mediator.Send(new CreateModelCommand(model.Name, model.ManufacturerId));
+        }
+        catch (EntityNotFoundException exception)
+        {
+            this.DisplayErrorMessage(exception.Message);
+            return RedirectToAction(nameof(Index), new { manufacturer = model.ManufacturerId });
         }
         catch (EntityValidationException exception)
         {
             this.MapErrorsToErrorMessages(exception);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { manufacturer = model.ManufacturerId });
         }
         
         this.DisplaySuccessMessage("Model " + model.Name + " bol úspešne vytvorený!");
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index), new { manufacturer = model.ManufacturerId });
     }
     
     [HttpPost]
@@ -58,6 +83,7 @@ public class AedModelsController : Controller
         if (!ModelState.IsValid)
         {
             var models = await _mediator.Send(new GetAllModelsQuery());
+            await LoadManufacturersToViewBag();
             return View("../Settings/AedModels/Index", models);
         }
 
@@ -65,23 +91,39 @@ public class AedModelsController : Controller
         {
             await _mediator.Send(new UpdateModelCommand(modelId, model.Name));
         }
+        catch (EntityNotFoundException exception)
+        {
+            this.DisplayErrorMessage(exception.Message);
+            return RedirectToAction(nameof(Index), new { manufacturer = model.ManufacturerId });
+        }
         catch (EntityValidationException exception)
         {
             this.MapErrorsToErrorMessages(exception);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { manufacturer = model.ManufacturerId });
         }
         
         this.DisplaySuccessMessage("Názov modelu bol úspešne zmenený!");
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index), new { manufacturer = model.ManufacturerId });
     }
     
     [HttpPost]
     [Route("{modelId}/[action]")]
-    public async Task<IActionResult> Delete(Guid modelId)
+    public async Task<IActionResult> Delete(Guid modelId, string? manufacturerId = null)
     {
+        // TODO: redirect
         await _mediator.Send(new DeleteModelCommand(modelId));
         this.DisplaySuccessMessage("Model bol úspešne odstránený!");
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index), new { manufacturer = manufacturerId });
     }
+    
+    #region Helpers
+    
+    private async Task LoadManufacturersToViewBag(string selectedManufacturer = null)
+    {
+        ViewBag.Manufacturers = (await _mediator.Send(new GetAllManufacturersQuery()))
+            .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString(), Selected = m.Id.ToString() == selectedManufacturer});
+    }
+    
+    #endregion
     
 }

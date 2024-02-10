@@ -74,10 +74,9 @@
                         @if (Model?.AedFormDTO.Owner != null)
                         {
                             <text>
-                                :selected-owner="{ fullName: '@Model.AedFormDTO.Owner.FullName', email: '@Model.AedFormDTO.Owner.Email' }"
+                                :selected-owner="{ id: '@Model.AedFormDTO.Owner.Id', fullName: '@Model.AedFormDTO.Owner.FullName', email: '@Model.AedFormDTO.Owner.Email' }"
                             </text>
-                        }
-                    />
+                        }/>
                 </div>
             }
 
@@ -207,6 +206,11 @@
 
 @section Scripts
 {
+    <script>
+        // Script for loading models based on the selected manufacturer.
+        window.aedHelpers.handleManufacturerModelSelects('manufacturer-select', 'model-select', '@Url.Action("Models", "Aed")')
+    </script>
+    
     @if(Model.AedFormDTO.GeneralType == AedGeneralType.Public && Model.AedFormDTO.Latitude != null && Model.AedFormDTO.Longitude != null)
     {
         var lat = Model.AedFormDTO.Latitude.ToString().Replace(",", ".");

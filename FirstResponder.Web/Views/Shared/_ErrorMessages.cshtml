@@ -7,12 +7,15 @@
 
 @if(TempData["ErrorMessages"] != null)
 {
-    var errorMessages = (object[])TempData["ErrorMessages"]!;
-
-    foreach (var message in errorMessages)
+    var errorMessages = (object[])TempData["ErrorMessages"];
+    
+    if (errorMessages != null && errorMessages.Length > 0)
     {
-        <div class="message is-danger">
-            <div class="message-body mb-1">@message</div>
-        </div>
+        foreach (var message in errorMessages)
+        {
+            <div class="message is-danger">
+                <div class="message-body mb-1">@message</div>
+            </div>
+        }
     }
 }

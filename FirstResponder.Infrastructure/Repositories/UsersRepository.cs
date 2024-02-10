@@ -115,7 +115,7 @@ public class UsersRepository : IUsersRepository
             .OrderByDescending(a => a.CreatedAt)
             .Select(a => new UserSearchResultDTO
             {
-                UserId = a.Id,
+                Id = a.Id,
                 FullName = a.FullName,
                 Email = a.Email
             })

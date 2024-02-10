@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FirstResponder.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231221160709_Initial")]
+    [Migration("20240210154237_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -148,11 +148,16 @@ namespace FirstResponder.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ManufacturerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ManufacturerId");
 
                     b.ToTable("AedModels");
                 });
@@ -514,6 +519,15 @@ namespace FirstResponder.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.Model", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Manufacturer", "Manufacturer")
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId");
+
+                    b.Navigation("Manufacturer");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.GroupUser", b =>
                 {
                     b.HasOne("FirstResponder.ApplicationCore.Entities.UserAggregate.Group", "Group")
@@ -523,7 +537,7 @@ namespace FirstResponder.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany()
+                        .WithMany("GroupUser")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -609,6 +623,11 @@ namespace FirstResponder.Infrastructure.Migrations
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.Group", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("FirstResponder.Infrastructure.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("GroupUser");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>

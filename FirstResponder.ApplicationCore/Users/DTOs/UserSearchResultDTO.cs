@@ -2,7 +2,7 @@ namespace FirstResponder.ApplicationCore.Users.DTOs;
 
 public class UserSearchResultDTO
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
     
     public string FullName { get; set; }
 

@@ -20,7 +20,7 @@ public class UpdateModelCommandHandler : IRequestHandler<UpdateModelCommand>
         
         if (model == null)
         {
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Výrobca neexistuje!");
         }
 
         if (model.Name == request.Name)
@@ -28,7 +28,7 @@ public class UpdateModelCommandHandler : IRequestHandler<UpdateModelCommand>
             return;
         }
         
-        if (await _aedModelsRepository.ModelExists(request.Name))
+        if (await _aedModelsRepository.ModelExists(request.Name, model.ManufacturerId ?? Guid.Empty))
         {
             var errors = new Dictionary<string, string>();
             errors["Name"] = "Model s týmto názvom už existuje!";

@@ -6,9 +6,11 @@ public interface IAedModelsRepository
 {
     Task<IEnumerable<Model>> GetAllModels();
     
+    Task<IEnumerable<Model>> GetAllModelsByManufacturerId(Guid manufacturerId);
+    
     Task<Model?> GetModelById(Guid modelId);
 
-    Task<bool> ModelExists(string name);
+    Task<bool> ModelExists(string name, Guid manufacturerId);
     
     Task AddModel(Model model);
     

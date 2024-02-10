@@ -62,7 +62,7 @@ public class AedController : Controller
         catch (EntityValidationException exception)
         {
             this.MapErrorsToModelState(exception);
-            await LoadOptionsForSelectionsToViewBag();
+            await LoadOptionsForSelectionsToViewBag(model.AedFormDTO.ManufacturerId);
             return View(model);
         }
     }
@@ -77,7 +77,7 @@ public class AedController : Controller
             return NotFound();
         }
         
-        await LoadOptionsForSelectionsToViewBag();
+        await LoadOptionsForSelectionsToViewBag(aed.ManufacturerId);
 
         var model = new AedFormViewModel
         {
@@ -109,7 +109,7 @@ public class AedController : Controller
                 model.AedFormDTO.Owner = personalAed.Owner;
             }
             
-            await LoadOptionsForSelectionsToViewBag();
+            await LoadOptionsForSelectionsToViewBag(model.AedFormDTO.ManufacturerId);
             return View(model);
         }
 
@@ -135,7 +135,7 @@ public class AedController : Controller
                 model.AedFormDTO.Owner = personalAed.Owner;
             }
 
-            await LoadOptionsForSelectionsToViewBag();
+            await LoadOptionsForSelectionsToViewBag(model.AedFormDTO.ManufacturerId);
             return View(model);
         }
     }
@@ -166,6 +166,26 @@ public class AedController : Controller
         var publicAeds = await _mediator.Send(new GetAllPublicAedsQuery());
         return View(publicAeds);
     }
+    
+    [HttpGet]
+    [Route("[action]")]
+    public async Task<IEnumerable<Model>> Models(string manufacturerId)
+    {
+        if (string.IsNullOrEmpty(manufacturerId))
+        {
+            return new List<Model>();
+        }
+
+        try
+        {
+            var models = await _mediator.Send(new GetAllModelsQuery { ManufacturerId = manufacturerId });
+            return models.Select(m => new Model { Id = m.Id, Name = m.Name });
+        } catch (EntityNotFoundException)
+        {
+            return new List<Model>();
+        }
+        
+    }
 
     #region Helpers
 
@@ -188,10 +208,10 @@ public class AedController : Controller
         }
     }
     
-    private async Task LoadOptionsForSelectionsToViewBag()
+    private async Task LoadOptionsForSelectionsToViewBag(Guid? manufacturerId = null)
     {
         await LoadManufacturersToViewBag();
-        await LoadModelsToViewBag();
+        await LoadModelsToViewBag(manufacturerId);
         await LoadLanguagesToViewBag();
     }
 
@@ -201,9 +221,15 @@ public class AedController : Controller
             .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
     }
     
-    private async Task LoadModelsToViewBag()
+    private async Task LoadModelsToViewBag(Guid? manufacturerId = null)
     {
-        ViewBag.Models = (await _mediator.Send(new GetAllModelsQuery()))
+        if (manufacturerId == null)
+        {
+            ViewBag.Models = new List<SelectListItem>();
+            return;
+        }
+        
+        ViewBag.Models = (await _mediator.Send(new GetAllModelsQuery{ ManufacturerId = manufacturerId.ToString() }))
             .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
     }
 
