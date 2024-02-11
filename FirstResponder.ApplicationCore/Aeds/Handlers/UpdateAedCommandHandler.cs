@@ -12,12 +12,14 @@ namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 public class UpdateAedCommandHandler : IRequestHandler<UpdateAedCommand, Aed?>
 {
     private readonly IAedRepository _aedRepository;
+    private readonly IAedModelsRepository _aedModelsRepository;
     private readonly IUsersRepository _usersRepository;
     private readonly IFileService _fileService;
 
-    public UpdateAedCommandHandler(IAedRepository aedRepository, IUsersRepository usersRepository, IFileService fileService)
+    public UpdateAedCommandHandler(IAedRepository aedRepository, IAedModelsRepository aedModelsRepository, IUsersRepository usersRepository, IFileService fileService)
     {
         _aedRepository = aedRepository;
+        _aedModelsRepository = aedModelsRepository;
         _usersRepository = usersRepository;
         _fileService = fileService;
     }
@@ -46,6 +48,8 @@ public class UpdateAedCommandHandler : IRequestHandler<UpdateAedCommand, Aed?>
                 throw new EntityValidationException(errors);
             }
         }
+        
+        await ValidateRelatedEntities(aed);
 
         await _aedRepository.UpdateAed(aed);
         
@@ -92,6 +96,30 @@ public class UpdateAedCommandHandler : IRequestHandler<UpdateAedCommand, Aed?>
             };
 
             await _aedRepository.AddAedPhoto(aedPhoto);
+        }
+    }
+    
+    private async Task ValidateRelatedEntities(Aed aed)
+    {
+        if (aed.ModelId != null)
+        {
+            var model = await _aedModelsRepository.GetModelById(aed.ModelId.Value);
+            
+            if (model == null)
+            {
+                var errors = new Dictionary<string, string>();
+                errors["ModelId"] = "Model AED neexistuje!";
+                
+                throw new EntityValidationException(errors);
+            }
+            
+            if (model.ManufacturerId != aed.ManufacturerId)
+            {
+                var errors = new Dictionary<string, string>();
+                errors["ModelId"] = "Model AED nepatri pod vyrobcu!";
+                
+                throw new EntityValidationException(errors);
+            }
         }
     }
 }
