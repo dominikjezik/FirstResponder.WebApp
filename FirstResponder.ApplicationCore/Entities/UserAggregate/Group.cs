@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using FirstResponder.ApplicationCore.Abstractions;
+using FirstResponder.ApplicationCore.Common.Abstractions;
 
 namespace FirstResponder.ApplicationCore.Entities.UserAggregate;
 

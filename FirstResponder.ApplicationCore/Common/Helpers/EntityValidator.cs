@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FirstResponder.ApplicationCore.Exceptions;
 
-namespace FirstResponder.ApplicationCore.Helpers;
+namespace FirstResponder.ApplicationCore.Common.Helpers;
 
 public static class EntityValidator
 {

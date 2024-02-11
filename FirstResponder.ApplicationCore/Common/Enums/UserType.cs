@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FirstResponder.ApplicationCore.Enums;
+namespace FirstResponder.ApplicationCore.Common.Enums;
 
 public enum UserType
 {

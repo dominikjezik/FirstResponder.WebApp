@@ -1,6 +1,6 @@
 namespace FirstResponder.ApplicationCore.Shared;
 
-public class FileUploadDTO
+public class FileUploadDto
 {
     public required Stream FileStream { get; set; }
     

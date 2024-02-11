@@ -1,4 +1,4 @@
-namespace FirstResponder.ApplicationCore.Exceptions;
+namespace FirstResponder.ApplicationCore.Common.Exceptions;
 
 public class EntityNotFoundException : Exception
 {

@@ -1,4 +1,4 @@
-namespace FirstResponder.ApplicationCore.Abstractions;
+namespace FirstResponder.ApplicationCore.Common.Abstractions;
 
 public interface IAuditable
 {

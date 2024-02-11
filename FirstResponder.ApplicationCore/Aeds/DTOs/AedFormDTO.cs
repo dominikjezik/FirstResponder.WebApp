@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
-using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.ApplicationCore.Shared;
 
 namespace FirstResponder.ApplicationCore.Aeds.DTOs;
@@ -78,7 +78,7 @@ public class AedFormDTO
     [EmailAddress]
     public string? ContactPersonEmail { get; set; }
     
-    public IList<FileUploadDTO>? AedPhotoFileUploadDTOs { get; set; }
+    public IList<FileUploadDto>? AedPhotoFileUploadDTOs { get; set; }
 
     public ICollection<AedPhoto>? Photos { get; set; }
 

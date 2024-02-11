@@ -1,4 +1,4 @@
-using FirstResponder.ApplicationCore.Abstractions;
+using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Groups.Commands;
 using MediatR;

@@ -1,6 +1,6 @@
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
-using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.Identity;

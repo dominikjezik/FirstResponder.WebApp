@@ -1,4 +1,4 @@
-using FirstResponder.ApplicationCore.Abstractions;
+using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.Web.Filters;
 using FirstResponder.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;

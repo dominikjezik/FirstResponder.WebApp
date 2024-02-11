@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using FirstResponder.ApplicationCore.Abstractions;
-using FirstResponder.ApplicationCore.Enums;
+using FirstResponder.ApplicationCore.Common.Abstractions;
+using FirstResponder.ApplicationCore.Common.Enums;
 
 namespace FirstResponder.ApplicationCore.Entities.UserAggregate;
 

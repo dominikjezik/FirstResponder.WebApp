@@ -1,4 +1,4 @@
-using FirstResponder.ApplicationCore.Abstractions;
+using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Shared;
 using Microsoft.Extensions.Options;
 
@@ -18,7 +18,7 @@ public class LocalFileService : IFileService
         }
     }
     
-    public async Task<string> StoreFile(FileUploadDTO fileUploadDTO)
+    public async Task<string> StoreFile(FileUploadDto fileUploadDTO)
     {
         var fileName = Guid.NewGuid() + fileUploadDTO.Extension;
         var filePathOnDisk = Path.Combine(options.UploadsFolderPath, fileName);

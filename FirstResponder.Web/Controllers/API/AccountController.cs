@@ -1,4 +1,4 @@
-using FirstResponder.ApplicationCore.Enums;
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Users.Commands;
 using FirstResponder.ApplicationCore.Users.DTOs;

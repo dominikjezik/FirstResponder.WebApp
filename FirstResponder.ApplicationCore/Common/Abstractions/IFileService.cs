@@ -1,10 +1,10 @@
 using FirstResponder.ApplicationCore.Shared;
 
-namespace FirstResponder.ApplicationCore.Abstractions;
+namespace FirstResponder.ApplicationCore.Common.Abstractions;
 
 public interface IFileService
 {
-    Task<string> StoreFile(FileUploadDTO fileUploadDTO);
+    Task<string> StoreFile(FileUploadDto fileUploadDTO);
 
     Task DeleteFile(string fileName);
 }

@@ -1,6 +1,6 @@
-using FirstResponder.ApplicationCore.Abstractions;
+using FirstResponder.ApplicationCore.Common.Abstractions;
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
-using FirstResponder.ApplicationCore.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace FirstResponder.Infrastructure.Identity;

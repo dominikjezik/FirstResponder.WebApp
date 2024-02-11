@@ -1,6 +1,7 @@
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Aeds.Queries;
+using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Shared;
@@ -193,11 +194,11 @@ public class AedController : Controller
     {
         if (model.AedPhotoFormFiles != null)
         {
-            model.AedFormDTO.AedPhotoFileUploadDTOs = new List<FileUploadDTO>();
+            model.AedFormDTO.AedPhotoFileUploadDTOs = new List<FileUploadDto>();
                 
             foreach (var file in model.AedPhotoFormFiles)
             {
-                var uploadDto = new FileUploadDTO 
+                var uploadDto = new FileUploadDto 
                 { 
                     Extension = Path.GetExtension(file.FileName),
                     FileStream = file.OpenReadStream()

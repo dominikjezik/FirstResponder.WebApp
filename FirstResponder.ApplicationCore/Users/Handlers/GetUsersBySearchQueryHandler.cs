@@ -1,4 +1,4 @@
-using FirstResponder.ApplicationCore.Abstractions;
+using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.ApplicationCore.Users.Queries;
 using MediatR;

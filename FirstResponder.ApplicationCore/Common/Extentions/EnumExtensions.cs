@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace FirstResponder.Web.Extensions;
+namespace FirstResponder.ApplicationCore.Common.Extentions;
 
 public static class EnumExtensions
 {

@@ -1,4 +1,4 @@
-using FirstResponder.ApplicationCore.Abstractions;
+using FirstResponder.ApplicationCore.Common.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
 namespace FirstResponder.Infrastructure.Identity;

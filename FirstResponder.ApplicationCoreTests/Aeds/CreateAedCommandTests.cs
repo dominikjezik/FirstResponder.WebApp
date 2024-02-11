@@ -1,10 +1,10 @@
 using AutoFixture;
-using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Aeds.Handlers;
+using FirstResponder.ApplicationCore.Common.Abstractions;
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
-using FirstResponder.ApplicationCore.Enums;
 using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Shared;
 using FluentAssertions;
@@ -22,7 +22,7 @@ public class CreateAedCommandTests
 
     public CreateAedCommandTests()
     {
-        _fixture.Register<FileUploadDTO>(() => null);
+        _fixture.Register<FileUploadDto>(() => null);
     }
     
     [Fact]

@@ -1,6 +1,6 @@
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 
-namespace FirstResponder.ApplicationCore.Abstractions;
+namespace FirstResponder.ApplicationCore.Common.Abstractions;
 
 public interface IAedLanguagesRepository
 {

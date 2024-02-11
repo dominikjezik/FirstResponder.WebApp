@@ -1,7 +1,7 @@
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Groups.DTOs;
 
-namespace FirstResponder.ApplicationCore.Abstractions;
+namespace FirstResponder.ApplicationCore.Common.Abstractions;
 
 public interface IGroupsRepository
 {

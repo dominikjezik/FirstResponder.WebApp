@@ -1,6 +1,6 @@
-using FirstResponder.ApplicationCore.Abstractions;
 using FirstResponder.ApplicationCore.Aeds.Queries;
-using FirstResponder.ApplicationCore.Enums;
+using FirstResponder.ApplicationCore.Common.Abstractions;
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.FileStorage;
 using FirstResponder.Infrastructure.Identity;
