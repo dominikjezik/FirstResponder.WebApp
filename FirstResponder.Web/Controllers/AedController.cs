@@ -30,8 +30,8 @@ public class AedController : Controller
     {
         await LoadManufacturersToViewBag();
         await LoadModelsToViewBag();
-        
-        var aeds = await _mediator.Send(new GetAllAedsQuery());
+
+        var aeds = new List<Aed>();//await _mediator.Send(new GetAedItemsQuery());
         return View(aeds);
     }
 
@@ -170,6 +170,14 @@ public class AedController : Controller
     
     [HttpGet]
     [Route("[action]")]
+    public async Task<IEnumerable<Model>> Manufacturers()
+    {
+        var models = await _mediator.Send(new GetAllManufacturersQuery());
+        return models.Select(m => new Model { Id = m.Id, Name = m.Name });
+    }
+    
+    [HttpGet]
+    [Route("[action]")]
     public async Task<IEnumerable<Model>> Models(string manufacturerId)
     {
         if (string.IsNullOrEmpty(manufacturerId))
@@ -185,7 +193,14 @@ public class AedController : Controller
         {
             return new List<Model>();
         }
-        
+    }
+
+    [HttpGet]
+    [Route("filtered-table-items")]
+    public async Task<IEnumerable<AedItemDTO>> FilteredTableItems(int pageNumber, [FromQuery] AedItemFiltersDTO filtersDto)
+    {
+        var items = await _mediator.Send(new GetAedItemsQuery() { PageNumber = pageNumber, Filters = filtersDto });
+        return items;
     }
 
     #region Helpers

@@ -5,12 +5,12 @@ using MediatR;
 
 namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 
-public class GetAedByIdHandler : IRequestHandler<GetAedByIdQuery, Aed?>
+public class GetAedByIdQueryHandler : IRequestHandler<GetAedByIdQuery, Aed?>
 {
     private readonly IAedRepository _aedRepository;
     private readonly IUsersRepository _usersRepository;
 
-    public GetAedByIdHandler(IAedRepository aedRepository, IUsersRepository usersRepository)
+    public GetAedByIdQueryHandler(IAedRepository aedRepository, IUsersRepository usersRepository)
     {
         _aedRepository = aedRepository;
         _usersRepository = usersRepository;

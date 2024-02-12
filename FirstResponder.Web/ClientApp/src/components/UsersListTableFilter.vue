@@ -2,11 +2,13 @@
 export default {
     data() {
         return {
-            filter: {
+            filterInput: {
                 fullName: '',
                 phoneNumber: '',
+            },
+            filterSelect: {
                 type: '',
-                region: ''
+                region: '',
             },
             page: 0,
             loading: false,
@@ -22,6 +24,7 @@ export default {
             users: [],
             isMessageVisible: false,
             messageText: '',
+            debounceTimer: null,
         }
     },
     mounted() {
@@ -36,12 +39,17 @@ export default {
         }
     },
     watch: {
-        filter: {
+        filterSelect: {
             handler() {
-                this.page = 0
-                this.hasMore = true
-                this.users = []
-                this.loadMore()
+                clearTimeout(this.debounceTimer)
+                this.filterChanged()
+            },
+            deep: true
+        },
+        filterInput: {
+            handler() {
+                clearTimeout(this.debounceTimer)
+                this.debounceTimer = setTimeout(this.filterChanged, 300)
             },
             deep: true
         }
@@ -49,6 +57,12 @@ export default {
     methods: {
         onItemClicked(user) {
             window.location = `/users/${user.id}`
+        },
+        filterChanged() {
+            this.page = 0
+            this.hasMore = true
+            this.users = []
+            this.loadMore()
         },
         loadMore() {
             if (this.loading || !this.hasMore) {
@@ -92,20 +106,20 @@ export default {
             let url = new URL('/api/users/filtered-table-items', window.location.href)
             url.searchParams.append('pageNumber', this.page)
 
-            if (this.filter.fullName) {
-                url.searchParams.append('fullName', this.filter.fullName)
+            if (this.filterInput.fullName) {
+                url.searchParams.append('fullName', this.filterInput.fullName)
             }
 
-            if (this.filter.phoneNumber) {
-                url.searchParams.append('phoneNumber', this.filter.phoneNumber)
+            if (this.filterInput.phoneNumber) {
+                url.searchParams.append('phoneNumber', this.filterInput.phoneNumber)
             }
 
-            if (this.filter.type !== '') {
-                url.searchParams.append('type', this.filter.type)
+            if (this.filterSelect.type !== '') {
+                url.searchParams.append('type', this.filterSelect.type)
             }
 
-            if (this.filter.region !== '') {
-                url.searchParams.append('region', this.filter.region)
+            if (this.filterSelect.region !== '') {
+                url.searchParams.append('region', this.filterSelect.region)
             }
             
             return url
@@ -119,14 +133,14 @@ export default {
         <div class="field">
             <label class="label">Podľa&nbsp;mena</label>
             <div class="control">
-                <input v-model="filter.fullName" class="input" type="text">
+                <input v-model="filterInput.fullName" class="input" type="text">
             </div>
         </div>
 
         <div class="field">
             <label class="label">Podľa&nbsp;telefónu</label>
             <div class="control">
-                <input v-model="filter.phoneNumber" class="input" type="text">
+                <input v-model="filterInput.phoneNumber" class="input" type="text">
             </div>
         </div>
 
@@ -134,7 +148,7 @@ export default {
             <label class="label">Podľa&nbsp;stavu</label>
             <div class="control">
                 <div class="select">
-                    <select v-model="filter.type">
+                    <select v-model="filterSelect.type">
                         <option value="">-</option>
                         <option v-for="option in optionsType" :value="option.id">
                             {{ option.name}}
@@ -148,7 +162,7 @@ export default {
             <label class="label">Podľa&nbsp;kraju</label>
             <div class="control">
                 <div class="select">
-                    <select v-model="filter.region">
+                    <select v-model="filterSelect.region">
                         <option value="">-</option>
                         <option v-for="option in optionsRegion" :value="option.id">
                             {{ option.name}}

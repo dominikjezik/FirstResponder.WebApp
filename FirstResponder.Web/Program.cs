@@ -48,7 +48,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 // Add MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetAllAedsQuery>());
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetAedItemsQuery>());
 
 // LocalFileService configuration
 builder.Services.Configure<LocalFileServiceOptions>(options =>

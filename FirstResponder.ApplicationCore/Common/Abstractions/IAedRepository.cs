@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 
 namespace FirstResponder.ApplicationCore.Common.Abstractions;
@@ -5,6 +6,12 @@ namespace FirstResponder.ApplicationCore.Common.Abstractions;
 public interface IAedRepository
 {
     Task<IEnumerable<Aed>> GetAllAedsWithOwners();
+
+    Task<IEnumerable<AedItemDTO>> GetAedItems(int pageNumber, int pageSize, AedItemFiltersDTO? filtersDTO = null);
+    
+    Task<IEnumerable<AedItemDTO>> GetPersonalAedItems(int pageNumber, int pageSize, AedItemFiltersDTO? filtersDTO = null);
+    
+    Task<IEnumerable<AedItemDTO>> GetPublicAedItems(int pageNumber, int pageSize, AedItemFiltersDTO? filtersDTO = null);
     
     Task<IEnumerable<PublicAed>> GetAllPublicAeds();
     

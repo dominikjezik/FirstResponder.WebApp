@@ -41,6 +41,7 @@
 }
 
 .table td.table-icon {
+    width: 0;
     svg {
         transform: translate(0, .2rem);
     }
