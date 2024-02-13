@@ -1,0 +1,224 @@
+@using FirstResponder.ApplicationCore.Common.Enums
+<header class="main-header">
+    <h1>adresa</h1>
+    <div class="buttons">
+        <a asp-controller="Incidents" asp-action="Index" class="button button-with-icon">
+            <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+                </svg>
+            </span>
+            <span>Prehľad zásahov</span>
+        </a>
+    </div>
+</header>
+
+<partial name="_SuccessMessage" />
+
+<div class="entity-details-page">
+    <div class="entity-details-form">
+        <form asp-controller="Incidents" asp-action="Edit" asp-route-incidentId="">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="message is-danger">
+                    <div asp-validation-summary="All" class="message-body mb-1"></div>
+                </div>
+            }
+            
+            <section class="form-section">
+                
+                <div class="field is-horizontal">
+                    <div class="field-body">
+                        <div class="field">
+                            <label class="label">Začiatok</label>
+                            <div class="control">
+                                <input type="datetime-local" class="input">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Koniec</label>
+                            <div class="control">
+                                <input type="datetime-local" class="input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Stav</label>
+                    <div class="control">
+                        <div class="select select-full-width">
+                            <select asp-items="Html.GetEnumSelectList<IncidentState>()">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Adresa</label>
+                    <div class="control">
+                        <textarea class="textarea" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Pacient</label>
+                    <div class="control">
+                        <input class="input">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Diagnóza</label>
+                    <div class="control">
+                        <textarea class="textarea" rows="4"></textarea>
+                    </div>
+                </div>
+                
+                <div class="field is-horizontal">
+                    <div class="field-body">
+                        <div class="field">
+                            <label class="label">Zemepisná šírka</label>
+                            <div class="control">
+                                <input class="input" type="number" step=".000001" min="-90" max="90">
+                            </div>
+                        </div>
+        
+                        <div class="field">
+                            <label class="label">Zemepisná dĺžka</label>
+                            <div class="control">
+                                <input class="input" type="number" step=".000001" min="-90" max="90">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control flex-space-between">
+                        <button id="submit-btn" type="submit" class="button is-link">Aktualizovať</button>
+                        <button type="submit" class="button is-danger is-light" form="formDelete">Odstrániť zásah</button>
+                    </div>
+                </div>
+            </section>
+            
+        </form>
+        <form asp-controller="Incidents" asp-action="Delete" asp-route-incidentId="" id="formDelete" onSubmit="return confirm('Naozaj chcete odstrániť tento zásah?') "></form>
+        
+        <section style="opacity: 0.2">
+            <header class="section-header">
+                <h2 class="heading-with-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                    </svg>
+                    Správy
+                </h2>
+        
+                <button class="button">
+                    Odoslať správu
+                </button>
+            </header>
+            
+            <div>
+                <div class="message is-info">
+                    <div class="message-body">
+                        <strong>John Doe</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum felis venenatis efficitur.
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </div>
+
+    <aside class="entity-details-aside">
+        <section>
+            <h2 class="heading-with-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg>
+                Umiestnenie
+            </h2>
+            <div id="map" style="height: 300px; margin-bottom: 1rem;"></div>
+        </section>
+        
+        
+        <h2 class="heading-with-icon" style="opacity: 0.2;">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+            </svg>
+            Priradený Responderi
+        </h2>
+
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth" style="opacity: 0.2;">
+            <thead>
+            <tr>
+                <th>Responder</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>John Doe</td>
+            </tr>
+            </tbody>
+        </table>
+
+        
+        <header class="section-header" style="opacity: 0.2;">
+            <h2 class="heading-with-icon">
+                <svg width="28" height="28" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.79832 201.333C-17.2805 98.4708 52.7101 20.734 131.257 20.0131C171.625 19.3941 222.121 40.7359 249.035 92.2912C275.948 40.7359 326.444 19.3941 366.813 20.0131C445.36 20.734 515.35 98.4708 494.271 201.333C478.203 279.744 394.702 381.713 249.035 480.552C103.368 381.713 19.8668 279.744 3.79832 201.333ZM164.031 331.283L190.768 48.4749C209.15 59.0772 226.112 75.261 238.016 98.0647L244.335 110.173L214.174 250.673L327.999 168.283L277.857 395.135H307.363L248.319 460.766L213.116 378.72L242.623 389.081L258.995 262.813L164.031 331.283Z" fill="currentColor"/>
+                </svg>
+                AED
+            </h2>
+        </header>
+
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth" style="opacity: 0.2;">
+            <thead>
+            <tr>
+                <th>Umiestnenie</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+    </aside>
+</div>
+
+@section StyleSheets
+{
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+}
+
+@section Scripts
+{
+    @* var lat = Model.AedFormDTO.Latitude.ToString().Replace(",", "."); *@
+    @* var lon = Model.AedFormDTO.Longitude.ToString().Replace(",", "."); *@
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        let map = L.map('map').setView([48.684, 19.677], 7);
+    
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        @*
+        L.marker([@Model.AedFormDTO.Latitude.ToString().Replace(",", "."), @Model.AedFormDTO.Longitude.ToString().Replace(",", ".")], {
+            icon: L.divIcon({
+                className: '',
+                iconAnchor: [12.5, 40],
+                html: `<svg class="aed-icon-@Model.AedFormDTO.State.ToString()" th="25" height="40" viewBox="0 0 25 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M11.0075 0.0700632C9.62925 0.227349 7.94368 0.725421 6.67073 1.3633C4.57256 2.42062 2.55339 4.40417 1.40334 6.53627C-0.0188515 9.17519 -0.396348 12.5743 0.437655 15.388C0.938057 17.0832 2.23735 19.4949 4.66912 23.2086C7.28526 27.2282 8.03147 28.4777 9.24297 30.9069C10.5949 33.6157 11.4202 35.8003 12.1488 38.6401C12.3595 39.4528 12.5526 40.0645 12.5702 39.9946C12.5965 39.9247 12.7194 39.4091 12.8511 38.8586C13.3954 36.4993 14.5191 33.441 15.7219 31.038C16.9597 28.5826 17.9781 26.8786 20.5854 22.9115C21.9637 20.8056 22.3324 20.1852 23.3069 18.2716C24.5184 15.8948 24.8783 14.7239 24.9837 12.784C25.2207 8.31885 22.8592 3.99348 18.9525 1.72157C16.6612 0.393374 13.7027 -0.218295 11.0075 0.0700632Z" fill="white"/>
+                           <path d="M11.083 0.6961C9.7745 0.844717 8.17429 1.31534 6.96579 1.91806C4.97385 2.9171 3.05692 4.79132 1.9651 6.80591C0.614915 9.29937 0.256533 12.5111 1.04831 15.1697C1.52337 16.7715 2.75688 19.0503 5.06553 22.5593C7.5492 26.3573 8.25763 27.538 9.40779 29.8333C10.6913 32.3928 11.4747 34.4569 12.1665 37.1403C12.3665 37.9081 12.5499 38.4861 12.5666 38.42C12.5916 38.354 12.7082 37.8668 12.8333 37.3467C13.35 35.1174 14.4168 32.2277 15.5586 29.9571C16.7338 27.637 17.7006 26.027 20.1759 22.2786C21.4844 20.2888 21.8345 19.7026 22.7596 17.8944C23.9098 15.6486 24.2515 14.5422 24.3515 12.7093C24.5765 8.49023 22.3346 4.40327 18.6257 2.25658C16.4504 1.00159 13.6417 0.423636 11.083 0.6961Z" fill="currentColor"/>
+                           <path fill-rule="evenodd" clip-rule="evenodd" d="M4.24427 12.1847C3.52008 8.66747 5.92469 6.00935 8.62324 5.9847C10.0101 5.96353 11.745 6.69329 12.6696 8.45616C13.5943 6.69329 15.3291 5.96353 16.7161 5.9847C19.4146 6.00935 21.8192 8.66747 21.095 12.1847C20.543 14.8659 17.6742 18.3526 12.6696 21.7323C7.66508 18.3526 4.79632 14.8659 4.24427 12.1847ZM9.74907 16.6282L10.6676 6.95791C11.2992 7.32044 11.8819 7.87383 12.2909 8.65357L12.508 9.06762L11.4718 13.8718L15.3824 11.0546L13.6597 18.8116H14.6734L12.6449 21.0557L11.4354 18.2502L12.4492 18.6045L13.0116 14.2869L9.74907 16.6282Z" fill="white"/>
+                       </svg>`
+            })
+        }).addTo(map)
+
+        map.setView([@lat, @lon], 16);*@
+    </script>
+}

@@ -4,10 +4,10 @@ namespace FirstResponder.ApplicationCore.Common.Enums;
 
 public enum AedState
 {
-    [Display(Name="Registrovaný")]
+    [Display(Name = "Registrovaný")]
     Registered,
     
-    [Display(Name="Pripravený")]
+    [Display(Name = "Pripravený")]
     Ready,
     
     [Display(Name = "Nepripravený")]

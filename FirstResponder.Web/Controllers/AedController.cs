@@ -31,8 +31,7 @@ public class AedController : Controller
         await LoadManufacturersToViewBag();
         await LoadModelsToViewBag();
 
-        var aeds = new List<Aed>();//await _mediator.Send(new GetAedItemsQuery());
-        return View(aeds);
+        return View();
     }
 
     [Route("[action]")]

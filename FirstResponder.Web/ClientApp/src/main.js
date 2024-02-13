@@ -15,6 +15,7 @@ import UserGroupsModal from "./components/UserGroupsModal.vue";
 import GroupMembersModal from "./components/GroupMembersModal.vue";
 import GroupCreateModal from "./components/GroupCreateModal.vue";
 import GroupEditModal from "./components/GroupEditModal.vue";
+import IncidentsListTableFilter from "./components/IncidentsListTableFilter.vue";
 
 const app = createApp({
     data() {
@@ -49,6 +50,8 @@ app.component('group-members-modal', GroupMembersModal)
 app.component('group-create-modal', GroupCreateModal)
 app.component('group-edit-modal', GroupEditModal)
 
+// Incidents index page components
+app.component('incidents-list-table-filter', IncidentsListTableFilter)
 
 app.mount('#app')
 

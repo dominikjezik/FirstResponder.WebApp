@@ -1,5 +1,3 @@
-using FirstResponder.ApplicationCore.Common.Enums;
-
 namespace FirstResponder.ApplicationCore.Aeds.DTOs;
 
 public class AedItemDTO
