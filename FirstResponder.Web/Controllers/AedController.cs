@@ -144,6 +144,7 @@ public class AedController : Controller
     [Route("{aedId}/[action]")]
     public async Task<IActionResult> Delete(string aedId)
     {
+        // TODO: zmenit typ parametra na Guid a zjednodusit command
         try
         {
             await _mediator.Send(new DeleteAedCommand(aedId));

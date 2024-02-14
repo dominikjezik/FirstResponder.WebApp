@@ -225,7 +225,7 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
             
-            L.marker([@Model.AedFormDTO.Latitude.ToString().Replace(",", "."), @Model.AedFormDTO.Longitude.ToString().Replace(",", ".")], {
+            L.marker([@lat, @lon], {
                 icon: L.divIcon({
                     className: '',
                     iconAnchor: [12.5, 40],

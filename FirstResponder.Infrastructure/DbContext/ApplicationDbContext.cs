@@ -1,6 +1,6 @@
 ﻿using FirstResponder.ApplicationCore.Common.Abstractions;
-using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -28,6 +28,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     // User Aggregate
     public DbSet<Group> Groups { get; set; }
     public DbSet<GroupUser> GroupUser { get; set; }
+    
+    // Incident Aggregate
+    public DbSet<Incident> Incidents { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

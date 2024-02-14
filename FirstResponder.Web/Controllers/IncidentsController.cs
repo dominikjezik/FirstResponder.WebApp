@@ -1,6 +1,11 @@
-using FirstResponder.ApplicationCore.Common.Enums;
-using FirstResponder.ApplicationCore.Common.Extentions;
+using FirstResponder.ApplicationCore.Common.Exceptions;
+using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
+using FirstResponder.ApplicationCore.Incidents.Queries;
+using FirstResponder.Web.Extensions;
+using FirstResponder.Web.ViewModels;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +15,13 @@ namespace FirstResponder.Web.Controllers;
 [Route("[controller]")]
 public class IncidentsController : Controller
 {
+    private readonly IMediator _mediator;
+
+    public IncidentsController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+    
     [Route("")]
     public IActionResult Index()
     {
@@ -26,43 +38,97 @@ public class IncidentsController : Controller
     [Route("[action]")]
     public async Task<IActionResult> Create(IncidentFormDTO model)
     {
-        throw new NotImplementedException();
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        
+        try
+        {
+            var incident = await _mediator.Send(new CreateIncidentCommand(model));
+            this.DisplaySuccessMessage("Zásah bol úspešne vytvorený!");
+            return RedirectToAction(nameof(Edit), new { incidentId = incident.Id });
+        }
+        catch (EntityValidationException exception)
+        {
+            this.MapErrorsToModelState(exception);
+            return View(model);
+        }
     }
     
     [Route("{incidentId}")]
     public async Task<IActionResult> Edit(string incidentId)
     {
-        return View();
+        var incident = await _mediator.Send(new GetIncidentByIdQuery(incidentId));
+
+        if (incident == null)
+        {
+            return NotFound();
+        }
+
+        var model = incident.ToIncidentEditViewModel();
+        
+        return View(model);
+    }
+    
+    [HttpPost]
+    [Route("{incidentId}")]
+    public async Task<IActionResult> Edit(string incidentId, IncidentEditViewModel model)
+    {
+        var incident = await _mediator.Send(new GetIncidentByIdQuery(incidentId));
+        
+        if (incident == null)
+        {
+            return NotFound();
+        }
+        
+        if (!ModelState.IsValid)
+        {
+            // Zabezpeci, aby ostali zachovane povodne vyplnene data
+            model = incident.ToIncidentEditViewModel(model.IncidentForm);
+            return View(model);
+        }
+        
+        try
+        {
+            await _mediator.Send(new UpdateIncidentCommand(incident.Id, model.IncidentForm));
+            this.DisplaySuccessMessage("Zásah bol úspešne aktualizovaný!");
+            return RedirectToAction(nameof(Edit), new { incidentId = incident.Id });
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (EntityValidationException exception)
+        {
+            this.MapErrorsToModelState(exception);
+            // Zabezpeci, aby ostali zachovane povodne vyplnene data
+            model = incident.ToIncidentEditViewModel(model.IncidentForm);
+            return View(model);
+        }
     }
     
     [HttpPost]
     [Route("{incidentId}/[action]")]
-    public async Task<IActionResult> Delete(string incidentId)
+    public async Task<IActionResult> Delete(Guid incidentId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _mediator.Send(new DeleteIncidentCommand(incidentId));
+            this.DisplaySuccessMessage("Zásah bol úspešne vymazaný!");
+            return RedirectToAction(nameof(Index));
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
     }
     
     [HttpGet]
     [Route("filtered-table-items")]
     public async Task<IEnumerable<IncidentItemDTO>> FilteredTableItems(int pageNumber, [FromQuery] IncidentItemFiltersDTO filtersDto)
     {
-        // TODO
-        var items = new List<IncidentItemDTO>();
-        
-        // Sample item
-        items.Add(new IncidentItemDTO
-        {
-            Id = Guid.Empty,
-            CreatedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm").ToUpper(),
-            ResolvedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm").ToUpper(),
-            Patient = "John Doe",
-            Address = "Lorem ipsum, 123",
-            Diagnosis = "Lorem ipsum",
-            State = IncidentState.Completed.GetDisplayAttributeValue(),
-        });
-        
+        var items = await _mediator.Send(new GetIncidentItemsQuery { PageNumber = pageNumber, Filters = filtersDto });
         return items;
     }
-    
-    
 }

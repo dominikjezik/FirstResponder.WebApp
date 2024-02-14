@@ -9,7 +9,7 @@ namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 public class GetAedItemsQueryHandler : IRequestHandler<GetAedItemsQuery, IEnumerable<AedItemDTO>>
 {
     private readonly IAedRepository _aedRepository;
-    private const int pageSize = 30;
+    private const int PageSize = 30;
 
     public GetAedItemsQueryHandler(IAedRepository aedRepository)
     {
@@ -27,14 +27,14 @@ public class GetAedItemsQueryHandler : IRequestHandler<GetAedItemsQuery, IEnumer
         
         if (request.Filters.Type == AedGeneralType.Personal)
         {
-            return await _aedRepository.GetPersonalAedItems(pageNumber, pageSize, request.Filters);
+            return await _aedRepository.GetPersonalAedItems(pageNumber, PageSize, request.Filters);
         }
 
         if (request.Filters.Type == AedGeneralType.Public)
         {
-            return await _aedRepository.GetPublicAedItems(pageNumber, pageSize, request.Filters);
+            return await _aedRepository.GetPublicAedItems(pageNumber, PageSize, request.Filters);
         }
 
-        return await _aedRepository.GetAedItems(pageNumber, pageSize, request.Filters);
+        return await _aedRepository.GetAedItems(pageNumber, PageSize, request.Filters);
     }
 }

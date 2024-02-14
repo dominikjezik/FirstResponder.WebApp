@@ -148,16 +148,16 @@ export default {
         </div>
 
         <div class="field">
-            <label class="label">Podľa&nbsp;pacienta</label>
+            <label class="label">Podľa&nbsp;adresy</label>
             <div class="control">
-                <input v-model="filterInput.patient" class="input" type="text">
+                <input v-model="filterInput.address" class="input" type="text">
             </div>
         </div>
 
         <div class="field">
-            <label class="label">Podľa&nbsp;adresy</label>
+            <label class="label">Podľa&nbsp;pacienta</label>
             <div class="control">
-                <input v-model="filterInput.address" class="input" type="text">
+                <input v-model="filterInput.patient" class="input" type="text">
             </div>
         </div>
 

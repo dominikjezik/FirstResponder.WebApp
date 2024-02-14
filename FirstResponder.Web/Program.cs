@@ -63,6 +63,7 @@ builder.Services.AddScoped<IAedModelsRepository, AedModelsRepository>();
 builder.Services.AddScoped<IAedLanguagesRepository, AedLanguagesRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IGroupsRepository, GroupsRepository>();
+builder.Services.AddScoped<IIncidentsRepository, IncidentsRepository>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddSingleton<IFileService, LocalFileService>();

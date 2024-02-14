@@ -11,4 +11,3 @@ public class DeleteAedCommand : IRequest
         AedId = aedId;
     }
 }
-
