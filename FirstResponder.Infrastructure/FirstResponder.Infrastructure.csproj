@@ -1,57 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
-
+    
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.14" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.14" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.14" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.14">
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
         <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
-
-
-
-
+    
     <ItemGroup>
-      <ProjectReference Include="..\FirstResponder.ApplicationCore\FirstResponder.ApplicationCore.csproj" />
+        <ProjectReference Include="..\FirstResponder.ApplicationCore\FirstResponder.ApplicationCore.csproj" />
     </ItemGroup>
-
-
-
-
-
-
-
-
-
+    
     <ItemGroup>
-      <Folder Include="Migrations\" />
+        <Folder Include="Migrations\" />
     </ItemGroup>
-
-
-
-
-
-
-
-
-
-    <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Identity">
-        <HintPath>..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\7.0.5\Microsoft.AspNetCore.Identity.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-
-
 
 </Project>
