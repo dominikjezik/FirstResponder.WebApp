@@ -56,7 +56,7 @@ public class AedController : Controller
             await HandleFileUploads(model);
             
             var aed = await _mediator.Send(new CreateAedCommand(model.AedFormDTO));
-            TempData["SuccessMessage"] = "AED bolo úspešne vytvorené!";
+            this.DisplaySuccessMessage("AED bolo úspešne vytvorené!");
             return RedirectToAction(nameof(Edit), "Aed", new { aedId = aed.Id });
         }
         catch (EntityValidationException exception)
@@ -118,7 +118,7 @@ public class AedController : Controller
             await HandleFileUploads(model);
             
             var updatedAed = await _mediator.Send(new UpdateAedCommand(model.AedFormDTO, model.AedPhotosToDelete));
-            TempData["SuccessMessage"] = "AED bolo úspešne aktualizované!";
+            this.DisplaySuccessMessage("AED bolo úspešne aktualizované!");
             return RedirectToAction(nameof(Edit), "Aed", new { aedId = updatedAed.Id });
         }
         catch (EntityNotFoundException)
@@ -142,18 +142,13 @@ public class AedController : Controller
 
     [HttpPost]
     [Route("{aedId}/[action]")]
-    public async Task<IActionResult> Delete(string aedId)
+    public async Task<IActionResult> Delete(Guid aedId)
     {
-        // TODO: zmenit typ parametra na Guid a zjednodusit command
         try
         {
             await _mediator.Send(new DeleteAedCommand(aedId));
-            TempData["SuccessMessage"] = "AED bolo úspešne odstránené!";
+            this.DisplaySuccessMessage("AED bolo úspešne odstránené!");
             return RedirectToAction(nameof(Index), "Aed");
-        }
-        catch (ArgumentException)
-        {
-            return NotFound();
         }
         catch (EntityNotFoundException)
         {

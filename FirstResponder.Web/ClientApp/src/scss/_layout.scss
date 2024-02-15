@@ -229,3 +229,13 @@ $main-app-color: #000000;
         font-weight: bold;
     }
 }
+
+.message-closeable .message-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    & > p {
+        margin: 0;
+    }
+}

@@ -45,7 +45,7 @@ public class UsersController : Controller
         {
             // TODO: Zmeniť fixné heslo
             var user = await _mediator.Send(new CreateUserCommand(model, "Password123!"));
-            TempData["SuccessMessage"] = "Používateľ bol úspešne vytvorený!";
+            this.DisplaySuccessMessage("Používateľ bol úspešne vytvorený!");
             return RedirectToAction(nameof(Edit), "Users", new { userId = user.Id });
         }
         catch (EntityValidationException exception)
@@ -82,7 +82,7 @@ public class UsersController : Controller
         try
         {
             var user = await _mediator.Send(new UpdateUserCommand(model));
-            TempData["SuccessMessage"] = "Používateľ bol úspešne aktualizovaný!";
+            this.DisplaySuccessMessage("Používateľ bol úspešne aktualizovaný!");
             return RedirectToAction(nameof(Edit), "Users", new { userId = user.Id });
         }
         catch (EntityValidationException exception)

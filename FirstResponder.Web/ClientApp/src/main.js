@@ -5,6 +5,8 @@ import aedHelpers from './js/aed-helpers.js';
 import { createApp } from 'vue'
 
 import NavigationCategory from "./components/NavigationCategory.vue"
+import StatusMessage from "./components/StatusMessage.vue";
+import MapWithMarkers from "./components/MapWithMarkers.vue";
 import AedsListTableFilter from "./components/AedsListTableFilter.vue";
 import PersonalAedOwnerField from "./components/PersonalAedOwnerField.vue"
 import AedImageUploader from "./components/AedImageUploader.vue"
@@ -27,6 +29,10 @@ const app = createApp({
 
 // Layout components
 app.component('navigation-category', NavigationCategory)
+app.component('status-message', StatusMessage)
+
+// Map components
+app.component('map-with-markers', MapWithMarkers)
 
 // Aed index page components
 app.component('aeds-list-table-filter', AedsListTableFilter)

@@ -10,6 +10,8 @@ export default {
                 type: 0,
                 region: '',
                 state: '',
+            },
+            filterSelectTechnicalDetails: {
                 manufacturerId: '',
                 modelId: '',
             },
@@ -71,15 +73,23 @@ export default {
             },
             deep: true
         },
-        "filterSelect.manufacturerId"() {
-            this.filterSelect.modelId = ''
-            this.optionsModel = []
+        "filterSelectTechnicalDetails.modelId"() {
+            clearTimeout(this.debounceTimer)
+            this.filterChanged()
+        },
+        "filterSelectTechnicalDetails.manufacturerId"() {
+            this.filterSelectTechnicalDetails.modelId = ''
 
-            if (this.filterSelect.manufacturerId === '') {
+            clearTimeout(this.debounceTimer)
+            this.filterChanged()
+            
+            this.optionsModel = []
+            
+            if (this.filterSelectTechnicalDetails.manufacturerId === '') {
                 return
             }
 
-            fetch(`/aed/models?manufacturerId=${this.filterSelect.manufacturerId}`)
+            fetch(`/aed/models?manufacturerId=${this.filterSelectTechnicalDetails.manufacturerId}`)
                 .then((response) => response.json())
                 .then(models => {
                     this.optionsModel = models
@@ -155,11 +165,11 @@ export default {
             }
             
             if (this.filterSelect.manufacturerId !== '') {
-                url.searchParams.append('manufacturerId', this.filterSelect.manufacturerId)
+                url.searchParams.append('manufacturerId', this.filterSelectTechnicalDetails.manufacturerId)
             }
             
             if (this.filterSelect.modelId !== '') {
-                url.searchParams.append('modelId', this.filterSelect.modelId)
+                url.searchParams.append('modelId', this.filterSelectTechnicalDetails.modelId)
             }
             
             if (this.filterInput.serialNumber !== '') {
@@ -225,7 +235,7 @@ export default {
             <label class="label">Podľa&nbsp;výrobcu</label>
             <div class="control">
                 <div class="select">
-                    <select v-model="filterSelect.manufacturerId">
+                    <select v-model="filterSelectTechnicalDetails.manufacturerId">
                         <option value="">-</option>
                         <option v-for="option in optionsManufacturer" :value="option.id">
                             {{ option.name }}
@@ -239,7 +249,7 @@ export default {
             <label class="label">Podľa&nbsp;modelu</label>
             <div class="control">
                 <div class="select">
-                    <select v-model="filterSelect.modelId">
+                    <select v-model="filterSelectTechnicalDetails.modelId">
                         <option value="">-</option>
                         <option v-for="option in optionsModel" :value="option.id">
                             {{ option.name }}

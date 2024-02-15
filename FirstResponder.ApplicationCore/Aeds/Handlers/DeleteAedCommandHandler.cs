@@ -19,14 +19,7 @@ public class DeleteAedCommandHandler : IRequestHandler<DeleteAedCommand>
 
     public async Task Handle(DeleteAedCommand request, CancellationToken cancellationToken)
     {
-        var isValid = Guid.TryParse(request.AedId, out Guid aedId);
-        
-        if (!isValid)
-        {
-            throw new ArgumentException("Invalid aedId Guid format.");
-        }
-
-        var aed = await _aedRepository.GetAedById(aedId);
+        var aed = await _aedRepository.GetAedById(request.AedId);
 
         if (aed == null)
         {

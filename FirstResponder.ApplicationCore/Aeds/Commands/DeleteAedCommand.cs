@@ -4,9 +4,9 @@ namespace FirstResponder.ApplicationCore.Aeds.Commands;
 
 public class DeleteAedCommand : IRequest
 {
-    public string AedId { get; private set; }
+    public Guid AedId { get; private set; }
 
-    public DeleteAedCommand(string aedId)
+    public DeleteAedCommand(Guid aedId)
     {
         AedId = aedId;
     }
