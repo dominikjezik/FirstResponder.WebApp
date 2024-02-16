@@ -31,6 +31,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     
     // Incident Aggregate
     public DbSet<Incident> Incidents { get; set; }
+    public DbSet<IncidentResponder> IncidentResponders { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -68,8 +69,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         
         modelBuilder.Entity<GroupUser>()
             .HasOne<ApplicationUser>()
-            .WithMany(user => user.GroupUser)
+            .WithMany(user => user.Groups)
             .HasForeignKey(a => a.UserId)
+            .IsRequired();
+        
+        modelBuilder.Entity<IncidentResponder>()
+            .HasKey(incidentResponder => new { incidentResponder.IncidentId, incidentResponder.ResponderId });
+        
+        modelBuilder.Entity<IncidentResponder>()
+            .HasOne<ApplicationUser>()
+            .WithMany(user => user.Incidents)
+            .HasForeignKey(a => a.ResponderId)
             .IsRequired();
     }
     

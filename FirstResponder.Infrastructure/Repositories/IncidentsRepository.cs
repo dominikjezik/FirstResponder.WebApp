@@ -1,4 +1,5 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Extentions;
 using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
@@ -21,6 +22,26 @@ public class IncidentsRepository : IIncidentsRepository
         return await _dbContext.Incidents
             .OrderByDescending(i => i.CreatedAt)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radius, Guid? userId = null)
+    {
+        var incidents = _dbContext.Incidents
+            .Where(i => i.State == IncidentState.Created || i.State == IncidentState.InProgress);
+        
+        // TODO: Ak je uz akceptovany tak sa nezobrazuje - pripradne osetrit na strane klienta
+        // Ak je zadany pouzivatel, tak sa vyfiltruju incidenty, ktore uz pouzivatel odmietol
+        // a includnu sa do incidentov iba dany pouzivatel.
+        if (userId != null)
+        {
+            incidents = incidents
+                .Include(i => i.Responders.Where(r => r.ResponderId == userId))
+                .Where(i => !i.Responders.Any(r => r.ResponderId == userId && r.IsDeclined));
+        }
+        
+        // TODO: Implementovat algoritmus pre ziskanie incidentov v okoli
+
+        return await incidents.ToListAsync();
     }
 
     public async Task<IEnumerable<IncidentItemDTO>> GetIncidentItems(int pageNumber, int pageSize, IncidentItemFiltersDTO? filtersDTO = null)
@@ -55,6 +76,47 @@ public class IncidentsRepository : IIncidentsRepository
             .Take(pageSize)
             .ToListAsync();
     }
+    
+    public async Task<IncidentDTO?> GetIncidentDetailsById(Guid incidentId)
+    {
+        return await _dbContext.Incidents
+            .Where(i => i.Id == incidentId)
+            .Include(i => i.Responders)
+            .Select(i => new {
+                Incident = i,
+                Responders = i.Responders
+                    .Where(r => r.AcceptedAt != null)
+                    .Join(
+                        _dbContext.Users,
+                        r => r.ResponderId,
+                        u => u.Id,
+                        (r, u) => new { Responder = r, User = u }
+                    ).ToList()
+            })
+            .Select(result => new IncidentDTO
+            {
+                IncidentId = result.Incident.Id,
+                CreatedAt = result.Incident.CreatedAt,
+                State = result.Incident.State,
+                ResolvedAt = result.Incident.ResolvedAt,
+                IncidentForm = new IncidentFormDTO
+                {
+                    Patient = result.Incident.Patient,
+                    Address = result.Incident.Address,
+                    Diagnosis = result.Incident.Diagnosis,
+                    Latitude = result.Incident.Latitude,
+                    Longitude = result.Incident.Longitude
+                },
+                Responders = result.Responders
+                    .Select(r => new IncidentDTO.ResponderItemDTO
+                    {
+                        ResponderId = r.User.Id,
+                        FullName = r.User.FullName,
+                        AcceptedAt = r.Responder.AcceptedAt
+                    }).ToList()
+            })
+            .FirstOrDefaultAsync();
+    }
 
     public async Task<Incident?> GetIncidentById(Guid incidentId)
     {
@@ -78,6 +140,27 @@ public class IncidentsRepository : IIncidentsRepository
     public async Task DeleteIncident(Incident incident)
     {
         _dbContext.Incidents.Remove(incident);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task AssignResponderToIncidents(Guid responderId, IEnumerable<Incident> incidents)
+    {
+        // prefiltrovanie incidentov, ktore uz ma priradene
+        incidents = incidents
+            .Where(i => !i.Responders.Any(r => r.ResponderId == responderId));
+        
+        foreach (var incident in incidents)
+        {
+            var responderIncident = new IncidentResponder
+            {
+                ResponderId = responderId,
+                IncidentId = incident.Id,
+                CreatedAt = DateTime.Now
+            };
+            
+            _dbContext.IncidentResponders.Add(responderIncident);
+        }
+        
         await _dbContext.SaveChangesAsync();
     }
 }

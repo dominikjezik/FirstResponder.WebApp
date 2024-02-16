@@ -10,6 +10,6 @@ public class Group : AuditableEntity<Guid>
 
 	public string? Description { get; set; }
 
-	public List<GroupUser> Users { get; set; } = new List<GroupUser>();
+	public List<GroupUser> Users { get; set; } = new();
 	
 }

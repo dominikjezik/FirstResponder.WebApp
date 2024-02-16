@@ -1,5 +1,6 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
+using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using Microsoft.AspNetCore.Identity;
 
@@ -27,7 +28,11 @@ public class ApplicationUser : IdentityUser<Guid>, IAuditable
     
     public DateTime UpdatedAt { get; set; }
     
-    public ICollection<GroupUser> GroupUser { get; set; } = new List<GroupUser>();
+    public ICollection<GroupUser> Groups { get; set; } = new List<GroupUser>();
+    
+    // TODO: pridať v extension metódach
+    public ICollection<IncidentResponder> Incidents { get; set; } = new List<IncidentResponder>();
+    
 }
 
 public static class ApplicationUserExtensions
@@ -54,7 +59,7 @@ public static class ApplicationUserExtensions
             UpdatedAt = applicationUser.UpdatedAt
         };
 
-        user.Groups = applicationUser.GroupUser.Select(groupUser => groupUser.Group).ToList();
+        user.Groups = applicationUser.Groups.Select(groupUser => groupUser.Group).ToList();
         
         return user;
     }

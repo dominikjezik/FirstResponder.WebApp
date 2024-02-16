@@ -4,7 +4,6 @@ using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.ApplicationCore.Incidents.Queries;
 using FirstResponder.Web.Extensions;
-using FirstResponder.Web.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -65,15 +64,13 @@ public class IncidentsController : Controller
         {
             return NotFound();
         }
-
-        var model = incident.ToIncidentEditViewModel();
         
-        return View(model);
+        return View(incident);
     }
     
     [HttpPost]
     [Route("{incidentId}")]
-    public async Task<IActionResult> Edit(string incidentId, IncidentEditViewModel model)
+    public async Task<IActionResult> Edit(string incidentId, IncidentDTO model)
     {
         var incident = await _mediator.Send(new GetIncidentByIdQuery(incidentId));
         
@@ -85,15 +82,15 @@ public class IncidentsController : Controller
         if (!ModelState.IsValid)
         {
             // Zabezpeci, aby ostali zachovane povodne vyplnene data
-            model = incident.ToIncidentEditViewModel(model.IncidentForm);
-            return View(model);
+            incident.IncidentForm = model.IncidentForm;
+            return View(incident);
         }
         
         try
         {
-            await _mediator.Send(new UpdateIncidentCommand(incident.Id, model.IncidentForm));
+            await _mediator.Send(new UpdateIncidentCommand(incident.IncidentId, model.IncidentForm));
             this.DisplaySuccessMessage("Zásah bol úspešne aktualizovaný!");
-            return RedirectToAction(nameof(Edit), new { incidentId = incident.Id });
+            return RedirectToAction(nameof(Edit), new { incidentId = incident.IncidentId });
         }
         catch (EntityNotFoundException)
         {
@@ -103,7 +100,7 @@ public class IncidentsController : Controller
         {
             this.MapErrorsToModelState(exception);
             // Zabezpeci, aby ostali zachovane povodne vyplnene data
-            model = incident.ToIncidentEditViewModel(model.IncidentForm);
+            incident.IncidentForm = model.IncidentForm;
             return View(model);
         }
     }

@@ -43,7 +43,7 @@ public class UsersRepository : IUsersRepository
 
         var applicationUser = await _dbContext.Users
             .Where(user => user.Id == id)
-            .Include(user => user.GroupUser)
+            .Include(user => user.Groups)
                 .ThenInclude(groupUser => groupUser.Group)
             .FirstOrDefaultAsync();
 

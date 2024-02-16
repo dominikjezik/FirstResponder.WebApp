@@ -1,4 +1,3 @@
-using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Users.DTOs;
 using MediatR;
