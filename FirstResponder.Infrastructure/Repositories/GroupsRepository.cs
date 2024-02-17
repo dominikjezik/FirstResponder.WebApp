@@ -90,23 +90,14 @@ public class GroupsRepository : IGroupsRepository
 
 	public async Task ChangeUsersInGroup(Guid groupId, IEnumerable<Guid> addUsers, IEnumerable<Guid> removeUsers)
 	{
-		// TODO: refaktor miesto alreadyInGroup a notInGroup do jedneho dotazu (rovnako ako v ChangeGroupsForUser)
-		
-		// Filter out users that are already in the group
-		var alreadyInGroup = await _dbContext.GroupUser
+		// Pouzivatelia, ktori su v skupine
+		var usersGroup = await _dbContext.GroupUser
 			.Where(groupUser => groupUser.GroupId == groupId)
 			.Select(groupUser => groupUser.UserId)
 			.ToListAsync();
 		
-		addUsers = addUsers.Except(alreadyInGroup);
-		
-		// Filter out users that are not in the group
-		var notInGroup = await _dbContext.GroupUser
-			.Where(groupUser => groupUser.GroupId == groupId)
-			.Select(groupUser => groupUser.UserId)
-			.ToListAsync();
-		
-		removeUsers = removeUsers.Intersect(notInGroup);
+		addUsers = addUsers.Except(usersGroup);
+		removeUsers = removeUsers.Intersect(usersGroup);
 		
 		var addGroupUsers = addUsers.Select(userId => new GroupUser
 		{

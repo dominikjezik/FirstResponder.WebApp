@@ -10,10 +10,9 @@ public class IncidentResponder
     public Guid ResponderId { get; set; }
     public User? Responder { get; set; }
     
-    public DateTime? AcceptedAt { get; set; }
-    
     public DateTime CreatedAt { get; set; }
     
-    public bool IsDeclined { get; set; } = false;
+    public DateTime? AcceptedAt { get; set; }
     
+    public DateTime? DeclinedAt { get; set; }
 }

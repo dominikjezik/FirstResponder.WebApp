@@ -21,7 +21,7 @@ public class IncidentsController : Controller
     }
     
     [HttpGet("get-nearby-and-assign")]
-    public async Task<JsonResult> GetIncidentsNearby(double latitude, double longitude, double radius)
+    public async Task<IActionResult> GetIncidentsNearby(double latitude, double longitude, double radius)
     {
         // TODO: Ziskanie Guid prihlaseneho pouzivatela z JWT
         
@@ -43,7 +43,14 @@ public class IncidentsController : Controller
         });
         
         // TODO
-        incidents.ToList().ForEach(i => i.Responders = null);
-        return Json(new { incidents });
+        incidents.ToList().ForEach(i =>
+        {
+            i.Responders.ToList().ForEach(r =>
+            {
+                r.Incident = null;
+                r.Responder = null;
+            });
+        });
+        return Json(incidents);
     }
 }

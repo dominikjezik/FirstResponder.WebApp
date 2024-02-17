@@ -8,11 +8,11 @@ public class UpdateIncidentCommand : IRequest<Incident>
 {
     public Guid IncidentId { get; private set; }
     
-    public IncidentFormDTO IncidentFormDto { get; private set; }
+    public IncidentFormDTO IncidentFormDTO { get; private set; }
     
-    public UpdateIncidentCommand(Guid incidentId, IncidentFormDTO incidentFormDto)
+    public UpdateIncidentCommand(Guid incidentId, IncidentFormDTO incidentFormDTO)
     {
         IncidentId = incidentId;
-        IncidentFormDto = incidentFormDto;
+        IncidentFormDTO = incidentFormDTO;
     }
 }

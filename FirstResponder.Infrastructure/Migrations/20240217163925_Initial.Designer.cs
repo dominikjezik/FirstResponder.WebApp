@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FirstResponder.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240214073345_AddedIncidentEntity")]
-    partial class AddedIncidentEntity
+    [Migration("20240217163925_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.14")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -200,6 +200,30 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Incidents");
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentResponder", b =>
+                {
+                    b.Property<Guid>("IncidentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ResponderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("AcceptedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeclinedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("IncidentId", "ResponderId");
+
+                    b.HasIndex("ResponderId");
+
+                    b.ToTable("IncidentResponders");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.Group", b =>
@@ -568,6 +592,23 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Navigation("Manufacturer");
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentResponder", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.IncidentAggregate.Incident", "Incident")
+                        .WithMany("Responders")
+                        .HasForeignKey("IncidentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany("Incidents")
+                        .HasForeignKey("ResponderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Incident");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.GroupUser", b =>
                 {
                     b.HasOne("FirstResponder.ApplicationCore.Entities.UserAggregate.Group", "Group")
@@ -577,7 +618,7 @@ namespace FirstResponder.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany("GroupUser")
+                        .WithMany("Groups")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -660,6 +701,11 @@ namespace FirstResponder.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.Incident", b =>
+                {
+                    b.Navigation("Responders");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.Group", b =>
                 {
                     b.Navigation("Users");
@@ -667,7 +713,9 @@ namespace FirstResponder.Infrastructure.Migrations
 
             modelBuilder.Entity("FirstResponder.Infrastructure.Identity.ApplicationUser", b =>
                 {
-                    b.Navigation("GroupUser");
+                    b.Navigation("Groups");
+
+                    b.Navigation("Incidents");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>

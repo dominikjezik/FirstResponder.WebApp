@@ -100,6 +100,26 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Incidents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false),
+                    ResolvedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Patient = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Diagnosis = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Latitude = table.Column<double>(type: "float", nullable: false),
+                    Longitude = table.Column<double>(type: "float", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Incidents", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AedModels",
                 columns: table => new
                 {
@@ -243,6 +263,33 @@ namespace FirstResponder.Infrastructure.Migrations
                         name: "FK_GroupUser_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IncidentResponders",
+                columns: table => new
+                {
+                    IncidentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ResponderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AcceptedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeclinedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncidentResponders", x => new { x.IncidentId, x.ResponderId });
+                    table.ForeignKey(
+                        name: "FK_IncidentResponders_AspNetUsers_ResponderId",
+                        column: x => x.ResponderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IncidentResponders_Incidents_IncidentId",
+                        column: x => x.IncidentId,
+                        principalTable: "Incidents",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -433,6 +480,11 @@ namespace FirstResponder.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IncidentResponders_ResponderId",
+                table: "IncidentResponders",
+                column: "ResponderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersonalAeds_OwnerId",
                 table: "PersonalAeds",
                 column: "OwnerId");
@@ -463,6 +515,9 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "GroupUser");
 
             migrationBuilder.DropTable(
+                name: "IncidentResponders");
+
+            migrationBuilder.DropTable(
                 name: "PersonalAeds");
 
             migrationBuilder.DropTable(
@@ -473,6 +528,9 @@ namespace FirstResponder.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "Incidents");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

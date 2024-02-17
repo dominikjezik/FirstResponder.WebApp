@@ -9,7 +9,7 @@ public interface IUsersRepository
 
     Task<User?> GetUserById(Guid? id);
     
-    Task<User?> GetUserWithDetailsById(Guid? id);
+    Task<UserDTO?> GetUserWithDetailsById(Guid? id);
     
     Task UpdateUser(User user);
 

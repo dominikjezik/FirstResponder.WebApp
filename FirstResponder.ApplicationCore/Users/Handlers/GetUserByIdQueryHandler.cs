@@ -1,11 +1,11 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
-using FirstResponder.ApplicationCore.Entities.UserAggregate;
+using FirstResponder.ApplicationCore.Users.DTOs;
 using FirstResponder.ApplicationCore.Users.Queries;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Users.Handlers;
 
-public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User?>
+public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDTO?>
 {
     private readonly IUsersRepository _usersRepository;
 
@@ -14,7 +14,7 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User?>
         _usersRepository = usersRepository;
     }
     
-    public async Task<User?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<UserDTO?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         if (Guid.TryParse(request.UserId, out Guid guid))
         {

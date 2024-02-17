@@ -24,7 +24,7 @@ public class UpdateIncidentCommandHandler : IRequestHandler<UpdateIncidentComman
             throw new EntityNotFoundException();
         }
         
-        request.IncidentFormDto.ToIncident(incident);
+        request.IncidentFormDTO.ToIncident(incident);
         
         await _incidentsRepository.UpdateIncident(incident);
         return incident;

@@ -153,26 +153,32 @@
             Priradený Responderi
         </h2>
 
-        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
-            <thead>
-            <tr>
-                <th>Responder</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var responder in Model.Responders)
-            {
+        @if (Model.Responders.Any())
+        {
+            <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
                 <tr>
-                    <td>
-                        <a asp-controller="Users" asp-action="Edit" asp-route-userId="@responder.ResponderId">@responder.FullName</a>
-                    </td>
-                    <td>@responder.AcceptedAt</td>
+                    <th>Responder</th>
+                    <th>Dátum a čas potvrdenia</th>
                 </tr>
-            }
-            </tbody>
-        </table>
-
+                </thead>
+                <tbody>
+                @foreach (var responder in Model.Responders)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Users" asp-action="Edit" asp-route-userId="@responder.ResponderId">@responder.FullName</a>
+                        </td>
+                        <td>@responder.AcceptedAt</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Doposiaľ žiadny Responder nepotvrdil účasť na tomto zásahu.</p>
+        }
         
         <header class="section-header" style="opacity: 0.2;">
             <h2 class="heading-with-icon">

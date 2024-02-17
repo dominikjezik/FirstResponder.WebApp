@@ -29,23 +29,12 @@ public class UserFormDTO
 
     public UserType UserType { get; set; }
     
-    #region Edit form properties
-
-    public Guid UserId { get; set; }
-
-    public DateTime CreatedAt { get; set; }
-    
-    public IEnumerable<Group> Groups { get; set; } = new List<Group>();
-
-    #endregion
-    
     public User ToUser(User? targetUser = null)
     {
         if (targetUser == null)
         {
             return new User
             {
-                Id = UserId,
                 Email = Email,
                 FullName = FullName,
                 PhoneNumber = PhoneNumber,
@@ -59,7 +48,6 @@ public class UserFormDTO
             };
         }
 
-        targetUser.Id = UserId;
         targetUser.Email = Email;
         targetUser.FullName = FullName;
         targetUser.PhoneNumber = PhoneNumber;
@@ -72,28 +60,5 @@ public class UserFormDTO
         targetUser.Notes = Notes;
 
         return targetUser;
-    }
-}
-
-public static class UserExtensions
-{
-    public static UserFormDTO ToUserFormDTO(this User user)
-    {
-        return new UserFormDTO
-        {
-            UserId = user.Id,
-            Email = user.Email,
-            FullName = user.FullName,
-            PhoneNumber = user.PhoneNumber,
-            DateOfBirth = user.DateOfBirth,
-            Address = user.Address,
-            PostalCode = user.PostalCode,
-            City = user.City,
-            Region = user.Region,
-            Notes = user.Notes,
-            UserType = user.Type,
-            CreatedAt = user.CreatedAt,
-            Groups = user.Groups
-        };
     }
 }

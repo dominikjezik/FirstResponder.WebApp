@@ -1,9 +1,9 @@
-using FirstResponder.ApplicationCore.Entities.UserAggregate;
+using FirstResponder.ApplicationCore.Users.DTOs;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Users.Queries;
 
-public class GetUserByIdQuery : IRequest<User?>
+public class GetUserByIdQuery : IRequest<UserDTO?>
 {
     public string UserId { get; private set; }
     

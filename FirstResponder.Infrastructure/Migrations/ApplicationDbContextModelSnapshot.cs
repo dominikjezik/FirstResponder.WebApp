@@ -213,8 +213,8 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeclined")
-                        .HasColumnType("bit");
+                    b.Property<DateTime?>("DeclinedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("IncidentId", "ResponderId");
 

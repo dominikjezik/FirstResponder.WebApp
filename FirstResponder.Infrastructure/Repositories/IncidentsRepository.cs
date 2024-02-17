@@ -17,33 +17,6 @@ public class IncidentsRepository : IIncidentsRepository
         _dbContext = dbContext;
     }
     
-    public async Task<IEnumerable<Incident>> GetIncidents()
-    {
-        return await _dbContext.Incidents
-            .OrderByDescending(i => i.CreatedAt)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radius, Guid? userId = null)
-    {
-        var incidents = _dbContext.Incidents
-            .Where(i => i.State == IncidentState.Created || i.State == IncidentState.InProgress);
-        
-        // TODO: Ak je uz akceptovany tak sa nezobrazuje - pripradne osetrit na strane klienta
-        // Ak je zadany pouzivatel, tak sa vyfiltruju incidenty, ktore uz pouzivatel odmietol
-        // a includnu sa do incidentov iba dany pouzivatel.
-        if (userId != null)
-        {
-            incidents = incidents
-                .Include(i => i.Responders.Where(r => r.ResponderId == userId))
-                .Where(i => !i.Responders.Any(r => r.ResponderId == userId && r.IsDeclined));
-        }
-        
-        // TODO: Implementovat algoritmus pre ziskanie incidentov v okoli
-
-        return await incidents.ToListAsync();
-    }
-
     public async Task<IEnumerable<IncidentItemDTO>> GetIncidentItems(int pageNumber, int pageSize, IncidentItemFiltersDTO? filtersDTO = null)
     {
         var query = _dbContext.Incidents
@@ -75,6 +48,22 @@ public class IncidentsRepository : IIncidentsRepository
             .Skip(pageNumber * pageSize)
             .Take(pageSize)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radius, Guid? userId = null)
+    {
+        var incidents = _dbContext.Incidents
+            .Where(i => i.State == IncidentState.Created || i.State == IncidentState.InProgress);
+        
+        if (userId != null)
+        {
+            incidents = incidents
+                .Include(i => i.Responders.Where(r => r.ResponderId == userId));
+        }
+        
+        // TODO: Implementovat algoritmus pre ziskanie incidentov v okoli
+
+        return await incidents.ToListAsync();
     }
     
     public async Task<IncidentDTO?> GetIncidentDetailsById(Guid incidentId)
@@ -158,6 +147,7 @@ public class IncidentsRepository : IIncidentsRepository
                 CreatedAt = DateTime.Now
             };
             
+            incident.Responders.Add(responderIncident);
             _dbContext.IncidentResponders.Add(responderIncident);
         }
         

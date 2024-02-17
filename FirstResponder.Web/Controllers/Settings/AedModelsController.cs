@@ -111,7 +111,6 @@ public class AedModelsController : Controller
     [Route("{modelId}/[action]")]
     public async Task<IActionResult> Delete(Guid modelId, string? manufacturerId = null)
     {
-        // TODO: redirect
         await _mediator.Send(new DeleteModelCommand(modelId));
         this.DisplaySuccessMessage("Model bol úspešne odstránený!");
         return RedirectToAction(nameof(Index), new { manufacturer = manufacturerId });

@@ -2,6 +2,7 @@ using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
+using FirstResponder.ApplicationCore.Users.DTOs;
 using Microsoft.AspNetCore.Identity;
 
 namespace FirstResponder.Infrastructure.Identity;
@@ -30,13 +31,44 @@ public class ApplicationUser : IdentityUser<Guid>, IAuditable
     
     public ICollection<GroupUser> Groups { get; set; } = new List<GroupUser>();
     
-    // TODO: pridať v extension metódach
     public ICollection<IncidentResponder> Incidents { get; set; } = new List<IncidentResponder>();
-    
 }
 
 public static class ApplicationUserExtensions
 {
+    public static UserDTO? ToUserDTO(this ApplicationUser? applicationUser)
+    {
+        if (applicationUser == null)
+            return null;
+
+        return new UserDTO
+        {
+            UserId = applicationUser.Id,
+            UserForm = new UserFormDTO
+            {
+                Email = applicationUser.Email,
+                FullName = applicationUser.FullName,
+                PhoneNumber = applicationUser.PhoneNumber,
+                DateOfBirth = applicationUser.DateOfBirth,
+                Address = applicationUser.Address,
+                PostalCode = applicationUser.PostalCode,
+                City = applicationUser.City,
+                Region = applicationUser.Region,
+                Notes = applicationUser.Notes,
+                UserType = applicationUser.Type
+            },
+            CreatedAt = applicationUser.CreatedAt,
+            Groups = applicationUser.Groups.Select(groupUser => groupUser.Group).ToList(),
+            Incidents = applicationUser.Incidents
+                .Select(incidentResponder => new UserDTO.IncidentItemDTO
+                {
+                    IncidentId = incidentResponder.Incident.Id,
+                    CreatedAt = incidentResponder.Incident.CreatedAt,
+                    Address = incidentResponder.Incident.Address
+                }).ToList()
+        };
+    }
+        
     public static User? ToDomainUser(this ApplicationUser? applicationUser)
     {
         if (applicationUser == null)
@@ -58,8 +90,6 @@ public static class ApplicationUserExtensions
             CreatedAt = applicationUser.CreatedAt,
             UpdatedAt = applicationUser.UpdatedAt
         };
-
-        user.Groups = applicationUser.Groups.Select(groupUser => groupUser.Group).ToList();
         
         return user;
     }

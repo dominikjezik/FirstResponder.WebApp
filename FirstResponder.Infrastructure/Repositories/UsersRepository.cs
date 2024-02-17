@@ -34,25 +34,23 @@ public class UsersRepository : IUsersRepository
         return applicationUser.ToDomainUser();
     }
 
-    public async Task<User?> GetUserWithDetailsById(Guid? id)
+    public async Task<UserDTO?> GetUserWithDetailsById(Guid? id)
     {
         if (id == null)
         {
             return null;
         }
-
-        var applicationUser = await _dbContext.Users
+        
+        return await _dbContext.Users
             .Where(user => user.Id == id)
             .Include(user => user.Groups)
                 .ThenInclude(groupUser => groupUser.Group)
+            .Include(user => user.Incidents
+                    .Where(incidentResponder => incidentResponder.AcceptedAt != null)
+                    .OrderByDescending(incidentResponder => incidentResponder.CreatedAt))
+                .ThenInclude(incidentResponder => incidentResponder.Incident)
+            .Select(applicationUser => applicationUser.ToUserDTO())
             .FirstOrDefaultAsync();
-
-        if (applicationUser == null)
-        {
-            return null;
-        }
-        
-        return applicationUser.ToDomainUser();
     }
 
     public async Task AddUser(User user, string password)

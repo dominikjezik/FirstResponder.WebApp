@@ -65,25 +65,31 @@ public class UsersController : Controller
             return NotFound();
         }
 
-        var model = user.ToUserFormDTO();
-
-        return View(model);
+        return View(user);
     }
     
     [HttpPost]
     [Route("{userId}")]
-    public async Task<IActionResult> Edit(string userId, UserFormDTO model)
+    public async Task<IActionResult> Edit(string userId, UserDTO model)
     {
+        var user = await _mediator.Send(new GetUserByIdQuery(userId));
+        
+        if (user == null)
+        {
+            return NotFound();
+        }
+        
         if (!ModelState.IsValid)
         {
+            user.UserForm = model.UserForm;
             return View(model);
         }
         
         try
         {
-            var user = await _mediator.Send(new UpdateUserCommand(model));
+            await _mediator.Send(new UpdateUserCommand(user.UserId, model.UserForm));
             this.DisplaySuccessMessage("Používateľ bol úspešne aktualizovaný!");
-            return RedirectToAction(nameof(Edit), "Users", new { userId = user.Id });
+            return RedirectToAction(nameof(Edit), "Users", new { userId = user.UserId });
         }
         catch (EntityValidationException exception)
         {
