@@ -4,7 +4,6 @@ using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Common.Helpers;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
-using FirstResponder.ApplicationCore.Exceptions;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Aeds.Handlers;

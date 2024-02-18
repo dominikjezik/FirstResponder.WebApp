@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Common.Exceptions;
 
 namespace FirstResponder.ApplicationCore.Common.Helpers;
 

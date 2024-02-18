@@ -20,12 +20,39 @@ export default {
             }
         }
     },
+    watch: {
+        markers() {
+            if (!this.map) {
+                return;
+            }
+            
+            this.map.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    this.map.removeLayer(layer)
+                }
+            })
+            
+            this.markers.forEach(marker => {
+                L.marker([marker.lat, marker.lon], {
+                    icon: L.divIcon({
+                        className: '',
+                        iconAnchor: [12.5, 40],
+                        html: this.getIcon(marker.icon)
+                    })
+                }).on('click', function() {
+                    if (marker.onClickUrl) {
+                        window.location = marker.onClickUrl
+                    }
+                }).addTo(this.map)
+            });
+        }
+    },
     methods: {
         loadLeaflet() {
             const leafletJs = document.createElement('script')
             leafletJs.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
             leafletJs.onload = () => {
-                this.map = L.map('map').setView([48.684, 19.677], 7)
+                this.map = L.map('map').setView([48.684, 19.677], 8)
                 this.map.attributionControl.setPrefix(false)
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

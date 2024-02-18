@@ -17,7 +17,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, User>
     
     public async Task<User> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = request.UserFormDto.ToUser();
+        var user = request.UserFormDTO.ToUser();
         
         EntityValidator.Validate(user);
         

@@ -1,6 +1,6 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
-using FirstResponder.ApplicationCore.Common.Extentions;
+using FirstResponder.ApplicationCore.Common.Extensions;
 using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.Infrastructure.DbContext;
@@ -40,6 +40,7 @@ public class IncidentsRepository : IIncidentsRepository
             {
                 Id = i.Id,
                 CreatedAt = i.CreatedAt.ToString("dd.MM.yyyy HH:mm"),
+                ResolvedAt = i.ResolvedAt.HasValue ? i.ResolvedAt.Value.ToString("dd.MM.yyyy HH:mm") : null,
                 Patient = i.Patient,
                 Address = i.Address,
                 Diagnosis = i.Diagnosis,

@@ -15,6 +15,6 @@ public class ChangeGroupsForUserCommandHandler : IRequestHandler<ChangeGroupsFor
 
     public async Task Handle(ChangeGroupsForUserCommand request, CancellationToken cancellationToken)
     {
-        await _groupsRepository.ChangeGroupsForUser(request.ChangeGroupsForUserDto.UserId, request.ChangeGroupsForUserDto.CheckedOnGroupIds, request.ChangeGroupsForUserDto.CheckedOffGroupIds);
+        await _groupsRepository.ChangeGroupsForUser(request.ChangeGroupsForUserDTO.UserId, request.ChangeGroupsForUserDTO.CheckedOnGroupIds, request.ChangeGroupsForUserDTO.CheckedOffGroupIds);
     }
 }

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace FirstResponder.ApplicationCore.Users.Queries;
 
-public class GetUserItems :  IRequest<IEnumerable<UserItemDTO>>
+public class GetUserItems : IRequest<IEnumerable<UserItemDTO>>
 {
     public int PageNumber { get; set; }
     

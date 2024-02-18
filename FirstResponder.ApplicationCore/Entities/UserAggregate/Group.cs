@@ -11,5 +11,4 @@ public class Group : AuditableEntity<Guid>
 	public string? Description { get; set; }
 
 	public List<GroupUser> Users { get; set; } = new();
-	
 }

@@ -68,12 +68,20 @@ builder.Services.AddScoped<IIncidentsRepository, IncidentsRepository>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddSingleton<IFileService, LocalFileService>();
 
+// Seedovanie databázy
+// builder.Services.AddTransient<DatabaseSeeder>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    
+    // Seedovanie databázy
+    // using var serviceScope = app.Services.CreateScope();
+    // var seeder = serviceScope.ServiceProvider.GetService<DatabaseSeeder>();
+    // seeder.Seed();
 }
 else
 {

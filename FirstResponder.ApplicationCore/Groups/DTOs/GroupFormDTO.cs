@@ -22,5 +22,4 @@ public class GroupFormDTO
 		
 		return group;
 	}
-
 }

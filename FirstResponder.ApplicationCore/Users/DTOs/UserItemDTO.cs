@@ -17,5 +17,4 @@ public class UserItemDTO
     public string Region { get; set; }
 
     public string Address { get; set; }
-    
 }

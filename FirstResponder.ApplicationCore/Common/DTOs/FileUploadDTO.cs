@@ -1,4 +1,4 @@
-namespace FirstResponder.ApplicationCore.Shared;
+namespace FirstResponder.ApplicationCore.Common.DTOs;
 
 public class FileUploadDto
 {

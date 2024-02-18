@@ -1,6 +1,6 @@
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.Queries;
-using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.Web.Extensions;
 using FirstResponder.Web.ViewModels;
 using MediatR;

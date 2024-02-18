@@ -1,7 +1,6 @@
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Exceptions;
-using FirstResponder.ApplicationCore.Exceptions;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Aeds.Handlers;
@@ -21,7 +20,7 @@ public class UpdateModelCommandHandler : IRequestHandler<UpdateModelCommand>
         
         if (model == null)
         {
-            throw new EntityNotFoundException("Výrobca neexistuje!");
+            throw new EntityNotFoundException("Model neexistuje!");
         }
 
         if (model.Name == request.Name)

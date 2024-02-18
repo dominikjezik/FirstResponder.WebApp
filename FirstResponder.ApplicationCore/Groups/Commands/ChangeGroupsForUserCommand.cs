@@ -5,10 +5,10 @@ namespace FirstResponder.ApplicationCore.Groups.Commands;
 
 public class ChangeGroupsForUserCommand : IRequest
 {
-    public ChangeGroupsForUserDTO ChangeGroupsForUserDto { get; set; }
+    public ChangeGroupsForUserDTO ChangeGroupsForUserDTO { get; private set; }
     
     public ChangeGroupsForUserCommand(ChangeGroupsForUserDTO changeGroupsForUserDto)
     {
-        ChangeGroupsForUserDto = changeGroupsForUserDto;
+        ChangeGroupsForUserDTO = changeGroupsForUserDto;
     }
 }

@@ -1,4 +1,4 @@
-using FirstResponder.ApplicationCore.Shared;
+using FirstResponder.ApplicationCore.Common.DTOs;
 
 namespace FirstResponder.ApplicationCore.Common.Abstractions;
 

@@ -28,5 +28,4 @@ public class User : AuditableEntity<Guid>
     public UserType Type { get; set; } = UserType.Default;
     
     public ICollection<Group> Groups { get; set; } = new List<Group>();
-    
 }

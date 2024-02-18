@@ -2,7 +2,6 @@ using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.Queries;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
-using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.Web.Extensions;
 using FirstResponder.Web.ViewModels;
 using MediatR;
@@ -61,11 +60,6 @@ public class AedModelsController : Controller
         try
         {
             await _mediator.Send(new CreateModelCommand(model.Name, model.ManufacturerId));
-        }
-        catch (EntityNotFoundException exception)
-        {
-            this.DisplayErrorMessage(exception.Message);
-            return RedirectToAction(nameof(Index), new { manufacturer = model.ManufacturerId });
         }
         catch (EntityValidationException exception)
         {

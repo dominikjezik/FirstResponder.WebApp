@@ -76,7 +76,7 @@
     </form>
     
     <aside class="entity-details-aside">
-        <section class="public-aed-form">
+        <section class="public-aed-form" id="section-aed-photo">
             <aed-image-uploader
                 input-element-id="AedPhotoFormFiles"
             />
@@ -100,6 +100,7 @@
         const radioPersonalAed = document.getElementById('radio-personal-aed')
         
         const publicAedForm = document.querySelector('.public-aed-form')
+        const sectionAedPhoto = document.getElementById('section-aed-photo')
         const personalAedForm = document.querySelector('.personal-aed-form')
         
         const publicAedFormRequiredFields = publicAedForm.querySelectorAll('[required]')
@@ -107,6 +108,7 @@
         
         function displayPersonalAedForm() {
             publicAedForm.style.display = 'none'
+            sectionAedPhoto.style.display = 'none'
             personalAedForm.style.display = 'block'
             
             publicAedFormRequiredFields.forEach(field => field.removeAttribute('required'))
@@ -115,6 +117,7 @@
         
         function displayPublicAedForm() {
             publicAedForm.style.display = 'block'
+            sectionAedPhoto.style.display = 'block'
             personalAedForm.style.display = 'none'
             
             publicAedFormRequiredFields.forEach(field => field.setAttribute('required', 'required'))

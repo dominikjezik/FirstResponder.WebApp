@@ -5,10 +5,10 @@ namespace FirstResponder.ApplicationCore.Groups.Commands;
 
 public class UpdateGroupCommand : IRequest
 {
-	public GroupFormDTO GroupFormDto { get; set; }
+	public GroupFormDTO GroupFormDTO { get; private set; }
 
 	public UpdateGroupCommand(GroupFormDTO groupFormDto)
 	{
-		GroupFormDto = groupFormDto;
+		GroupFormDTO = groupFormDto;
 	}
 }

@@ -1,6 +1,6 @@
 using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Common.Abstractions;
-using FirstResponder.ApplicationCore.Common.Extentions;
+using FirstResponder.ApplicationCore.Common.Extensions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.Identity;
@@ -163,10 +163,26 @@ public class AedRepository : IAedRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<PublicAed>> GetAllPublicAeds()
+    public async Task<IEnumerable<AedItemDTO>> GetAllPublicAedItems()
     {
         return await _dbContext.PublicAeds
+            .Include(aed => aed.Manufacturer)
             .OrderByDescending(a => a.CreatedAt)
+            .Select(a => new AedItemDTO()
+            {
+                Id = a.Id,
+                State = a.State.ToString(),
+                DisplayState = a.State.GetDisplayAttributeValue(),
+                Holder = a.GetDisplayHolder(),
+                CreatedAt = a.CreatedAt.ToString("dd.MM.yyyy HH:mm").ToUpper(),
+                SerialNumber = a.SerialNumber,
+                Manufacturer = a.Manufacturer.Name,
+                ManufacturerId = a.ManufacturerId,
+                ModelId = a.ModelId,
+                Region = a.Region,
+                Latitude = a.Latitude,
+                Longitude = a.Longitude
+            })
             .ToListAsync();
     }
 
@@ -224,5 +240,4 @@ public class AedRepository : IAedRepository
         _dbContext.AedPhotos.RemoveRange(photos);
         await _dbContext.SaveChangesAsync();
     }
-
 }

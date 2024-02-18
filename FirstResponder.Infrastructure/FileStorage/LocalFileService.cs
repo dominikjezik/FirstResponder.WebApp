@@ -1,5 +1,5 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
-using FirstResponder.ApplicationCore.Shared;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using Microsoft.Extensions.Options;
 
 namespace FirstResponder.Infrastructure.FileStorage;

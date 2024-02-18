@@ -2,7 +2,6 @@ using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
-using FirstResponder.ApplicationCore.Exceptions;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Aeds.Handlers;
@@ -25,7 +24,7 @@ public class CreateModelCommandHandler : IRequestHandler<CreateModelCommand>
         
         if (manufacturer == null)
         {
-            throw new EntityNotFoundException("Výrobca neexistuje!");
+            throw new EntityValidationException("Zadaný výrobca neexistuje!");
         }
         
         var model = new Model

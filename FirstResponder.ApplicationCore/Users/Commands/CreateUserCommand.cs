@@ -6,13 +6,13 @@ namespace FirstResponder.ApplicationCore.Users.Commands;
 
 public class CreateUserCommand : IRequest<User>
 {
-    public UserFormDTO UserFormDto { get; private set; }
+    public UserFormDTO UserFormDTO { get; private set; }
 
     public string UserPassword { get; private set; }
 
-    public CreateUserCommand(UserFormDTO userFormDto, string userPassword)
+    public CreateUserCommand(UserFormDTO userFormDTO, string userPassword)
     {
-        UserFormDto = userFormDto;
+        UserFormDTO = userFormDTO;
         UserPassword = userPassword;
     }
 }

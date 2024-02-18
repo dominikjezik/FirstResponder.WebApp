@@ -10,5 +10,4 @@ public class AedPhoto : AuditableEntity<Guid>
     
     [Required]
     public string PhotoName { get; set; }
-    
 }

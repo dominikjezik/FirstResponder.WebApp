@@ -5,5 +5,4 @@ namespace FirstResponder.ApplicationCore.Aeds.Queries;
 
 public class GetAllLanguagesQuery : IRequest<IEnumerable<Language>>
 {
-    
 }

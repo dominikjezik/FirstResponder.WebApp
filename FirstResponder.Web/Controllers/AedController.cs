@@ -1,10 +1,9 @@
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Aeds.Queries;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
-using FirstResponder.ApplicationCore.Exceptions;
-using FirstResponder.ApplicationCore.Shared;
 using FirstResponder.Web.Extensions;
 using FirstResponder.Web.ViewModels;
 using MediatR;
@@ -28,9 +27,12 @@ public class AedController : Controller
     [Route("")]
     public async Task<IActionResult> Index()
     {
-        await LoadManufacturersToViewBag();
-        await LoadModelsToViewBag();
-
+        return View();
+    }
+    
+    [Route("[action]")]
+    public async Task<IActionResult> Map()
+    {
         return View();
     }
 
@@ -155,13 +157,6 @@ public class AedController : Controller
             return NotFound();
         }
     }
-
-    [Route("[action]")]
-    public async Task<IActionResult> Map()
-    {
-        var publicAeds = await _mediator.Send(new GetAllPublicAedsQuery());
-        return View(publicAeds);
-    }
     
     [HttpGet]
     [Route("[action]")]
@@ -194,8 +189,14 @@ public class AedController : Controller
     [Route("filtered-table-items")]
     public async Task<IEnumerable<AedItemDTO>> FilteredTableItems(int pageNumber, [FromQuery] AedItemFiltersDTO filtersDto)
     {
-        var items = await _mediator.Send(new GetAedItemsQuery() { PageNumber = pageNumber, Filters = filtersDto });
-        return items;
+        return await _mediator.Send(new GetAedItemsQuery() { PageNumber = pageNumber, Filters = filtersDto });
+    }
+    
+    [HttpGet]
+    [Route("map-items")]
+    public async Task<IEnumerable<AedItemDTO>> MapItems()
+    {
+        return await _mediator.Send(new GetAllPublicAedItemsQuery());
     }
 
     #region Helpers

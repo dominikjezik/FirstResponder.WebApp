@@ -1,5 +1,4 @@
 using FirstResponder.ApplicationCore.Common.Exceptions;
-using FirstResponder.ApplicationCore.Exceptions;
 using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.ApplicationCore.Incidents.Queries;

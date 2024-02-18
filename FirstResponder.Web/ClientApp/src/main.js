@@ -8,6 +8,7 @@ import NavigationCategory from "./components/NavigationCategory.vue"
 import StatusMessage from "./components/StatusMessage.vue";
 import MapWithMarkers from "./components/MapWithMarkers.vue";
 import AedsListTableFilter from "./components/AedsListTableFilter.vue";
+import AedsMapFilter from "./components/AedsMapFilter.vue";
 import PersonalAedOwnerField from "./components/PersonalAedOwnerField.vue"
 import AedImageUploader from "./components/AedImageUploader.vue"
 import EditableTableItem from "./components/EditableTableItem.vue";
@@ -34,8 +35,9 @@ app.component('status-message', StatusMessage)
 // Map components
 app.component('map-with-markers', MapWithMarkers)
 
-// Aed index page components
+// Aed index/map page components
 app.component('aeds-list-table-filter', AedsListTableFilter)
+app.component('aeds-map-filter', AedsMapFilter)
 
 // Aed create/edit page components
 app.component('personal-aed-owner-field', PersonalAedOwnerField)

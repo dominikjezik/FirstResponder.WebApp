@@ -1,5 +1,5 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
-using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Groups.Commands;
 using MediatR;
 
@@ -16,7 +16,7 @@ public class CreateGroupCommandHandler : IRequestHandler<CreateGroupCommand>
 	
 	public async Task Handle(CreateGroupCommand request, CancellationToken cancellationToken)
 	{
-		var group = request.GroupFormDto.ToGroup();
+		var group = request.GroupFormDTO.ToGroup();
 
 		if (await _groupsRepository.GroupExists(group.Name))
 		{

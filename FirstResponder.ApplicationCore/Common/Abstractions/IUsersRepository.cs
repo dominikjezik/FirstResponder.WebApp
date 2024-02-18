@@ -20,5 +20,4 @@ public interface IUsersRepository
     Task<bool> UserExists(Guid? id);
     
     Task<IEnumerable<UserItemDTO>> GetUserItems(int pageNumber, int pageSize, UserItemFiltersDTO? filtersDTO = null);
-    
 }

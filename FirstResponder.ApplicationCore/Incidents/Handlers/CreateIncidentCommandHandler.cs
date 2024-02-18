@@ -16,7 +16,7 @@ public class CreateIncidentCommandHandler : IRequestHandler<CreateIncidentComman
     
     public async Task<Incident> Handle(CreateIncidentCommand request, CancellationToken cancellationToken)
     {
-        var incident = request.IncidentFormDto.ToIncident();
+        var incident = request.IncidentFormDTO.ToIncident();
         
         await _incidentsRepository.AddIncident(incident);
         

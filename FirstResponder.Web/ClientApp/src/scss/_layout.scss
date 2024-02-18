@@ -131,6 +131,16 @@ $main-app-color: #000000;
     .content {
         flex: 1;
         padding: 0 1rem;
+
+        display: flex; 
+        flex-direction: column; 
+        height: 100vh;
+        
+        main {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
     }
 
     // Responzitiva
@@ -187,6 +197,7 @@ $main-app-color: #000000;
 
         .content {
             overflow-x: scroll;
+            height: calc(100vh - #{$mobile-top-menu-bar-height});
         }
     }
 }

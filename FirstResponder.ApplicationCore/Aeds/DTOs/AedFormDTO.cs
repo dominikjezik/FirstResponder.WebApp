@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Common.Enums;
-using FirstResponder.ApplicationCore.Entities;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
-using FirstResponder.ApplicationCore.Shared;
 
 namespace FirstResponder.ApplicationCore.Aeds.DTOs;
 

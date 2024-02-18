@@ -13,7 +13,7 @@ public interface IAedRepository
     
     Task<IEnumerable<AedItemDTO>> GetPublicAedItems(int pageNumber, int pageSize, AedItemFiltersDTO? filtersDTO = null);
     
-    Task<IEnumerable<PublicAed>> GetAllPublicAeds();
+    Task<IEnumerable<AedItemDTO>> GetAllPublicAedItems();
     
     Task<Aed?> GetAedById(Guid id);
 
@@ -30,5 +30,4 @@ public interface IAedRepository
     Task<ICollection<AedPhoto>> GetAedPhotosByIds(Guid aedId, string[] photosIdsForDelete);
     
     Task DeleteAedPhotosByIds(Guid aedId, string[] photosIdsForDelete);
-    
 }

@@ -1,4 +1,4 @@
-using FirstResponder.ApplicationCore.Exceptions;
+using FirstResponder.ApplicationCore.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FirstResponder.Web.Extensions;
