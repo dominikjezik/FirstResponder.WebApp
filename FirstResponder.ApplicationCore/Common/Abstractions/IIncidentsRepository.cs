@@ -7,7 +7,7 @@ public interface IIncidentsRepository
 {
     Task<IEnumerable<IncidentItemDTO>> GetIncidentItems(int pageNumber, int pageSize, IncidentItemFiltersDTO? filtersDTO = null);
     
-    Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radius, Guid? userId = null);
+    Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radiusInMeters, Guid? userId = null);
     
     Task<Incident?> GetIncidentById(Guid incidentId);
 

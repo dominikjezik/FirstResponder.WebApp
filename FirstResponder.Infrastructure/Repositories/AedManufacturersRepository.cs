@@ -49,7 +49,8 @@ public class AedManufacturersRepository : IAedManufacturersRepository
 
     public async Task DeleteManufacturer(Manufacturer manufacturer)
     {
-        // V transakci odstráni výrobcu a modely patriace k nemu
+        // The transaction is used to delete the manufacturer and its models.
+        // It is a problem to define cascading deletion so transaction is used.
         await using var transaction = await _dbContext.Database.BeginTransactionAsync();
         
         await _dbContext.AedModels

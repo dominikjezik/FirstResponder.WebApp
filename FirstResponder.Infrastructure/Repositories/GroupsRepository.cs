@@ -56,6 +56,9 @@ public class GroupsRepository : IGroupsRepository
 
 	public async Task<IEnumerable<UserWithGroupInfoDTO>> GetUsersWithGroupInfoAsync(Guid groupId, string searchQuery, int limitResultsCount = 0, bool includeNotInGroup = false)
 	{
+		// GroupJoin will do a left outer join, so it will take the users and
+		// if the user is in that group it will take GroupUser as well.
+		// SelectMany flattens the results (instead of a collection of collections, there will only be a collection).
 		var queryable = _dbContext.Users
 			.GroupJoin(
 				_dbContext.GroupUser.Where(groupUser => groupUser.GroupId == groupId),
@@ -90,13 +93,16 @@ public class GroupsRepository : IGroupsRepository
 
 	public async Task ChangeUsersInGroup(Guid groupId, IEnumerable<Guid> addUsers, IEnumerable<Guid> removeUsers)
 	{
-		// Pouzivatelia, ktori su v skupine
+		// Users that are in the group
 		var usersGroup = await _dbContext.GroupUser
 			.Where(groupUser => groupUser.GroupId == groupId)
 			.Select(groupUser => groupUser.UserId)
 			.ToListAsync();
 		
+		// Filter out already added users
 		addUsers = addUsers.Except(usersGroup);
+		
+		// Filter out users not in the group
 		removeUsers = removeUsers.Intersect(usersGroup);
 		
 		var addGroupUsers = addUsers.Select(userId => new GroupUser
@@ -119,6 +125,9 @@ public class GroupsRepository : IGroupsRepository
 
 	public async Task<IEnumerable<GroupWithUserInfoDTO>> GetGroupsWithUserInfoAsync(Guid userId, string searchQuery, int limitResultsCount, bool includeNotInGroups = false)
 	{
+		// GroupJoin will do a left outer join, so it will take the groups and
+		// if the user is in that group it will take GroupUser as well.
+		// SelectMany flattens the results (instead of a collection of collections, there will only be a collection).
 		var queryable = _dbContext.Groups
 			.GroupJoin(
 				_dbContext.GroupUser.Where(groupUser => groupUser.UserId == userId),
@@ -151,13 +160,16 @@ public class GroupsRepository : IGroupsRepository
 
 	public async Task ChangeGroupsForUser(Guid userId, IEnumerable<Guid> addGroups, IEnumerable<Guid> removeGroups)
 	{
-		// Ziska skupiny, v ktorych je sa pouzivatel nachadza
+		// Groups the user is in
 		var userGroups = await _dbContext.GroupUser
 			.Where(groupUser => groupUser.UserId == userId)
 			.Select(groupUser => groupUser.GroupId)
 			.ToListAsync();
 		
+		// Filter out already added groups
 		addGroups = addGroups.Except(userGroups);
+		
+		// Filter out groups in which the user is not in
 		removeGroups = removeGroups.Intersect(userGroups);
 		
 		var addGroupUsers = addGroups.Select(groupId => new GroupUser

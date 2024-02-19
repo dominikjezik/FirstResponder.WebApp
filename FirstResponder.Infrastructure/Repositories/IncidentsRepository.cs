@@ -51,7 +51,7 @@ public class IncidentsRepository : IIncidentsRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radius, Guid? userId = null)
+    public async Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radiusInMeters, Guid? userId = null)
     {
         var incidents = _dbContext.Incidents
             .Where(i => i.State == IncidentState.Created || i.State == IncidentState.InProgress);
@@ -62,7 +62,18 @@ public class IncidentsRepository : IIncidentsRepository
                 .Include(i => i.Responders.Where(r => r.ResponderId == userId));
         }
         
-        // TODO: Implementovat algoritmus pre ziskanie incidentov v okoli
+        // Get incidents only in the specified radius using the Haversine formula
+        // https://en.wikipedia.org/wiki/Haversine_formula
+        incidents = incidents
+            .Where(i =>
+                2 * 6371 * Math.Asin(
+                    Math.Sqrt(
+                        Math.Pow(Math.Sin((latitude - i.Latitude) * (Math.PI / 180) / 2), 2) +
+                        Math.Cos(latitude * (Math.PI / 180)) *
+                        Math.Cos(i.Latitude * (Math.PI / 180)) *
+                        Math.Pow(Math.Sin((longitude - i.Longitude) * (Math.PI / 180) / 2), 2)
+                    )
+                ) <= radiusInMeters / 1000);
 
         return await incidents.ToListAsync();
     }
@@ -135,7 +146,7 @@ public class IncidentsRepository : IIncidentsRepository
 
     public async Task AssignResponderToIncidents(Guid responderId, IEnumerable<Incident> incidents)
     {
-        // prefiltrovanie incidentov, ktore uz ma priradene
+        // Filter out incidents that have already been assigned to a responder
         incidents = incidents
             .Where(i => !i.Responders.Any(r => r.ResponderId == responderId));
         
