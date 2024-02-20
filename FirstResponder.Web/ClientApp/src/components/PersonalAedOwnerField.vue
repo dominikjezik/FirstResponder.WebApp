@@ -32,7 +32,7 @@ export default {
 
             this.isLoading = true
 
-            fetch('/api/users/search?query=' + query)
+            fetch('/users/search?query=' + query)
                 .then((response) => response.json())
                 .then(data => {
                     this.isLoading = false

@@ -4,12 +4,14 @@ namespace FirstResponder.Web.ViewModels;
 
 public class LoginViewModel
 {
+    [Required]
     [Display(Name = "E-mail")]
-    public required string Email { get; set; }
+    public string Email { get; set; }
 
+    [Required]
     [Display(Name = "Heslo")]
     [DataType(DataType.Password)]
-    public required string Password { get; set; }
+    public string Password { get; set; }
 
     [Display(Name = "Zapamätať si ma")]
     public bool RememberMe { get; set; }

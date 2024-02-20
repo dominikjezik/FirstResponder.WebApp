@@ -104,4 +104,17 @@ public class UsersController : Controller
         return View();
     }
     
+    [Route("search")]
+    public async Task<IEnumerable<UserSearchResultDTO>> Search(string query)
+    {
+        var searchResults = await _mediator.Send(new GetUsersBySearchQuery(query));
+        return searchResults;
+    }
+    
+    [Route("filtered-table-items")]
+    public async Task<IEnumerable<UserItemDTO>> FilteredTableItems(int pageNumber, [FromQuery] UserItemFiltersDTO filtersDto)
+    {
+        var items = await _mediator.Send(new GetUserItems() { PageNumber = pageNumber, Filters = filtersDto });
+        return items;
+    }
 }

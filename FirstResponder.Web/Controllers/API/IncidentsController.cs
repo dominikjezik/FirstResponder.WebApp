@@ -7,11 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FirstResponder.Web.Controllers.API;
 
+[Authorize("Bearer")]
+[Authorize("IsResponderOrEmployee")]
 [Route("api/[controller]")]
-[IgnoreAntiforgeryToken]
-[Authorize]
-[ApiController]
-public class IncidentsController : Controller
+public class IncidentsController : ApiController
 {
     private readonly IMediator _mediator;
     
@@ -20,12 +19,9 @@ public class IncidentsController : Controller
         _mediator = mediator;
     }
     
-    [HttpGet("get-nearby-and-assign")]
+    [Route("get-nearby-and-assign")]
     public async Task<IActionResult> GetIncidentsNearby(double latitude, double longitude, double radius)
     {
-        // TODO: Ziskanie Guid prihlaseneho pouzivatela z JWT
-        
-        // Docasne ziskanie z klasickeho Identity
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         
         var incidents = await _mediator.Send(new GetIncidentsNearbyQuery
@@ -51,6 +47,7 @@ public class IncidentsController : Controller
                 r.Responder = null;
             });
         });
-        return Json(incidents);
+        
+        return Ok(incidents);
     }
 }

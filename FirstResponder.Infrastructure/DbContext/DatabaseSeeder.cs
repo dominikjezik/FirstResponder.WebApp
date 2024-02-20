@@ -131,7 +131,7 @@ public class DatabaseSeeder
         var groupUsers = new List<GroupUser>();
         foreach (var group in groups)
         {
-            var groupUsersCount = faker.Random.Int(0, 10);
+            var groupUsersCount = faker.Random.Int(0, 5);
             for (int i = 0; i < groupUsersCount; i++)
             {
                 var user = users[faker.Random.Int(0, users.Count - 1)];

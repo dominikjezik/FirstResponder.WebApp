@@ -1,13 +1,17 @@
+using System.Text;
 using FirstResponder.ApplicationCore.Aeds.Queries;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.FileStorage;
 using FirstResponder.Infrastructure.Identity;
+using FirstResponder.Infrastructure.JWT;
 using FirstResponder.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +38,22 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/login";
 });
 
+// JWT
+builder.Services.AddAuthentication()
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
 // Configure routing
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true); 
 builder.Services.AddControllersWithViews(options =>
@@ -44,7 +64,19 @@ builder.Services.AddControllersWithViews(options =>
 // Authorization
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("IsEmployee", policy => policy.RequireClaim("UserType", UserType.Employee.ToString()));
+    options.AddPolicy("IsEmployee", policy => policy
+        .RequireClaim("UserType", UserType.Employee.ToString()));
+    
+    options.AddPolicy("IsResponderOrEmployee", policy => policy
+        .RequireClaim("UserType", UserType.Responder.ToString(), UserType.Employee.ToString()));
+    
+    options.AddPolicy("Bearer", policy => policy
+        .RequireAuthenticatedUser()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
+    
+    options.AddPolicy("CookieOrBearer", policy => policy
+        .RequireAuthenticatedUser()
+        .AddAuthenticationSchemes(IdentityConstants.ApplicationScheme, JwtBearerDefaults.AuthenticationScheme));
 });
 
 // Add MediatR
@@ -67,6 +99,7 @@ builder.Services.AddScoped<IIncidentsRepository, IncidentsRepository>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddSingleton<IFileService, LocalFileService>();
+builder.Services.AddSingleton<ITokenService, TokenService>();
 
 // Seedovanie databázy
 // builder.Services.AddTransient<DatabaseSeeder>();
@@ -97,6 +130,7 @@ app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

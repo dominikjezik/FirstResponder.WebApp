@@ -103,7 +103,7 @@ export default {
                 })
         },
         getURL() {
-            let url = new URL('/api/users/filtered-table-items', window.location.href)
+            let url = new URL('/users/filtered-table-items', window.location.href)
             url.searchParams.append('pageNumber', this.page)
 
             if (this.filterInput.fullName) {
