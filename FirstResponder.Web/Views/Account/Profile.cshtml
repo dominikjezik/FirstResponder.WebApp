@@ -1,34 +1,25 @@
-@using FirstResponder.ApplicationCore.Common.Enums
-@model UserFormDTO
+@model UserDTO
 
 <header class="main-header">
-    <h1>Pridať nového respondera</h1>
+    <h1>Úprava profilu</h1>
     <div class="buttons">
-        <a asp-controller="Users" asp-action="Index" class="button button-with-icon">
+        <a asp-controller="Account" asp-action="Index" class="button button-with-icon">
             <span class="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
                 </svg>
             </span>
-            <span>Späť na prehľad responderov</span>
+            <span>Používateľský účet</span>
         </a>
     </div>
 </header>
 
+<partial name="_SuccessMessage" />
+
 <div class="entity-details-page">
-    <form asp-controller="Users" asp-action="Create" class="entity-details-form">
+    <form asp-controller="Account" asp-action="Profile" class="entity-details-form">
         <partial name="_ErrorMessages"/>
-        <partial name="_UserFormPartial" />
-        
-        <div class="field">
-            <label class="label">Stav</label>
-            <div class="control">
-                <div class="select select-full-width">
-                    <select asp-for="UserType" asp-items="Html.GetEnumSelectList<UserType>()">
-                    </select>
-                </div>
-            </div>
-        </div>
+        <partial name="_UserFormPartial" for="@Model.UserForm"/>
 
         <div class="field">
             <div class="control">

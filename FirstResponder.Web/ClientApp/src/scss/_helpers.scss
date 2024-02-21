@@ -46,3 +46,13 @@
         transform: translate(0, .2rem);
     }
 }
+
+// Menu
+.menu-item {
+    display: flex;
+    align-items: center;
+    
+    svg {
+        margin-right: .5rem;
+    }
+}

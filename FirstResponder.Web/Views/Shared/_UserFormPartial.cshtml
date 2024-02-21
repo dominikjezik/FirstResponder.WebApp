@@ -1,13 +1,6 @@
 @using FirstResponder.ApplicationCore.Common.Enums
 @model UserFormDTO
 
-@if(!ViewData.ModelState.IsValid)
-{
-    <div class="message is-danger">
-        <div asp-validation-summary="All" class="message-body mb-1"></div>
-    </div>
-}
-
 <div class="field">
     <label asp-for="Email" class="label">Email *</label>
     <div class="control">
