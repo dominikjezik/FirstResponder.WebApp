@@ -86,4 +86,47 @@ public class AuthService : IAuthService
         var applicationUser = await _userManager.FindByIdAsync(userId.ToString());
         await _signInManager.RefreshSignInAsync(applicationUser);
     }
+
+    public async Task<string> GeneratePasswordResetTokenAsync(string userEmail)
+    {
+        var applicationUser = await _userManager.FindByEmailAsync(userEmail);
+        
+        if (applicationUser == null)
+        {
+            throw new EntityNotFoundException($"User with email '{userEmail}' not found.");
+        }
+
+        return await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
+    }
+
+    public async Task<bool> ResetPasswordAsync(string userEmail, string token, string password)
+    {
+        var user = await _userManager.FindByEmailAsync(userEmail);
+        
+        if (user == null)
+        {
+            return false;
+        }
+        
+        var result = await _userManager.ResetPasswordAsync(user, token, password);
+        
+        if (result.Succeeded)
+        {
+            return true;
+        }
+        
+        var errors = new Dictionary<string, string>();
+        
+        foreach (var error in result.Errors)
+        {
+            // Ignore duplicate error that Identity throws if we try to create a user with the same email
+            if (error.Code == "DuplicateUserName" && error.Description.Contains("is already taken."))
+            {
+                continue;
+            }
+            errors.Add(error.Code, error.Description);
+        }
+
+        throw new EntityValidationException(errors);
+    }
 }

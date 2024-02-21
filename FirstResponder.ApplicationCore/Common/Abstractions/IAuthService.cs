@@ -13,4 +13,8 @@ public interface IAuthService
     Task ChangePasswordAsync(Guid userId, string currentPassword, string newPassword, bool refreshSignIn = false);
 
     Task RefreshSignInAsync(Guid userId);
+
+    Task<string> GeneratePasswordResetTokenAsync(string userEmail);
+    
+    Task<bool> ResetPasswordAsync(string userEmail, string token, string password);
 }

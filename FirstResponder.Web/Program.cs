@@ -6,6 +6,7 @@ using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.FileStorage;
 using FirstResponder.Infrastructure.Identity;
 using FirstResponder.Infrastructure.JWT;
+using FirstResponder.Infrastructure.Mail;
 using FirstResponder.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -100,6 +101,7 @@ builder.Services.AddScoped<IIncidentsRepository, IncidentsRepository>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddSingleton<IFileService, LocalFileService>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
+builder.Services.AddSingleton<IMailService, MailKitService>();
 
 // Seedovanie databázy
 // builder.Services.AddTransient<DatabaseSeeder>();

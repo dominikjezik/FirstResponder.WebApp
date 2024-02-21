@@ -1,0 +1,53 @@
+using FirstResponder.ApplicationCore.Common.Abstractions;
+using MailKit.Net.Smtp;
+using Microsoft.Extensions.Configuration;
+using MimeKit;
+
+namespace FirstResponder.Infrastructure.Mail;
+
+public class MailKitService : IMailService
+{
+    private readonly IConfiguration _configuration;
+
+    public MailKitService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+    
+    public bool SendMail(string toEmail, string toName, string subject, string body)
+    {
+        try
+        {
+            using var emailMessage = new MimeMessage();
+
+            emailMessage.From.Add(new MailboxAddress(_configuration["MailSettings:SenderName"],
+                _configuration["MailSettings:SenderEmail"]));
+            emailMessage.To.Add(new MailboxAddress(toName, toEmail));
+
+            emailMessage.Subject = subject;
+
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = body
+            };
+
+            using SmtpClient mailClient = new SmtpClient();
+            mailClient.Connect(
+                _configuration["MailSettings:Server"],
+                int.Parse(_configuration["MailSettings:Port"]),
+                MailKit.Security.SecureSocketOptions.StartTls
+            );
+
+            mailClient.Authenticate(_configuration["MailSettings:UserName"], _configuration["MailSettings:Password"]);
+            mailClient.Send(emailMessage);
+            mailClient.Disconnect(true);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log exception
+            return false;
+        }
+    }
+}

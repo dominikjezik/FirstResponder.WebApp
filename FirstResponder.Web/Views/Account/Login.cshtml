@@ -5,6 +5,15 @@
 
 <h1 class="has-text-centered">Prihlásenie</h1>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="message is-success">
+        <div class="message-body mb-1">
+            <p>@TempData["SuccessMessage"]</p>
+        </div>
+    </div>
+}
+
 <div class="message is-danger">
     <div asp-validation-summary="ModelOnly" class="message-body mb-1"></div>
 </div>
@@ -34,9 +43,13 @@
         </div>
     </div>
 
-    <div class="field is-grouped">
+    <div class="field flex-space-between">
         <div class="control">
             <button type="submit" class="button is-link">Prihlásiť sa</button>
+        </div>
+        
+        <div class="control">
+            <a asp-controller="Account" asp-action="ForgotPassword" class="button is-text">Zabudli ste heslo?</a>
         </div>
     </div>
 </form>

@@ -1,5 +1,10 @@
 @{
     ViewBag.Title = ViewBag.TitleMessage ?? ViewBag.StatusCode;
+
+    if (!ViewBag.IsLogged)
+    {
+        Layout = "_GuestLayout";
+    }
 }
 
 <h1>@(ViewBag.TitleMessage ?? ViewBag.StatusCode)</h1>

@@ -7,6 +7,8 @@ public interface IUsersRepository
 {
     Task<User?> GetUserById(Guid? id);
     
+    Task<User?> GetUserByEmail(string email);
+    
     Task<UserDTO?> GetUserWithDetailsById(Guid? id);
     
     Task<IEnumerable<UserItemDTO>> GetUserItems(int pageNumber, int pageSize, UserItemFiltersDTO? filtersDTO = null);

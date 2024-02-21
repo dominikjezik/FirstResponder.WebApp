@@ -10,6 +10,10 @@ public class ErrorController : Controller
     {
         ViewBag.TitleMessage = "500 Nastala chyba!";
         ViewBag.Message = "Internal server error.";
+        
+        var isLogged = User.Identity.IsAuthenticated;
+        ViewBag.IsLogged = isLogged;
+        
         return View("StatusCode");
     }
     
@@ -17,6 +21,9 @@ public class ErrorController : Controller
     public IActionResult StatusCode(int statusCode)
     {
         ViewBag.StatusCode = statusCode;
+        
+        var isLogged = User.Identity.IsAuthenticated;
+        ViewBag.IsLogged = isLogged;
         
         if (statusCode == 404)
         {

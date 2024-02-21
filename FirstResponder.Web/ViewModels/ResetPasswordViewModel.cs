@@ -2,12 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FirstResponder.Web.ViewModels;
 
-public class ChangePasswordViewModel
+public class ResetPasswordViewModel
 {
+    public string Token { get; set; }
+    
     [Required]
-    [DataType(DataType.Password)]
-    [Display(Name = "Aktuálne heslo")]
-    public string CurrentPassword { get; set; }
+    [EmailAddress]
+    public string Email { get; set; }
     
     [Required]
     [DataType(DataType.Password)]

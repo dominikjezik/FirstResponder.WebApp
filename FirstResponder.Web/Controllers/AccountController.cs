@@ -15,13 +15,15 @@ namespace FirstResponder.Web.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly IAuthService _authService;
     private readonly IMediator _mediator;
+    private readonly IAuthService _authService;
+    private readonly IMailService _mailService;
 
-    public AccountController(IAuthService authService, IMediator mediator)
+    public AccountController(IMediator mediator, IAuthService authService, IMailService mailService)
     {
-        _authService = authService;
         _mediator = mediator;
+        _authService = authService;
+        _mailService = mailService;
     }
     
     #region Login
@@ -173,5 +175,105 @@ public class AccountController : Controller
         return RedirectToAction(nameof(ChangePassword));
     }
     
+    #endregion
+    
+    # region Forgot Password
+    
+    [AllowOnlyAnonymous]
+    [Route("/forgot-password")]
+    public IActionResult ForgotPassword()
+    {
+        return View();
+    }
+    
+    [HttpPost]
+    [AllowOnlyAnonymous]
+    [Route("/forgot-password")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        
+        var user = await _mediator.Send(new GetUserByEmailQuery(model.Email));
+        
+        if (user == null)
+        {
+            // If user is not found, it will not reveal that the user does not exist
+            this.DisplaySuccessMessage("Na Váš email bol odoslaný odkaz na obnovenie hesla!");
+            return RedirectToAction(nameof(ForgotPassword));
+        }
+        
+        try
+        {
+            var token = await _authService.GeneratePasswordResetTokenAsync(model.Email);
+            var resetPasswordUrl = Url.Action(nameof(ResetPassword), "Account", new { token, email = model.Email },
+                HttpContext.Request.Scheme);
+
+            var mailBody = $"Svoje heslo si môžete obnoviť na <a href='{resetPasswordUrl}'>tomto odkaze</a>.";
+            var isSuccessful = _mailService.SendMail(model.Email, user.FullName, "Obnovenie hesla", mailBody);
+            
+            if (!isSuccessful)
+            {
+                this.DisplayErrorMessage("Nepodarilo sa odoslať email na obnovenie hesla");
+                return View(model);
+            }
+        }
+        catch (EntityNotFoundException exception)
+        {
+        }
+        
+        this.DisplaySuccessMessage("Na Váš email bol odoslaný odkaz na obnovenie hesla!");
+        return RedirectToAction(nameof(ForgotPassword));
+    }
+    
+    #endregion
+    
+    #region Reset Password
+    
+    [AllowOnlyAnonymous]
+    [Route("/reset-password")]
+    public IActionResult ResetPassword(string? token = null, string? email = null)
+    {
+        if (string.IsNullOrEmpty(token))
+        {
+            return NotFound();
+        }
+        
+        return View(new ResetPasswordViewModel { Token = token, Email = email});
+    }
+
+    [HttpPost]
+    [AllowOnlyAnonymous]
+    [Route("/reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        try
+        {
+            // If user is not found, it will not reveal that the user does not exist
+            await _authService.ResetPasswordAsync(model.Email, model.Token, model.NewPassword);
+            
+            return RedirectToAction(nameof(ResetPasswordConfirmation));
+        }
+        catch (EntityValidationException exception)
+        {
+            this.MapErrorsToModelState(exception);
+            return View(model);
+        }
+    }
+    
+    [AllowAnonymous]
+    [Route("/reset-password-confirmation")]
+    public IActionResult ResetPasswordConfirmation()
+    {
+        return View();
+    }
+
     #endregion
 }

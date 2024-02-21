@@ -33,6 +33,14 @@ public class UsersRepository : IUsersRepository
         return applicationUser.ToDomainUser();
     }
 
+    public async Task<User?> GetUserByEmail(string email)
+    {
+        return await _dbContext.Users
+            .Where(user => user.Email == email)
+            .Select(applicationUser => applicationUser.ToDomainUser())
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<UserDTO?> GetUserWithDetailsById(Guid? id)
     {
         if (id == null)
