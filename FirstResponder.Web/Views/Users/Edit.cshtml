@@ -38,12 +38,20 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="field">
-            <div class="control">
+            <div class="control flex-space-between">
                 <button type="submit" class="button is-link">Uložiť</button>
+                <button type="submit" class="button is-info is-light" form="formSendPasswordResetLink">Odoslať odkaz na resetovanie hesla</button>
             </div>
         </div>
+    </form>
+    <form 
+        asp-controller="Users" 
+        asp-action="SendPasswordResetLink" 
+        asp-route-userId="@Model.UserId" 
+        id="formSendPasswordResetLink" 
+        onSubmit="return confirm('Naozaj chcete odoslať používateľovi @Model.UserForm.FullName odkaz na emailovú adresu @Model.UserForm.Email na resetovanie hesla?')">
     </form>
     
     <aside class="entity-details-aside">

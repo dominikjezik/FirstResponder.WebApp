@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Users.Commands;
 using FirstResponder.ApplicationCore.Users.DTOs;
@@ -14,10 +15,14 @@ namespace FirstResponder.Web.Controllers;
 public class UsersController : Controller
 {
     private readonly IMediator _mediator;
+    private readonly IAuthService _authService;
+    private readonly IMailService _mailService;
 
-    public UsersController(IMediator mediator)
+    public UsersController(IMediator mediator, IAuthService authService, IMailService mailService)
     {
         _mediator = mediator;
+        _authService = authService;
+        _mailService = mailService;
     }
     
     [Route("")]
@@ -43,8 +48,7 @@ public class UsersController : Controller
         
         try
         {
-            // TODO: Zmeniť fixné heslo
-            var user = await _mediator.Send(new CreateUserCommand(model, "Password123!"));
+            var user = await _mediator.Send(new CreateUserCommand(model));
             this.DisplaySuccessMessage("Používateľ bol úspešne vytvorený!");
             return RedirectToAction(nameof(Edit), "Users", new { userId = user.Id });
         }
@@ -96,6 +100,40 @@ public class UsersController : Controller
             this.MapErrorsToModelState(exception);
             return View(model);
         }
+    }
+    
+    [HttpPost]
+    [Route("[action]")]
+    public async Task<IActionResult> SendPasswordResetLink(string userId)
+    {
+        var user = await _mediator.Send(new GetUserByIdQuery(userId));
+        
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            var token = await _authService.GeneratePasswordResetTokenAsync(user.UserForm.Email);
+            var resetPasswordUrl = Url.Action("ResetPassword", "Account", new { token, email = user.UserForm.Email  }, HttpContext.Request.Scheme);
+        
+            var mailBody = $"Svoje nové heslo si môžete nastaviť na <a href='{resetPasswordUrl}'>tomto odkaze</a>.";
+            var isSuccessful = _mailService.SendMail(user.UserForm.Email, user.UserForm.FullName, "Obnovenie hesla", mailBody);
+        
+            if (!isSuccessful)
+            {
+                this.DisplayErrorMessage("Nepodarilo sa odoslať email na obnovenie hesla");
+                return RedirectToAction(nameof(Edit), "Users", new { userId });
+            }
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        
+        this.DisplaySuccessMessage("Odkaz na resetovanie hesla bol úspešne odoslaný!");
+        return RedirectToAction(nameof(Edit), "Users", new { userId });
     }
 
     [Route("[action]")]

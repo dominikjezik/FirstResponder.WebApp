@@ -17,7 +17,7 @@ public interface IUsersRepository
     
     Task<bool> UserExists(Guid? id);
     
-    Task AddUser(User user, string password);
+    Task AddUser(User user, string? password = null);
     
     Task UpdateUser(User user);
 

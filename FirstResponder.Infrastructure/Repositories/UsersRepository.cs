@@ -119,12 +119,21 @@ public class UsersRepository : IUsersRepository
         return await _dbContext.Users.Where(a => a.Id == id).CountAsync() == 1;
     }
 
-    public async Task AddUser(User user, string password)
+    public async Task AddUser(User user, string? password = null)
     {
         var applicationUser = user.ToApplicationUser();
         applicationUser.UserName = applicationUser.Email;
         
-        var result = await _userManager.CreateAsync(applicationUser, password);
+        IdentityResult result;
+        
+        if (password == null)
+        {
+            result = await _userManager.CreateAsync(applicationUser);
+        }
+        else
+        {
+            result = await _userManager.CreateAsync(applicationUser, password);
+        }
 
         if (!result.Succeeded)
         {
