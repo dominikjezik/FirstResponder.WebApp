@@ -106,7 +106,7 @@ public class UsersController : Controller
     [Route("[action]")]
     public async Task<IActionResult> SendPasswordResetLink(string userId)
     {
-        var user = await _mediator.Send(new GetUserByIdQuery(userId));
+        var user = await _mediator.Send(new GetUserProfileByIdQuery(userId));
         
         if (user == null)
         {
@@ -115,11 +115,11 @@ public class UsersController : Controller
 
         try
         {
-            var token = await _authService.GeneratePasswordResetTokenAsync(user.UserForm.Email);
-            var resetPasswordUrl = Url.Action("ResetPassword", "Account", new { token, email = user.UserForm.Email  }, HttpContext.Request.Scheme);
+            var token = await _authService.GeneratePasswordResetTokenAsync(user.Email);
+            var resetPasswordUrl = Url.Action("ResetPassword", "Account", new { token, email = user.Email  }, HttpContext.Request.Scheme);
         
             var mailBody = $"Svoje nové heslo si môžete nastaviť na <a href='{resetPasswordUrl}'>tomto odkaze</a>.";
-            var isSuccessful = _mailService.SendMail(user.UserForm.Email, user.UserForm.FullName, "Obnovenie hesla", mailBody);
+            var isSuccessful = _mailService.SendMail(user.Email, user.FullName, "Obnovenie hesla", mailBody);
         
             if (!isSuccessful)
             {

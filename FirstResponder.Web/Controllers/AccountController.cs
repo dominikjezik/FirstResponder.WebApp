@@ -89,7 +89,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Profile()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var user = await _mediator.Send(new GetUserByIdQuery(userId));
+        var user = await _mediator.Send(new GetUserProfileByIdQuery(userId));
 
         if (user == null)
         {
@@ -102,7 +102,7 @@ public class AccountController : Controller
     [HttpPost]
     [Authorize]
     [Route("/account/profile")]
-    public async Task<IActionResult> Profile(UserDTO model)
+    public async Task<IActionResult> Profile(UserProfileDTO model)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = await _mediator.Send(new GetUserByIdQuery(userId));
@@ -112,18 +112,14 @@ public class AccountController : Controller
             return NotFound();
         }
         
-        // Type of user cannot be changed
-        model.UserForm.UserType = user.UserForm.UserType;
-        
         if (!ModelState.IsValid)
         {
-            user.UserForm = model.UserForm;
             return View(model);
         }
         
         try
         {
-            await _mediator.Send(new UpdateUserCommand(user.UserId, model.UserForm));
+            await _mediator.Send(new UpdateUserCommand(user.UserId, model));
             
             // Update claims
             await _authService.RefreshSignInAsync(user.UserId);

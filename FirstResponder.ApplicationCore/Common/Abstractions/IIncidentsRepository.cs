@@ -1,4 +1,5 @@
 using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 
 namespace FirstResponder.ApplicationCore.Common.Abstractions;
@@ -20,4 +21,8 @@ public interface IIncidentsRepository
     Task DeleteIncident(Incident incident);
     
     Task AssignResponderToIncidents(Guid responderId, IEnumerable<Incident> incidents);
+    
+    Task AcceptIncident(Incident incident, User user);
+    
+    Task DeclineIncident(Incident incident, User user);
 }

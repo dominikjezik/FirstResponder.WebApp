@@ -187,9 +187,9 @@ public class AedController : Controller
 
     [HttpGet]
     [Route("filtered-table-items")]
-    public async Task<IEnumerable<AedItemDTO>> FilteredTableItems(int pageNumber, [FromQuery] AedItemFiltersDTO filtersDto)
+    public async Task<IEnumerable<AedItemDTO>> FilteredTableItems(int pageNumber, [FromQuery] AedItemFiltersDTO filtersDTO)
     {
-        return await _mediator.Send(new GetAedItemsQuery() { PageNumber = pageNumber, Filters = filtersDto });
+        return await _mediator.Send(new GetAedItemsQuery() { PageNumber = pageNumber, Filters = filtersDTO });
     }
     
     [HttpGet]

@@ -1,6 +1,6 @@
 namespace FirstResponder.ApplicationCore.Users.DTOs;
 
-public class UserAuthFormDTO : UserFormDTO
+public class UserRegisterFormDTO : UserProfileDTO
 {
     public string Password { get; set; }
 }

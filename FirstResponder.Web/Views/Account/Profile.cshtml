@@ -1,4 +1,4 @@
-@model UserDTO
+@model UserProfileDTO
 
 <header class="main-header">
     <h1>Úprava profilu</h1>
@@ -19,7 +19,7 @@
 <div class="entity-details-page">
     <form asp-controller="Account" asp-action="Profile" class="entity-details-form">
         <partial name="_ErrorMessages"/>
-        <partial name="_UserFormPartial" for="@Model.UserForm"/>
+        <partial name="_UserFormPartial" for="@Model"/>
 
         <div class="field">
             <div class="control">

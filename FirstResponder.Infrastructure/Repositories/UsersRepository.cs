@@ -41,6 +41,26 @@ public class UsersRepository : IUsersRepository
             .FirstOrDefaultAsync();
     }
 
+    public async Task<UserProfileDTO?> GetUserProfileById(Guid? id)
+    {
+        return await _dbContext.Users
+            .Where(user => user.Id == id)
+            .Select(applicationUser => new UserProfileDTO
+            {
+                Email = applicationUser.Email,
+                FullName = applicationUser.FullName,
+                PhoneNumber = applicationUser.PhoneNumber,
+                DateOfBirth = applicationUser.DateOfBirth,
+                Address = applicationUser.Address,
+                PostalCode = applicationUser.PostalCode,
+                City = applicationUser.City,
+                Region = applicationUser.Region,
+                Notes = applicationUser.Notes,
+                
+            })
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<UserDTO?> GetUserWithDetailsById(Guid? id)
     {
         if (id == null)

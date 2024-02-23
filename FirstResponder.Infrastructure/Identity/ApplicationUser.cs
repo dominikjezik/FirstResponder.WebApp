@@ -46,15 +46,18 @@ public static class ApplicationUserExtensions
             UserId = applicationUser.Id,
             UserForm = new UserFormDTO
             {
-                Email = applicationUser.Email,
-                FullName = applicationUser.FullName,
-                PhoneNumber = applicationUser.PhoneNumber,
-                DateOfBirth = applicationUser.DateOfBirth,
-                Address = applicationUser.Address,
-                PostalCode = applicationUser.PostalCode,
-                City = applicationUser.City,
-                Region = applicationUser.Region,
-                Notes = applicationUser.Notes,
+                UserProfile = new UserProfileDTO
+                {
+                    Email = applicationUser.Email,
+                    FullName = applicationUser.FullName,
+                    PhoneNumber = applicationUser.PhoneNumber,
+                    DateOfBirth = applicationUser.DateOfBirth,
+                    Address = applicationUser.Address,
+                    PostalCode = applicationUser.PostalCode,
+                    City = applicationUser.City,
+                    Region = applicationUser.Region,
+                    Notes = applicationUser.Notes
+                },
                 UserType = applicationUser.Type
             },
             CreatedAt = applicationUser.CreatedAt,

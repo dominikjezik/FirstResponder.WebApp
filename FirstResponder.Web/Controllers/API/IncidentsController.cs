@@ -1,8 +1,10 @@
 using System.Security.Claims;
+using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FirstResponder.Web.Controllers.API;
@@ -19,6 +21,7 @@ public class IncidentsController : ApiController
         _mediator = mediator;
     }
     
+    [HttpGet]
     [Route("get-nearby-and-assign")]
     public async Task<IActionResult> GetIncidentsNearby(double latitude, double longitude, double radius)
     {
@@ -50,4 +53,59 @@ public class IncidentsController : ApiController
         
         return Ok(incidents);
     }
+    
+    [HttpPost]
+    [Route("{incidentId}/accept")]
+    public async Task<IActionResult> AcceptIncident(Guid incidentId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        try
+        {
+            await _mediator.Send(new AcceptIncidentCommand
+            {
+                IncidentId = incidentId,
+                ResponderId = userId
+            });
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (EntityValidationException e)
+        {
+            return BadRequest(e.Message);
+        }
+
+        // TODO: Vratit incident details?
+
+        return Ok();
+    }
+    
+    [HttpPost]
+    [Route("{incidentId}/decline")]
+    public async Task<IActionResult> DeclineIncident(Guid incidentId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        try
+        {
+            await _mediator.Send(new DeclineIncidentCommand
+            {
+                IncidentId = incidentId,
+                ResponderId = userId
+            });
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (EntityValidationException e)
+        {
+            return BadRequest(e.Message);
+        }
+
+        return Ok();
+    }
+    
 }

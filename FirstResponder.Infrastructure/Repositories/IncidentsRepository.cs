@@ -2,6 +2,7 @@ using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Extensions;
 using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
@@ -162,6 +163,56 @@ public class IncidentsRepository : IIncidentsRepository
             incident.Responders.Add(responderIncident);
             _dbContext.IncidentResponders.Add(responderIncident);
         }
+        
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task AcceptIncident(Incident incident, User user)
+    {
+        var responderIncident = await _dbContext.IncidentResponders
+            .Where(r => r.IncidentId == incident.Id && r.ResponderId == user.Id)
+            .FirstOrDefaultAsync();
+        
+        if (responderIncident == null)
+        {
+            responderIncident = new IncidentResponder
+            {
+                ResponderId = user.Id,
+                IncidentId = incident.Id,
+                CreatedAt = DateTime.Now
+            };
+            
+            incident.Responders.Add(responderIncident);
+            _dbContext.IncidentResponders.Add(responderIncident);
+        }
+        
+        responderIncident.AcceptedAt = DateTime.Now;
+        responderIncident.DeclinedAt = null;
+        
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeclineIncident(Incident incident, User user)
+    {
+        var responderIncident = await _dbContext.IncidentResponders
+            .Where(r => r.IncidentId == incident.Id && r.ResponderId == user.Id)
+            .FirstOrDefaultAsync();
+        
+        if (responderIncident == null)
+        {
+            responderIncident = new IncidentResponder
+            {
+                ResponderId = user.Id,
+                IncidentId = incident.Id,
+                CreatedAt = DateTime.Now
+            };
+            
+            incident.Responders.Add(responderIncident);
+            _dbContext.IncidentResponders.Add(responderIncident);
+        }
+        
+        responderIncident.DeclinedAt = DateTime.Now;
+        responderIncident.AcceptedAt = null;
         
         await _dbContext.SaveChangesAsync();
     }

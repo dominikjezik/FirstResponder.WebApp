@@ -17,17 +17,23 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, User>
     
     public async Task<User> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = request.UserFormDTO.ToUser();
+        User? user = null;
         
-        EntityValidator.Validate(user);
-        
-        if (request.WithoutPassword)
+        if (request.UserFormDTO != null)
         {
+            user = request.UserFormDTO.ToUser();
+            EntityValidator.Validate(user);
             await _usersRepository.AddUser(user);
+        }
+        else if (request.UserRegisterFormDTO != null)
+        {
+            user = request.UserRegisterFormDTO.ToUser();
+            EntityValidator.Validate(user);
+            await _usersRepository.AddUser(user, request.UserRegisterFormDTO.Password);
         }
         else
         {
-            await _usersRepository.AddUser(user, request.UserPassword);
+            throw new ArgumentNullException();
         }
 
         return user;

@@ -18,7 +18,7 @@
 <div class="entity-details-page">
     <form asp-controller="Users" asp-action="Create" class="entity-details-form">
         <partial name="_ErrorMessages"/>
-        <partial name="_UserFormPartial" />
+        <partial name="_UserFormPartial" for="@Model.UserProfile" />
         
         <div class="field">
             <label class="label">Stav</label>

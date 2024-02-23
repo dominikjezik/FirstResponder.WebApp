@@ -23,8 +23,16 @@ public class UpdateUserCommandHandler: IRequestHandler<UpdateUserCommand, User?>
         {
             throw new EntityNotFoundException();
         }
+
+        if (request.UserFormDTO != null)
+        {
+            request.UserFormDTO.ToUser(user);
+        }
+        else if (request.UserProfileDTO != null)
+        {
+            request.UserProfileDTO.ToUser(user);
+        }
         
-        request.UserFormDTO.ToUser(user);
         await _usersRepository.UpdateUser(user);
         
         return user;

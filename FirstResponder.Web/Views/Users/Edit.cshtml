@@ -2,7 +2,7 @@
 @model UserDTO
 
 <header class="main-header">
-    <h1>@Model.UserForm.FullName</h1>
+    <h1>@Model.UserForm.UserProfile.FullName</h1>
     <div class="buttons">
         <a asp-controller="Users" asp-action="Index" class="button button-with-icon">
             <span class="icon">
@@ -20,7 +20,7 @@
 <div class="entity-details-page">
     <form asp-controller="Users" asp-action="Edit" class="entity-details-form">
         <partial name="_ErrorMessages"/>
-        <partial name="_UserFormPartial" for="@Model.UserForm"/>
+        <partial name="_UserFormPartial" for="@Model.UserForm.UserProfile"/>
 
         <div class="field">
             <label asp-for="CreatedAt" class="label">Dátum registrácie</label>
@@ -51,7 +51,7 @@
         asp-action="SendPasswordResetLink" 
         asp-route-userId="@Model.UserId" 
         id="formSendPasswordResetLink" 
-        onSubmit="return confirm('Naozaj chcete odoslať používateľovi @Model.UserForm.FullName odkaz na emailovú adresu @Model.UserForm.Email na resetovanie hesla?')">
+        onSubmit="return confirm('Naozaj chcete odoslať používateľovi @Model.UserForm.UserProfile.FullName odkaz na emailovú adresu @Model.UserForm.UserProfile.Email na resetovanie hesla?')">
     </form>
     
     <aside class="entity-details-aside">
