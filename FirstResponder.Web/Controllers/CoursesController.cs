@@ -7,6 +7,7 @@ using FirstResponder.Web.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FirstResponder.Web.Controllers;
 
@@ -30,6 +31,7 @@ public class CoursesController : Controller
     [Route("[action]")]
     public async Task<IActionResult> Create()
     {
+        await LoadCourseTypesToViewBag();
         return View();
     }
     
@@ -39,6 +41,7 @@ public class CoursesController : Controller
     {
         if (!ModelState.IsValid)
         {
+            await LoadCourseTypesToViewBag();
             return View(model);
         }
 
@@ -51,6 +54,7 @@ public class CoursesController : Controller
         catch (EntityValidationException exception)
         {
             this.MapErrorsToModelState(exception);
+            await LoadCourseTypesToViewBag();
             return View(model);
         }
     }
@@ -64,6 +68,8 @@ public class CoursesController : Controller
         {
             return NotFound();
         }
+        
+        await LoadCourseTypesToViewBag();
         
         return View(course);
     }
@@ -83,6 +89,7 @@ public class CoursesController : Controller
         {
             // Ensure that the original data remains filled in
             course.CourseForm = model.CourseForm;
+            await LoadCourseTypesToViewBag();
             return View(course);
         }
         
@@ -101,6 +108,7 @@ public class CoursesController : Controller
             this.MapErrorsToModelState(exception);
             // Ensure that the original data remains filled in
             course.CourseForm = model.CourseForm;
+            await LoadCourseTypesToViewBag();
             return View(course);
         }
     }
@@ -125,12 +133,8 @@ public class CoursesController : Controller
     [Route("[action]")]
     public async Task<IEnumerable<CourseType>> Types()
     {
-        // TODO
-        /*
         var types = await _mediator.Send(new GetAllCourseTypesQuery());
         return types;
-        */
-        return new List<CourseType>();
     }
     
     [HttpGet]
@@ -139,4 +143,14 @@ public class CoursesController : Controller
     {
         return await _mediator.Send(new GetCoursesQuery() { PageNumber = pageNumber, Filters = filtersDTO });
     }
+    
+    #region Helpers
+    
+    private async Task LoadCourseTypesToViewBag()
+    {
+        ViewBag.CourseTypes = (await _mediator.Send(new GetAllCourseTypesQuery()))
+            .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
+    }
+    
+    #endregion
 }

@@ -17,21 +17,21 @@ public class AedLanguagesRepository : IAedLanguagesRepository
     public async Task<IEnumerable<Language>> GetAllLanguages()
     {
         return await _dbContext.AedLanguages
-            .OrderByDescending(m => m.Name)
+            .OrderBy(l => l.Name)
             .ToListAsync();
     }
 
     public async Task<Language?> GetLanguageById(Guid languageId)
     {
         return await _dbContext.AedLanguages
-            .Where(m => m.Id == languageId)
+            .Where(l => l.Id == languageId)
             .FirstOrDefaultAsync();
     }
 
     public async Task<bool> LanguageExists(string name)
     {
         return await _dbContext.AedLanguages
-            .Where(m => m.Name == name)
+            .Where(l => l.Name == name)
             .AnyAsync();
     }
 

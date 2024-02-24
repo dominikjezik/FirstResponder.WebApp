@@ -88,6 +88,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .HasForeignKey(a => a.ResponderId)
             .IsRequired();
         
+        modelBuilder.Entity<CourseType>()
+            .HasMany<Course>()
+            .WithOne(c => c.CourseType)
+            .HasForeignKey(c => c.CourseTypeId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
         modelBuilder.Entity<CourseUser>()
             .HasKey(courseUser => new { courseUser.CourseId, courseUser.UserId });
         

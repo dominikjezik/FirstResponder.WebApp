@@ -12,4 +12,10 @@ public class SettingsController : Controller
     {
         return View();
     }
+    
+    [Route("[action]")]
+    public IActionResult Users()
+    {
+        return View();
+    }
 }

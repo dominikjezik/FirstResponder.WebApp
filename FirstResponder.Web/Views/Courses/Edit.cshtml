@@ -35,8 +35,8 @@
                 <label class="label">Typ školenia</label>
                 <div class="control">
                     <div class="select select-full-width">
-                        <select asp-for="CourseForm.CourseTypeId">
-                            <option value="">TODO !</option>
+                        <select asp-for="CourseForm.CourseTypeId" asp-items="@ViewBag.CourseTypes">
+                            <option value="">-</option>
                         </select>
                     </div>
                 </div>

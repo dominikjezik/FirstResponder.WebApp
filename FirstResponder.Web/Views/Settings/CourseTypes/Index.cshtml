@@ -1,0 +1,82 @@
+@model IEnumerable<FirstResponder.ApplicationCore.Entities.CourseAggregate.CourseType>
+@{
+    ViewBag.Title = "Typy školení";
+}
+
+<header class="main-header">
+    <h1>Typy školení</h1>
+    
+    <div class="buttons">
+        <a asp-controller="Settings" asp-action="Users" class="button button-with-icon">
+            <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+                </svg>
+            </span>
+            <span>Nastavenia používatelov</span>
+        </a>
+        <button class="button button-with-icon" id="btn-create-new-item">
+            <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </span>
+            <span>Pridať typ školenia</span>
+        </button>
+    </div>
+</header>
+
+<partial name="_SuccessMessage" />
+<partial name="_ErrorMessages"/>
+
+<div class="field">
+    <label class="label">Typ školenia</label>
+    <div class="control">
+        <input class="input" type="text" id="search-input">
+    </div>
+</div>
+
+<table class="table is-striped is-narrow is-hoverable is-fullwidth">
+    <thead>
+    <tr>
+        <th>Typ školenia</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody id="table-body">
+        <tr is="vue:editable-new-table-item"
+            new-item-form-action="@Url.Action("Create", "CourseTypes")"
+            item-placeholder="Typ školenia">
+            <template v-slot:anti-forgery>
+                @Html.AntiForgeryToken()
+            </template>
+        </tr>
+    @foreach (var courseType in Model)
+    {
+        <tr is="vue:editable-table-item"
+            update-item-form-action="@Url.Action("Update", "CourseTypes", new { courseTypeId = courseType.Id })"
+            delete-item-form-action="@Url.Action("Delete", "CourseTypes", new { courseTypeId = courseType.Id })"
+            item-name="@courseType.Name">
+            <template v-slot:anti-forgery>
+                @Html.AntiForgeryToken()
+            </template>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p class="has-text-centered">Neboli pridané žiadne typy školenia.</p>
+}
+
+@section Scripts
+{
+    <script>
+        document.getElementById('btn-create-new-item').onclick = 
+            () => window.dispatchEvent(new CustomEvent('create-new-item'))
+            
+        document.getElementById('search-input').oninput = 
+            () => window.dispatchEvent(new CustomEvent('search-input', { detail: { query: document.getElementById('search-input').value } }))
+    </script>
+}
