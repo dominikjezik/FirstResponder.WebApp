@@ -85,6 +85,18 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CourseTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
                 {
@@ -244,6 +256,31 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CourseTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Trainer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Courses_CourseTypes_CourseTypeId",
+                        column: x => x.CourseTypeId,
+                        principalTable: "CourseTypes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GroupUser",
                 columns: table => new
                 {
@@ -335,6 +372,30 @@ namespace FirstResponder.Infrastructure.Migrations
                         principalTable: "AedModels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CourseUser",
+                columns: table => new
+                {
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseUser", x => new { x.CourseId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_CourseUser_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourseUser_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -475,6 +536,16 @@ namespace FirstResponder.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Courses_CourseTypeId",
+                table: "Courses",
+                column: "CourseTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseUser_UserId",
+                table: "CourseUser",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GroupUser_UserId",
                 table: "GroupUser",
                 column: "UserId");
@@ -512,6 +583,9 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CourseUser");
+
+            migrationBuilder.DropTable(
                 name: "GroupUser");
 
             migrationBuilder.DropTable(
@@ -527,6 +601,9 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Courses");
+
+            migrationBuilder.DropTable(
                 name: "Groups");
 
             migrationBuilder.DropTable(
@@ -537,6 +614,9 @@ namespace FirstResponder.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Aeds");
+
+            migrationBuilder.DropTable(
+                name: "CourseTypes");
 
             migrationBuilder.DropTable(
                 name: "AedLanguages");

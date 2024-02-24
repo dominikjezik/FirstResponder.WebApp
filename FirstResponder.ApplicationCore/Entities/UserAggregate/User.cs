@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
+using FirstResponder.ApplicationCore.Entities.CourseAggregate;
 
 namespace FirstResponder.ApplicationCore.Entities.UserAggregate;
 
@@ -28,4 +29,6 @@ public class User : AuditableEntity<Guid>
     public UserType Type { get; set; } = UserType.Default;
     
     public ICollection<Group> Groups { get; set; } = new List<Group>();
+    
+    public ICollection<Course> Courses { get; set; } = new List<Course>();
 }

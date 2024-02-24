@@ -80,7 +80,7 @@ public class IncidentsController : Controller
         
         if (!ModelState.IsValid)
         {
-            // Zabezpeci, aby ostali zachovane povodne vyplnene data
+            // Ensure that the original data remains filled in
             incident.IncidentForm = model.IncidentForm;
             return View(incident);
         }
@@ -98,9 +98,9 @@ public class IncidentsController : Controller
         catch (EntityValidationException exception)
         {
             this.MapErrorsToModelState(exception);
-            // Zabezpeci, aby ostali zachovane povodne vyplnene data
+            // Ensure that the original data remains filled in
             incident.IncidentForm = model.IncidentForm;
-            return View(model);
+            return View(incident);
         }
     }
     

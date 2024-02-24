@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FirstResponder.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240217163925_Initial")]
+    [Migration("20240224092256_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -160,6 +160,77 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.HasIndex("ManufacturerId");
 
                     b.ToTable("AedModels");
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.CourseAggregate.Course", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CourseTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Trainer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseTypeId");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.CourseAggregate.CourseType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CourseTypes");
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.CourseAggregate.CourseUser", b =>
+                {
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CourseId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CourseUser");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.Incident", b =>
@@ -592,6 +663,32 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Navigation("Manufacturer");
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.CourseAggregate.Course", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.CourseAggregate.CourseType", "CourseType")
+                        .WithMany()
+                        .HasForeignKey("CourseTypeId");
+
+                    b.Navigation("CourseType");
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.CourseAggregate.CourseUser", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.CourseAggregate.Course", "Course")
+                        .WithMany("Participants")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentResponder", b =>
                 {
                     b.HasOne("FirstResponder.ApplicationCore.Entities.IncidentAggregate.Incident", "Incident")
@@ -701,6 +798,11 @@ namespace FirstResponder.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.CourseAggregate.Course", b =>
+                {
+                    b.Navigation("Participants");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.Incident", b =>
                 {
                     b.Navigation("Responders");
@@ -713,6 +815,8 @@ namespace FirstResponder.Infrastructure.Migrations
 
             modelBuilder.Entity("FirstResponder.Infrastructure.Identity.ApplicationUser", b =>
                 {
+                    b.Navigation("Courses");
+
                     b.Navigation("Groups");
 
                     b.Navigation("Incidents");

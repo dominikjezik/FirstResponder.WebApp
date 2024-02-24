@@ -1,5 +1,6 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
+using FirstResponder.ApplicationCore.Entities.CourseAggregate;
 using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Users.DTOs;
@@ -32,6 +33,8 @@ public class ApplicationUser : IdentityUser<Guid>, IAuditable
     public ICollection<GroupUser> Groups { get; set; } = new List<GroupUser>();
     
     public ICollection<IncidentResponder> Incidents { get; set; } = new List<IncidentResponder>();
+    
+    public ICollection<CourseUser> Courses { get; set; } = new List<CourseUser>();
 }
 
 public static class ApplicationUserExtensions

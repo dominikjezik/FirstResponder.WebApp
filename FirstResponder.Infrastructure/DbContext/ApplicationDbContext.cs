@@ -1,5 +1,6 @@
 ﻿using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.ApplicationCore.Entities.CourseAggregate;
 using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.Infrastructure.Identity;
@@ -32,6 +33,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     // Incident Aggregate
     public DbSet<Incident> Incidents { get; set; }
     public DbSet<IncidentResponder> IncidentResponders { get; set; }
+    
+    // Course Aggregate
+    public DbSet<Course> Courses { get; set; }
+    public DbSet<CourseType> CourseTypes { get; set; }
+    public DbSet<CourseUser> CourseUser { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -80,6 +86,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .HasOne<ApplicationUser>()
             .WithMany(user => user.Incidents)
             .HasForeignKey(a => a.ResponderId)
+            .IsRequired();
+        
+        modelBuilder.Entity<CourseUser>()
+            .HasKey(courseUser => new { courseUser.CourseId, courseUser.UserId });
+        
+        modelBuilder.Entity<CourseUser>()
+            .HasOne<ApplicationUser>()
+            .WithMany(user => user.Courses)
+            .HasForeignKey(c => c.UserId)
             .IsRequired();
     }
     
