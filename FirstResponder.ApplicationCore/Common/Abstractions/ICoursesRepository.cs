@@ -16,4 +16,8 @@ public interface ICoursesRepository
     Task UpdateCourse(Course course);
     
     Task DeleteCourse(Course course);
+    
+    Task<IEnumerable<UserWithCourseInfoDTO>> GetUsersWithCourseInfoAsync(Guid courseId, string searchQuery, int limitResultsCount, bool includeNotInCourse = false);
+	
+    Task ChangeUsersInCourse(Guid courseId, IEnumerable<Guid> addUsers, IEnumerable<Guid> removeUsers);
 }

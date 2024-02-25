@@ -277,7 +277,8 @@ namespace FirstResponder.Infrastructure.Migrations
                         name: "FK_Courses_CourseTypes_CourseTypeId",
                         column: x => x.CourseTypeId,
                         principalTable: "CourseTypes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -379,7 +380,8 @@ namespace FirstResponder.Infrastructure.Migrations
                 columns: table => new
                 {
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

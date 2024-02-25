@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Entities.CourseAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 
 namespace FirstResponder.ApplicationCore.Users.DTOs;
@@ -13,6 +14,8 @@ public class UserDTO
     public IEnumerable<Group> Groups { get; set; } = new List<Group>();
     
     public List<IncidentItemDTO> Incidents { get; set; } = new();
+    
+    public List<Course> Courses { get; set; } = new();
     
     public class IncidentItemDTO
     {

@@ -3,6 +3,9 @@ using FirstResponder.ApplicationCore.Courses.Commands;
 using FirstResponder.ApplicationCore.Courses.DTOs;
 using FirstResponder.ApplicationCore.Courses.Queries;
 using FirstResponder.ApplicationCore.Entities.CourseAggregate;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
+using FirstResponder.ApplicationCore.Groups.Commands;
+using FirstResponder.ApplicationCore.Groups.Queries;
 using FirstResponder.Web.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -142,6 +145,30 @@ public class CoursesController : Controller
     public async Task<IEnumerable<Course>> FilteredTableItems(int pageNumber, [FromQuery] CourseFiltersDTO filtersDTO)
     {
         return await _mediator.Send(new GetCoursesQuery() { PageNumber = pageNumber, Filters = filtersDTO });
+    }
+    
+    [HttpGet]
+    [Route("{courseId}/users")]
+    public async Task<IEnumerable<UserWithCourseInfoDTO>> Users(Guid courseId, string query = "")
+    {
+        var users = await _mediator.Send(new GetUsersWithCourseInfoQuery(courseId, query));
+        return users;
+    }
+    
+    [HttpPost]
+    [IgnoreAntiforgeryToken]
+    [Route("{courseId}/users")]
+    public async Task<IActionResult> ChangeUsers([FromBody] ChangeUsersInCourseDTO model)
+    {
+        await _mediator.Send(new ChangeUsersInCourseCommand(model));
+        return Ok();
+    }
+    
+    [HttpGet]
+    [Route("groups")]
+    public async Task<IEnumerable<Group>> Groups()
+    {
+        return await _mediator.Send(new GetAllGroupsQuery());
     }
     
     #region Helpers

@@ -20,6 +20,8 @@ import GroupCreateModal from "./components/GroupCreateModal.vue";
 import GroupEditModal from "./components/GroupEditModal.vue";
 import IncidentsListTableFilter from "./components/IncidentsListTableFilter.vue";
 import CoursesListTableFilter from "./components/CoursesListTableFilter.vue";
+import CourseParticipantsModal from "./components/CourseParticipantsModal.vue";
+import CourseAddParticipantsFromGroupModal from "./components/CourseAddParticipantsFromGroupModal.vue";
 
 const app = createApp({
     data() {
@@ -64,6 +66,10 @@ app.component('incidents-list-table-filter', IncidentsListTableFilter)
 
 // Courses index page components
 app.component('courses-list-table-filter', CoursesListTableFilter)
+
+// Course page components
+app.component('course-participants-modal', CourseParticipantsModal)
+app.component('course-add-participants-from-group-modal', CourseAddParticipantsFromGroupModal)
 
 app.mount('#app')
 

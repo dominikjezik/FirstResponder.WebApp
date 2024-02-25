@@ -6,5 +6,14 @@ public class CourseDTO
     
     public CourseFormDTO CourseForm { get; set; }
     
-    // TODO: participants
+    public List<ParticipantItemDTO> Participants { get; set; } = new();
+    
+    public class ParticipantItemDTO
+    {
+        public Guid ParticipantId { get; set; }
+        
+        public string FullName { get; set; }
+        
+        public DateTime? CreatedAt { get; set; }
+    }
 }

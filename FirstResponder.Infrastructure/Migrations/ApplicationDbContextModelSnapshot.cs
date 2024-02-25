@@ -223,6 +223,9 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("CourseId", "UserId");
 
                     b.HasIndex("UserId");

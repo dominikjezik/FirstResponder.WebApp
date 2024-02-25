@@ -71,7 +71,10 @@ public static class ApplicationUserExtensions
                     IncidentId = incidentResponder.Incident.Id,
                     CreatedAt = incidentResponder.Incident.CreatedAt,
                     Address = incidentResponder.Incident.Address
-                }).ToList()
+                }).ToList(),
+            Courses = applicationUser.Courses.Select(courseUser => courseUser.Course).ToList()
+            
+            // TODO: Miesto Course pouzit CourseItemDTO alebo miesto IncidentItemDTO pouzit Incident ?
         };
     }
         

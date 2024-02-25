@@ -7,8 +7,8 @@ public class ChangeUsersInGroupCommand : IRequest
 {
     public ChangeUsersInGroupDTO ChangeUsersInGroupDTO { get; private set; }
     
-    public ChangeUsersInGroupCommand(ChangeUsersInGroupDTO changeUsersInGroupDto)
+    public ChangeUsersInGroupCommand(ChangeUsersInGroupDTO changeUsersInGroupDTO)
     {
-        ChangeUsersInGroupDTO = changeUsersInGroupDto;
+        ChangeUsersInGroupDTO = changeUsersInGroupDTO;
     }
 }

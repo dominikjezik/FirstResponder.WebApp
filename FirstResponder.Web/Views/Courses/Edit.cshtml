@@ -87,7 +87,7 @@
         <form asp-controller="Courses" asp-action="Delete" asp-route-courseId="@Model.CourseId" id="formDelete" onSubmit="return confirm('Naozaj chcete odstrániť toto školenie?') "></form>
     </div>
 
-    <aside class="entity-details-aside" style="opacity: 0.2">
+    <aside class="entity-details-aside">
         <header class="section-header">
             <h2 class="heading-with-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
@@ -95,24 +95,75 @@
                 </svg>
                 Účastníci
             </h2>
-    
-            <button class="button">
-                Pridať účastníka
-            </button>
+            
+            <div class="buttons">
+                <button class="button" id="btn-add-from-group">
+                    Pridať zo skupiny
+                </button>
+                <button class="button" id="btn-edit-participants">
+                    Upraviť účastníkov
+                </button>
+            </div>
         </header>
-        <table class="table is-striped is-narrow is-fullwidth">
-            <thead>
-            <tr>
-                <th>Účastník</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
+        
+        @if (Model.Participants.Any())
+        {
+            <table class="table is-striped is-narrow is-fullwidth">
+                <thead>
                 <tr>
-                    <td>Lorem ipsum</td>
-                    <td></td>
+                    <th>Účastník</th>
+                    <th>Dátum a čas pridania</th>
                 </tr>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach (var participant in Model.Participants)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Users" asp-action="Edit" asp-route-userId="@participant.ParticipantId">@participant.FullName</a>
+                        </td>
+                        <td>@participant.CreatedAt</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Na toto školenie neboli zatiaľ pridaní žiadni účastníci.</p>
+        }
     </aside>
 </div>
+
+<div>
+    <course-participants-modal
+        course-id-prop="@Model.CourseId">
+        <template v-slot:anti-forgery>
+            @Html.AntiForgeryToken()
+        </template>
+    </course-participants-modal>
+</div>
+
+<div>
+    <course-add-participants-from-group-modal
+        course-id-prop="@Model.CourseId">
+        <template v-slot:anti-forgery>
+            @Html.AntiForgeryToken()
+        </template>
+    </course-add-participants-from-group-modal>
+</div>
+
+@section Scripts
+{
+    <script>
+        // Show modal for editing participants
+        document.querySelector('#btn-edit-participants').onclick = () => {
+            window.dispatchEvent(new CustomEvent('display-edit-participants-modal'))
+        }
+        
+        // Show modal for adding participants from group
+        document.querySelector('#btn-add-from-group').onclick = () => {
+            window.dispatchEvent(new CustomEvent('display-add-from-group-modal'))
+        }
+    </script>
+}

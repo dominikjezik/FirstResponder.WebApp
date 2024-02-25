@@ -76,6 +76,8 @@ public class UsersRepository : IUsersRepository
                     .Where(incidentResponder => incidentResponder.AcceptedAt != null)
                     .OrderByDescending(incidentResponder => incidentResponder.CreatedAt))
                 .ThenInclude(incidentResponder => incidentResponder.Incident)
+            .Include(user => user.Courses.OrderByDescending(c => c.Course.CreatedAt))
+                .ThenInclude(courseUser => courseUser.Course)
             .Select(applicationUser => applicationUser.ToUserDTO())
             .FirstOrDefaultAsync();
     }

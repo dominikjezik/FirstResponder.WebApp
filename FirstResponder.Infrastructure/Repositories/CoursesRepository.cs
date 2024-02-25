@@ -48,23 +48,41 @@ public class CoursesRepository : ICoursesRepository
 
     public async Task<CourseDTO?> GetCourseDetailsById(Guid courseId)
     {
-        // TODO: Nacitat ucastnikov
-        
         return await _dbContext.Courses
             .Where(c => c.Id == courseId)
-            .Select(c => new CourseDTO
+            .Include(c => c.Participants)
+            .Select(c => new
             {
-                CourseId = c.Id,
+                Course = c,
+                Participants = c.Participants
+                    .Join(
+                        _dbContext.Users,
+                        c => c.UserId,
+                        u => u.Id,
+                        (c, u) => new { c, u }
+                    ).OrderBy(c => c.u.FullName)
+                    .ToList()
+            })
+            .Select(result => new CourseDTO
+            {
+                CourseId = result.Course.Id,
                 CourseForm = new CourseFormDTO
                 {
-                    Name = c.Name,
-                    CourseTypeId = c.CourseTypeId,
-                    StartDate = c.StartDate,
-                    EndDate = c.EndDate,
-                    Location = c.Location,
-                    Trainer = c.Trainer,
-                    Description = c.Description,
-                }
+                    Name = result.Course.Name,
+                    CourseTypeId = result.Course.CourseTypeId,
+                    StartDate = result.Course.StartDate,
+                    EndDate = result.Course.EndDate,
+                    Location = result.Course.Location,
+                    Trainer = result.Course.Trainer,
+                    Description = result.Course.Description,
+                },
+                Participants = result.Participants
+                    .Select(p => new CourseDTO.ParticipantItemDTO
+                    {
+                        ParticipantId = p.u.Id,
+                        FullName = p.u.FullName,
+                        CreatedAt = p.c.CreatedAt
+                    }).ToList()
             })
             .FirstOrDefaultAsync();
     }
@@ -84,6 +102,73 @@ public class CoursesRepository : ICoursesRepository
     public async Task DeleteCourse(Course course)
     {
         _dbContext.Courses.Remove(course);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<UserWithCourseInfoDTO>> GetUsersWithCourseInfoAsync(Guid courseId, string searchQuery, int limitResultsCount = 0, bool includeNotInCourse = false)
+    {
+        var queryable = _dbContext.Users
+            .GroupJoin(
+                _dbContext.CourseUser.Where(courseUser => courseUser.CourseId == courseId),
+                user => user.Id,
+                courseUser => courseUser.UserId,
+                (user, courseUser) => new { User = user, CourseUser = courseUser }
+            )
+            .Where(courseUser => 
+                courseUser.User.FullName.Contains(searchQuery) || 
+                courseUser.User.Email.Contains(searchQuery)
+            )
+            .Where(courseUser => includeNotInCourse || courseUser.CourseUser.Any())
+            .OrderByDescending(courseUser => courseUser.User.CreatedAt)
+            .SelectMany(
+                courseUser => courseUser.CourseUser.DefaultIfEmpty(),
+                (user, courseUser) => new UserWithCourseInfoDTO
+                {
+                    UserId = user.User.Id,
+                    FullName = user.User.FullName,
+                    Email = user.User.Email,
+                    IsInCourse = courseUser != null
+                }
+            );
+
+        if (limitResultsCount > 0)
+        {
+            queryable = queryable.Take(limitResultsCount);
+        }
+        
+        return await queryable.ToListAsync();
+    }
+
+    public async Task ChangeUsersInCourse(Guid courseId, IEnumerable<Guid> addUsers, IEnumerable<Guid> removeUsers)
+    {
+        // Users that are in the course
+        var usersCourse = await _dbContext.CourseUser
+            .Where(courseUser => courseUser.CourseId == courseId)
+            .Select(courseUser => courseUser.UserId)
+            .ToListAsync();
+		
+        // Filter out already added users
+        addUsers = addUsers.Except(usersCourse);
+		
+        // Filter out users not in the course
+        removeUsers = removeUsers.Intersect(usersCourse);
+		
+        var addCourseUsers = addUsers.Select(userId => new CourseUser
+        {
+            CourseId = courseId,
+            UserId = userId,
+            CreatedAt = DateTime.Now
+        });
+		
+        var removeCourseUsers = removeUsers.Select(userId => new CourseUser
+        {
+            CourseId = courseId,
+            UserId = userId
+        });
+		
+        _dbContext.CourseUser.AddRange(addCourseUsers);
+        _dbContext.CourseUser.RemoveRange(removeCourseUsers);
+		
         await _dbContext.SaveChangesAsync();
     }
 }
