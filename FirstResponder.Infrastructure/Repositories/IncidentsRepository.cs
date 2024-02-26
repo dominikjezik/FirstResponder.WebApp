@@ -17,7 +17,7 @@ public class IncidentsRepository : IIncidentsRepository
     {
         _dbContext = dbContext;
     }
-    
+
     public async Task<IEnumerable<IncidentItemDTO>> GetIncidentItems(int pageNumber, int pageSize, IncidentItemFiltersDTO? filtersDTO = null)
     {
         var query = _dbContext.Incidents
@@ -35,8 +35,8 @@ public class IncidentsRepository : IIncidentsRepository
                     (filtersDTO.State == null || filtersDTO.State == i.State)
                 );
         }
-        
-        return await query
+
+        var queryItems = query
             .Select(i => new IncidentItemDTO
             {
                 Id = i.Id,
@@ -45,11 +45,19 @@ public class IncidentsRepository : IIncidentsRepository
                 Patient = i.Patient,
                 Address = i.Address,
                 Diagnosis = i.Diagnosis,
-                State = i.State.GetDisplayAttributeValue()
-            })
-            .Skip(pageNumber * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+                State = i.State.GetDisplayAttributeValue(),
+                Latitude = i.Latitude,
+                Longitude = i.Longitude
+            });
+
+        if (pageSize > 0)
+        {
+            queryItems = queryItems
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize);
+        }
+        
+        return await queryItems.ToListAsync();
     }
 
     public async Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radiusInMeters, Guid? userId = null)

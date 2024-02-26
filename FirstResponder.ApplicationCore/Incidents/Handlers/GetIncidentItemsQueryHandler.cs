@@ -8,7 +8,6 @@ namespace FirstResponder.ApplicationCore.Incidents.Handlers;
 public class GetIncidentItemsQueryHandler : IRequestHandler<GetIncidentItemsQuery, IEnumerable<IncidentItemDTO>>
 {
     private readonly IIncidentsRepository _incidentsRepository;
-    private const int PageSize = 30;
 
     public GetIncidentItemsQueryHandler(IIncidentsRepository incidentsRepository)
     {
@@ -23,7 +22,14 @@ public class GetIncidentItemsQueryHandler : IRequestHandler<GetIncidentItemsQuer
         {
             pageNumber = 0;
         }
+        
+        int pageSize = request.PageSize;
+        
+        if (pageSize < 0)
+        {
+            pageSize = 0;
+        }
 
-        return await _incidentsRepository.GetIncidentItems(pageNumber, PageSize, request.Filters);
+        return await _incidentsRepository.GetIncidentItems(pageNumber, pageSize, request.Filters);
     }
 }

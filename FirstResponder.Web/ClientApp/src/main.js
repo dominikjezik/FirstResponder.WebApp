@@ -19,6 +19,7 @@ import GroupMembersModal from "./components/GroupMembersModal.vue";
 import GroupCreateModal from "./components/GroupCreateModal.vue";
 import GroupEditModal from "./components/GroupEditModal.vue";
 import IncidentsListTableFilter from "./components/IncidentsListTableFilter.vue";
+import IncidentsMapFilter from "./components/IncidentsMapFilter.vue";
 import CoursesListTableFilter from "./components/CoursesListTableFilter.vue";
 import CourseParticipantsModal from "./components/CourseParticipantsModal.vue";
 import CourseAddParticipantsFromGroupModal from "./components/CourseAddParticipantsFromGroupModal.vue";
@@ -61,8 +62,9 @@ app.component('group-members-modal', GroupMembersModal)
 app.component('group-create-modal', GroupCreateModal)
 app.component('group-edit-modal', GroupEditModal)
 
-// Incidents index page components
+// Incidents index/map page components
 app.component('incidents-list-table-filter', IncidentsListTableFilter)
+app.component('incidents-map-filter', IncidentsMapFilter)
 
 // Courses index page components
 app.component('courses-list-table-filter', CoursesListTableFilter)

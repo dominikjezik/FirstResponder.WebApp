@@ -27,6 +27,12 @@ public class IncidentsController : Controller
     }
     
     [Route("[action]")]
+    public async Task<IActionResult> Map()
+    {
+        return View();
+    }
+    
+    [Route("[action]")]
     public async Task<IActionResult> Create()
     {
         return View();
@@ -122,9 +128,9 @@ public class IncidentsController : Controller
     
     [HttpGet]
     [Route("filtered-table-items")]
-    public async Task<IEnumerable<IncidentItemDTO>> FilteredTableItems(int pageNumber, [FromQuery] IncidentItemFiltersDTO filtersDto)
+    public async Task<IEnumerable<IncidentItemDTO>> FilteredTableItems([FromQuery] IncidentItemFiltersDTO filtersDto, int pageNumber = 0, int pageSize = 0)
     {
-        var items = await _mediator.Send(new GetIncidentItemsQuery { PageNumber = pageNumber, Filters = filtersDto });
+        var items = await _mediator.Send(new GetIncidentItemsQuery { PageNumber = pageNumber, PageSize = pageSize, Filters = filtersDto });
         return items;
     }
 }

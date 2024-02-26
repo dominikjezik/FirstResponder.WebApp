@@ -11,9 +11,11 @@ export default {
                 to: '',
                 state: ''
             },
-            page: 0,
+            filterSelectTechnicalDetails: {
+                manufacturerId: '',
+                modelId: '',
+            },
             loading: false,
-            hasMore: true,
             optionsState: [
                 { id: 0, name: 'Vytvorený' },
                 { id: 1, name: 'Prebiehajúci' },
@@ -21,21 +23,20 @@ export default {
                 { id: 3, name: 'Zrušený' }
             ],
             items: [],
-            isMessageVisible: false,
-            messageText: '',
+            markers: [],
             debounceTimer: null,
         }
     },
     mounted() {
-        // Load first page
-        this.loadMore()
-
-        // On scroll, check if we’re at the bottom of the page
-        window.onscroll = () => {
-            if (this.hasMore && window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-                this.loadMore()
-            }
-        }
+        this.filterSelect.from = new Date().toISOString().split('T')[0] + 'T00:00'
+        this.filterSelect.to = new Date().toISOString().split('T')[0] + 'T23:59'
+        
+        let now = new Date()
+        let dayOfWeek = now.getDay()
+        this.filterSelect.from = new Date(now.setDate(now.getDate() - dayOfWeek + 1)).toISOString().split('T')[0] + 'T00:00'
+        this.filterSelect.to = new Date(now.setDate(now.getDate() - dayOfWeek + 7)).toISOString().split('T')[0] + 'T23:59'
+        
+        this.loadItems()
     },
     watch: {
         filterSelect: {
@@ -58,43 +59,33 @@ export default {
             window.location = `/incidents/${item.id}`
         },
         filterChanged() {
-            this.page = 0
-            this.hasMore = true
-            this.items = []
-            this.loadMore()
+            this.loadItems()
         },
-        loadMore() {
-            if (this.loading || !this.hasMore) {
+        loadItems() {
+            if (this.loading) {
                 return
             }
 
             this.loading = true
-            this.isMessageVisible = true
-            this.messageText = 'Načítavam ďalšie položky...'
-
+            
             fetch(this.getURL())
                 .then((response) => response.json())
                 .then(items => {
-                    if (items.length === 0) {
-                        if (this.page === 0) {
-                            this.isMessageVisible = true
-                            this.messageText = 'Nenašli sa žiadne položky.'
-                        } else {
-                            this.isMessageVisible = false
-                        }
+                    this.items = items
+                    
+                    this.markers = []
 
-                        this.hasMore = false
-                        return
-                    }
-
-                    this.page++
-
-                    this.items.push(...items)
-                    this.isMessageVisible = false
+                    this.markers = this.items
+                        .map(item => {
+                            return {
+                                lat: item.latitude,
+                                lon: item.longitude,
+                                icon: `incident-icon`,
+                                onClickUrl: `/incidents/${item.id}`
+                            }
+                        })
                 })
                 .catch((error) => {
-                    this.isMessageVisible = true
-                    this.messageText = 'Nastala chyba pri načítaní ďalších položiek.'
                     console.log(error)
                 })
                 .finally(() => {
@@ -103,13 +94,12 @@ export default {
         },
         getURL() {
             let url = new URL('/incidents/filtered-table-items', window.location.href)
-            url.searchParams.append('pageNumber', this.page)
-            url.searchParams.append('pageSize', 30)
-            
+            url.searchParams.append('pageNumber', 0)
+
             if (this.filterInput.patient !== '') {
                 url.searchParams.append('patient', this.filterInput.patient)
             }
-            
+
             if (this.filterInput.address !== '') {
                 url.searchParams.append('address', this.filterInput.address)
             }
@@ -117,11 +107,11 @@ export default {
             if (this.filterSelect.from !== '') {
                 url.searchParams.append('from', this.filterSelect.from)
             }
-            
+
             if (this.filterSelect.to !== '') {
                 url.searchParams.append('to', this.filterSelect.to)
             }
-            
+
             if (this.filterSelect.state !== '') {
                 url.searchParams.append('state', this.filterSelect.state)
             }
@@ -176,30 +166,8 @@ export default {
             </div>
         </div>
     </div>
-
-    <table class="table is-striped is-narrow is-hoverable is-fullwidth table-with-clickable-link">
-        <thead>
-        <tr>
-            <th>Začiatok</th>
-            <th>Koniec</th>
-            <th>Adresa</th>
-            <th>Pacient</th>
-            <th>Diagnóza</th>
-            <th>Stav</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="item in items" :key="item.id" @click="() => onItemClicked(item)">
-            <td>{{ item.createdAt }}</td>
-            <td>{{ item.resolvedAt }}</td>
-            <td>{{ item.address }}</td>
-            <td>{{ item.patient }}</td>
-            <td>{{ item.diagnosis }}</td>
-            <td>{{ item.state }}</td>
-        </tr>
-        </tbody>
-    </table>
-
-    <p v-if="isMessageVisible" class="has-text-centered">{{ messageText }}</p>
-
+    
+    <map-with-markers
+        style="height: 100%;"
+        :markers="markers" />
 </template>
