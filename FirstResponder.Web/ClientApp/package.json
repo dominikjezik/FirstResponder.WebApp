@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "vue": "^3.3.11"
+    "vue": "^3.3.11",
+    "vue-simple-calendar": "^7.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

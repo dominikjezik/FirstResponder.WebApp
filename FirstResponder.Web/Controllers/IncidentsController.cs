@@ -33,6 +33,12 @@ public class IncidentsController : Controller
     }
     
     [Route("[action]")]
+    public async Task<IActionResult> Calendar()
+    {
+        return View();
+    }
+    
+    [Route("[action]")]
     public async Task<IActionResult> Create()
     {
         return View();

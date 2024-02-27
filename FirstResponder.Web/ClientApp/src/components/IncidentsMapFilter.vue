@@ -28,9 +28,6 @@ export default {
         }
     },
     mounted() {
-        this.filterSelect.from = new Date().toISOString().split('T')[0] + 'T00:00'
-        this.filterSelect.to = new Date().toISOString().split('T')[0] + 'T23:59'
-        
         let now = new Date()
         let dayOfWeek = now.getDay()
         this.filterSelect.from = new Date(now.setDate(now.getDate() - dayOfWeek + 1)).toISOString().split('T')[0] + 'T00:00'
@@ -168,6 +165,7 @@ export default {
     </div>
     
     <map-with-markers
+        @click-item="onItemClicked"
         style="height: 100%;"
         :markers="markers" />
 </template>

@@ -7,6 +7,7 @@ import { createApp } from 'vue'
 import NavigationCategory from "./components/NavigationCategory.vue"
 import StatusMessage from "./components/StatusMessage.vue";
 import MapWithMarkers from "./components/MapWithMarkers.vue";
+import EventCalendar from "./components/EventCalendar.vue";
 import AedsListTableFilter from "./components/AedsListTableFilter.vue";
 import AedsMapFilter from "./components/AedsMapFilter.vue";
 import PersonalAedOwnerField from "./components/PersonalAedOwnerField.vue"
@@ -20,6 +21,7 @@ import GroupCreateModal from "./components/GroupCreateModal.vue";
 import GroupEditModal from "./components/GroupEditModal.vue";
 import IncidentsListTableFilter from "./components/IncidentsListTableFilter.vue";
 import IncidentsMapFilter from "./components/IncidentsMapFilter.vue";
+import IncidentsCalendar from "./components/IncidentsCalendar.vue";
 import CoursesListTableFilter from "./components/CoursesListTableFilter.vue";
 import CourseParticipantsModal from "./components/CourseParticipantsModal.vue";
 import CourseAddParticipantsFromGroupModal from "./components/CourseAddParticipantsFromGroupModal.vue";
@@ -38,6 +40,9 @@ app.component('status-message', StatusMessage)
 
 // Map components
 app.component('map-with-markers', MapWithMarkers)
+
+// Event calendar
+app.component('event-calendar', EventCalendar)
 
 // Aed index/map page components
 app.component('aeds-list-table-filter', AedsListTableFilter)
@@ -62,9 +67,10 @@ app.component('group-members-modal', GroupMembersModal)
 app.component('group-create-modal', GroupCreateModal)
 app.component('group-edit-modal', GroupEditModal)
 
-// Incidents index/map page components
+// Incidents index/map/calendar page components
 app.component('incidents-list-table-filter', IncidentsListTableFilter)
 app.component('incidents-map-filter', IncidentsMapFilter)
+app.component('incidents-calendar', IncidentsCalendar)
 
 // Courses index page components
 app.component('courses-list-table-filter', CoursesListTableFilter)

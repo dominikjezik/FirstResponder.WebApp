@@ -1,0 +1,106 @@
+<script>
+export default {
+    data() {
+        return {
+            filterSelect: {
+                from: '',
+                to: '',
+            },
+            items: [],
+            events: [],
+            centralDate: new Date(),
+        }
+    },
+    mounted() {
+        this.dateChanged(new Date())
+    },
+    watch: {
+        filterSelect() {
+            this.filterChanged()
+        }
+    },
+    methods: {
+        onItemClicked(calendarItem, windowEvent) {
+            window.location = `/incidents/${calendarItem.id}`
+        },
+        filterChanged() {
+            this.loadItems()
+        },
+        loadItems() {
+            if (this.loading) {
+                return
+            }
+
+            this.loading = true
+
+            fetch(this.getURL())
+                .then((response) => response.json())
+                .then(items => {
+                    this.items = items
+                    this.events = []
+
+                    this.events = this.items
+                        .map(item => {
+                            let date = new Date(item.createdAt)
+                            
+                            return {
+                                id: item.id,
+                                startDate: date,
+                                title: item.address,
+                                classes: [date.getMonth() === this.centralDate.getMonth() ? 'blue' : 'blue-outsideOfMonth']
+                            }
+                        })
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+                .finally(() => {
+                    this.loading = false
+                })
+        },
+        getURL() {
+            let url = new URL('/incidents/filtered-table-items', window.location.href)
+            url.searchParams.append('pageNumber', 0)
+
+            if (this.filterSelect.from !== '') {
+                url.searchParams.append('from', this.filterSelect.from)
+            }
+
+            if (this.filterSelect.to !== '') {
+                url.searchParams.append('to', this.filterSelect.to)
+            }
+
+            return url
+        },
+        dateChanged(date) {
+            let firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
+            let firstDayOfNextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1)
+
+            // TODO: optimalizovat len na potrebne dni
+            
+            // minus 6 days
+            firstDayOfMonth.setDate(firstDayOfMonth.getDate() - 6)
+            // plus 6 days
+            firstDayOfNextMonth.setDate(firstDayOfNextMonth.getDate() + 6)
+            
+            let firstDayOfMonthIso = new Date(firstDayOfMonth.getTime() - (firstDayOfMonth.getTimezoneOffset() * 60000)).toISOString();
+            let firstDayOfNextMonthIso = new Date(firstDayOfNextMonth.getTime() - (firstDayOfNextMonth.getTimezoneOffset() * 60000)).toISOString();
+
+            this.filterSelect.from = firstDayOfMonthIso
+            this.filterSelect.to = firstDayOfNextMonthIso
+            this.centralDate = date
+            
+            this.loadItems()
+        }
+    }
+}
+</script>
+
+<template>
+    <event-calendar
+        style="height: 100%;"
+        :events="events"
+        @click-item="onItemClicked"
+        @date-changed="dateChanged"
+        />
+</template>

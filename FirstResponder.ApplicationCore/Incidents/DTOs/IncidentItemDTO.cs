@@ -4,9 +4,9 @@ public class IncidentItemDTO
 {
     public Guid Id { get; set; }
     
-    public string CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
     
-    public string ResolvedAt { get; set; }
+    public DateTime? ResolvedAt { get; set; }
     
     public string Address { get; set; }
     

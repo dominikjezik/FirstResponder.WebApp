@@ -40,8 +40,8 @@ public class IncidentsRepository : IIncidentsRepository
             .Select(i => new IncidentItemDTO
             {
                 Id = i.Id,
-                CreatedAt = i.CreatedAt.ToString("dd.MM.yyyy HH:mm"),
-                ResolvedAt = i.ResolvedAt.HasValue ? i.ResolvedAt.Value.ToString("dd.MM.yyyy HH:mm") : null,
+                CreatedAt = i.CreatedAt,
+                ResolvedAt = i.ResolvedAt,
                 Patient = i.Patient,
                 Address = i.Address,
                 Diagnosis = i.Diagnosis,

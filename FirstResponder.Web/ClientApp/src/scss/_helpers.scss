@@ -56,3 +56,19 @@
         margin-right: .5rem;
     }
 }
+
+// Calendar
+.theme-gcal {
+    font-family: inherit;
+}
+
+.theme-gcal .cv-item.blue {
+    background-color: #2196F3;
+    color: white;
+}
+
+.theme-gcal .cv-item.blue-outsideOfMonth {
+    background-color: #2196F3;
+    color: white;
+    opacity: .5;
+}
