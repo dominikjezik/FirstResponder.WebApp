@@ -186,7 +186,7 @@ export default {
     <div class="filter-table-form">
         <div class="field">
             <label class="label">Typ</label>
-            <div class="control">
+            <div class="control" style="display: flex; flex-wrap: wrap">
                 <label style="margin-right: .5rem;">
                     <input v-model="filterSelect.type" value="0" name="type" type="radio"> Verejné
                 </label>

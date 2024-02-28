@@ -30,10 +30,7 @@ public class UpdateCourseTypeCommandHandler : IRequestHandler<UpdateCourseTypeCo
         
         if (await _courseTypesRepository.CourseTypeExists(request.Name))
         {
-            var errors = new Dictionary<string, string>();
-            errors["Name"] = "Tento typ školenia už existuje!";
-            
-            throw new EntityValidationException(errors);
+            throw new EntityValidationException("Name", "Tento typ školenia už existuje!");
         }
         
         courseType.Name = request.Name;

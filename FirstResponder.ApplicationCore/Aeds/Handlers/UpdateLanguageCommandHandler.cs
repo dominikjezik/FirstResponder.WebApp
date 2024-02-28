@@ -30,10 +30,7 @@ public class UpdateLanguageCommandHandler : IRequestHandler<UpdateLanguageComman
         
         if (await _aedLanguagesRepository.LanguageExists(request.Name))
         {
-            var errors = new Dictionary<string, string>();
-            errors["Name"] = "Tento jazyk už existuje!";
-            
-            throw new EntityValidationException(errors);
+            throw new EntityValidationException("Name", "Tento jazyk už existuje!");
         }
         
         language.Name = request.Name;

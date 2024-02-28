@@ -240,9 +240,16 @@ public class AedController : Controller
             ViewBag.Models = new List<SelectListItem>();
             return;
         }
-        
-        ViewBag.Models = (await _mediator.Send(new GetAllModelsQuery{ ManufacturerId = manufacturerId.ToString() }))
-            .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
+
+        try
+        {
+            ViewBag.Models = (await _mediator.Send(new GetAllModelsQuery{ ManufacturerId = manufacturerId.ToString() }))
+                .Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
+        }
+        catch (EntityNotFoundException)
+        {
+            ViewBag.Models = new List<SelectListItem>();
+        }
     }
 
     private async Task LoadLanguagesToViewBag()

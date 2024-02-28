@@ -7,7 +7,7 @@
         <div class="control">
             <div class="select select-full-width">
                 <select asp-for="AedFormDTO.ManufacturerId" asp-items="@ViewBag.Manufacturers" id="manufacturer-select">
-                    <option value="">-</option>
+                    <option value=" ">-</option>
                 </select>
             </div>
         </div>
@@ -18,7 +18,7 @@
         <div class="control">
             <div class="select select-full-width">
                 <select asp-for="AedFormDTO.ModelId" asp-items="@ViewBag.Models" id="model-select">
-                    <option value="">-</option>
+                    <option value=" ">-</option>
                 </select>
             </div>
         </div>
@@ -50,7 +50,7 @@
         <div class="control">
             <div class="select select-full-width">
                 <select asp-for="AedFormDTO.LanguageId" asp-items="@ViewBag.Languages">
-                    <option value="">-</option>
+                    <option value=" ">-</option>
                 </select>
             </div>
         </div>

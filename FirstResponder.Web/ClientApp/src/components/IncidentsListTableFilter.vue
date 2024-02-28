@@ -215,7 +215,7 @@ export default {
             <td>{{ item.address }}</td>
             <td>{{ item.patient }}</td>
             <td>{{ item.diagnosis }}</td>
-            <td>{{ item.state }}</td>
+            <td>{{ item.displayState }}</td>
         </tr>
         </tbody>
     </table>

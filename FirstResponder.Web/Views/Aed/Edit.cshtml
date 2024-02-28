@@ -204,3 +204,13 @@
         </table>
     </aside>
 </div>
+
+@section Scripts
+{
+    <script>
+        /**
+        * Script for loading models based on the selected manufacturer.
+        */
+        window.aedHelpers.handleManufacturerModelSelects('manufacturer-select', 'model-select', '@Url.Action("Models", "Aed")')
+    </script>
+}

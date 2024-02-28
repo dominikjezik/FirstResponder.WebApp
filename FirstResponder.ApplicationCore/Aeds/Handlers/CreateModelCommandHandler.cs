@@ -24,7 +24,7 @@ public class CreateModelCommandHandler : IRequestHandler<CreateModelCommand>
         
         if (manufacturer == null)
         {
-            throw new EntityValidationException("Zadaný výrobca neexistuje!");
+            throw new EntityValidationException("ManufacturerId", "Zadaný výrobca neexistujeeee!");
         }
         
         var model = new Model
@@ -35,10 +35,7 @@ public class CreateModelCommandHandler : IRequestHandler<CreateModelCommand>
         
         if (await _aedModelsRepository.ModelExists(model.Name, request.ManufacturerId))
         {
-            var errors = new Dictionary<string, string>();
-            errors["Name"] = "Model s týmto názvom už existuje!";
-            
-            throw new EntityValidationException(errors);
+            throw new EntityValidationException("Name", "Model s týmto názvom už existuje!");
         }
         
         await _aedModelsRepository.AddModel(model);

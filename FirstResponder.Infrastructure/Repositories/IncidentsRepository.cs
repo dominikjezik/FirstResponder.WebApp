@@ -45,7 +45,8 @@ public class IncidentsRepository : IIncidentsRepository
                 Patient = i.Patient,
                 Address = i.Address,
                 Diagnosis = i.Diagnosis,
-                State = i.State.GetDisplayAttributeValue(),
+                State = i.State.ToString(),
+                DisplayState = i.State.GetDisplayAttributeValue(),
                 Latitude = i.Latitude,
                 Longitude = i.Longitude
             });

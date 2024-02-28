@@ -9,6 +9,14 @@ public class EntityValidationException : Exception
         ValidationErrors = validationErrors;
     }
     
+    public EntityValidationException(string propertyName, string errorMessage) : base("Entity validation failed")
+    {
+        ValidationErrors = new Dictionary<string, string>
+        {
+            [propertyName] = errorMessage
+        };
+    }
+    
     public EntityValidationException() : base()
     {
     }

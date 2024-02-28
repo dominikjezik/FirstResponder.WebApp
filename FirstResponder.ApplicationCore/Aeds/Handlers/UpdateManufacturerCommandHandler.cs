@@ -30,10 +30,7 @@ public class UpdateManufacturerCommandHandler : IRequestHandler<UpdateManufactur
         
         if (await _aedManufacturersRepository.ManufacturerExists(request.Name))
         {
-            var errors = new Dictionary<string, string>();
-            errors["Name"] = "Výrobca s týmto názvom už existuje!";
-            
-            throw new EntityValidationException(errors);
+            throw new EntityValidationException("Name", "Výrobca s týmto názvom už existuje!");
         }
         
         manufacturer.Name = request.Name;

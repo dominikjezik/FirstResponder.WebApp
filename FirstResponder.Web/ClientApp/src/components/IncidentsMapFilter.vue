@@ -77,7 +77,7 @@ export default {
                             return {
                                 lat: item.latitude,
                                 lon: item.longitude,
-                                icon: `incident-icon`,
+                                icon: `incident-icon-${item.state}`,
                                 onClickUrl: `/incidents/${item.id}`
                             }
                         })

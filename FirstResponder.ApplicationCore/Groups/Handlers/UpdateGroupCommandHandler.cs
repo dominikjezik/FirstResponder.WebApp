@@ -27,10 +27,7 @@ public class UpdateGroupCommandHandler : IRequestHandler<UpdateGroupCommand>
 		
 		if (oldName != request.GroupFormDTO.Name && await _groupsRepository.GroupExists(request.GroupFormDTO.Name))
 		{
-			var errors = new Dictionary<string, string>();
-			errors["Name"] = "Skupina s týmto názvom už existuje!";
-				
-			throw new EntityValidationException(errors);
+			throw new EntityValidationException("Name", "Skupina s týmto názvom už existuje!");
 		}
 
 		request.GroupFormDTO.ToGroup(group);

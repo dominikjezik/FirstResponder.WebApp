@@ -30,10 +30,7 @@ public class UpdateModelCommandHandler : IRequestHandler<UpdateModelCommand>
         
         if (await _aedModelsRepository.ModelExists(request.Name, model.ManufacturerId ?? Guid.Empty))
         {
-            var errors = new Dictionary<string, string>();
-            errors["Name"] = "Model s týmto názvom už existuje!";
-            
-            throw new EntityValidationException(errors);
+            throw new EntityValidationException("Name", "Model s týmto názvom už existuje!");
         }
         
         model.Name = request.Name;

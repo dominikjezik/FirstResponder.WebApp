@@ -42,12 +42,17 @@ export default {
                     this.events = this.items
                         .map(item => {
                             let date = new Date(item.createdAt)
+                            let dateClass = item.state
+                            
+                            if (date.getMonth() !== this.centralDate.getMonth()) {
+                                dateClass += "-outsideOfMonth"
+                            }
                             
                             return {
                                 id: item.id,
                                 startDate: date,
                                 title: item.address,
-                                classes: [date.getMonth() === this.centralDate.getMonth() ? 'blue' : 'blue-outsideOfMonth']
+                                classes: [dateClass]
                             }
                         })
                 })
@@ -74,14 +79,18 @@ export default {
         },
         dateChanged(date) {
             let firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
-            let firstDayOfNextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1)
+            let lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0)
 
-            // TODO: optimalizovat len na potrebne dni
+            // Get first day of week (Monday)
+            let day = (firstDayOfMonth.getDay() - 1) % 7 // Monday - 0, Sunday - 6
+            firstDayOfMonth.setDate(firstDayOfMonth.getDate() - day)
             
-            // minus 6 days
-            firstDayOfMonth.setDate(firstDayOfMonth.getDate() - 6)
-            // plus 6 days
-            firstDayOfNextMonth.setDate(firstDayOfNextMonth.getDate() + 6)
+            // Get last day of week (Sunday) // Sunday - 0, Saturday - 6
+            lastDayOfMonth.setDate(lastDayOfMonth.getDate() + (7 - lastDayOfMonth.getDay()) % 7)
+            
+            // lastDayOfMonth + one day
+            lastDayOfMonth.setDate(lastDayOfMonth.getDate() + 1)
+            let firstDayOfNextMonth = lastDayOfMonth
             
             let firstDayOfMonthIso = new Date(firstDayOfMonth.getTime() - (firstDayOfMonth.getTimezoneOffset() * 60000)).toISOString();
             let firstDayOfNextMonthIso = new Date(firstDayOfNextMonth.getTime() - (firstDayOfNextMonth.getTimezoneOffset() * 60000)).toISOString();

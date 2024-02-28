@@ -12,13 +12,17 @@ public class UpdateAedCommandHandler : IRequestHandler<UpdateAedCommand, Aed?>
 {
     private readonly IAedRepository _aedRepository;
     private readonly IAedModelsRepository _aedModelsRepository;
+    private readonly IAedManufacturersRepository _aedManufacturersRepository;
+    private readonly IAedLanguagesRepository _aedLanguagesRepository;
     private readonly IUsersRepository _usersRepository;
     private readonly IFileService _fileService;
 
-    public UpdateAedCommandHandler(IAedRepository aedRepository, IAedModelsRepository aedModelsRepository, IUsersRepository usersRepository, IFileService fileService)
+    public UpdateAedCommandHandler(IAedRepository aedRepository, IAedModelsRepository aedModelsRepository, IAedManufacturersRepository aedManufacturersRepository, IAedLanguagesRepository aedLanguagesRepository, IUsersRepository usersRepository, IFileService fileService)
     {
         _aedRepository = aedRepository;
         _aedModelsRepository = aedModelsRepository;
+        _aedManufacturersRepository = aedManufacturersRepository;
+        _aedLanguagesRepository = aedLanguagesRepository;
         _usersRepository = usersRepository;
         _fileService = fileService;
     }
@@ -41,10 +45,7 @@ public class UpdateAedCommandHandler : IRequestHandler<UpdateAedCommand, Aed?>
             var exist = await _usersRepository.UserExists(request.AedFormDto.OwnerId);
             if (!exist)
             {
-                var errors = new Dictionary<string, string>();
-                errors["OwnerId"] = "Owner not found";
-                
-                throw new EntityValidationException(errors);
+                throw new EntityValidationException("OwnerId", "Owner not found");
             }
         }
         
@@ -100,24 +101,38 @@ public class UpdateAedCommandHandler : IRequestHandler<UpdateAedCommand, Aed?>
     
     private async Task ValidateRelatedEntities(Aed aed)
     {
+        if (aed.ManufacturerId != null)
+        {
+            var manufacturer = await _aedManufacturersRepository.GetManufacturerById(aed.ManufacturerId.Value);
+            
+            if (manufacturer == null)
+            {
+                throw new EntityValidationException("ManufacturerId", "Vyrobca AED neexistuje!");
+            }
+        }
+        
         if (aed.ModelId != null)
         {
             var model = await _aedModelsRepository.GetModelById(aed.ModelId.Value);
             
             if (model == null)
             {
-                var errors = new Dictionary<string, string>();
-                errors["ModelId"] = "Model AED neexistuje!";
-                
-                throw new EntityValidationException(errors);
+                throw new EntityValidationException("ModelId", "Model AED neexistuje!");
             }
             
             if (model.ManufacturerId != aed.ManufacturerId)
             {
-                var errors = new Dictionary<string, string>();
-                errors["ModelId"] = "Model AED nepatri pod vyrobcu!";
-                
-                throw new EntityValidationException(errors);
+                throw new EntityValidationException("ModelId", "Model AED nepatri pod vyrobcu!");
+            }
+        }
+        
+        if (aed.LanguageId != null)
+        {
+            var language = await _aedLanguagesRepository.GetLanguageById(aed.LanguageId.Value);
+            
+            if (language == null)
+            {
+                throw new EntityValidationException("LanguageId", "Jazyk AED neexistuje!");
             }
         }
     }

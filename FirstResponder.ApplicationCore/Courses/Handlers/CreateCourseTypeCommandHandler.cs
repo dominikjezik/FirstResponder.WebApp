@@ -24,10 +24,7 @@ public class CreateCourseTypeCommandHandler : IRequestHandler<CreateCourseTypeCo
         
         if (await _courseTypesRepository.CourseTypeExists(courseType.Name))
         {
-            var errors = new Dictionary<string, string>();
-            errors["Name"] = "Tento typ školenia už existuje!";
-            
-            throw new EntityValidationException(errors);
+            throw new EntityValidationException("Name", "Tento typ školenia už existuje!");
         }
         
         await _courseTypesRepository.AddCourseType(courseType);

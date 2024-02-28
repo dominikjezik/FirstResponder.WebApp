@@ -20,10 +20,7 @@ public class CreateGroupCommandHandler : IRequestHandler<CreateGroupCommand>
 
 		if (await _groupsRepository.GroupExists(group.Name))
 		{
-			var errors = new Dictionary<string, string>();
-			errors["Name"] = "Skupina s týmto názvom už existuje!";
-            
-			throw new EntityValidationException(errors);
+			throw new EntityValidationException("Name", "Skupina s týmto názvom už existuje!");
 		}
 
 		await _groupsRepository.AddGroup(group);

@@ -24,10 +24,7 @@ public class CreateManufacturerCommandHandler : IRequestHandler<CreateManufactur
         
         if (await _aedManufacturersRepository.ManufacturerExists(manufacturer.Name))
         {
-            var errors = new Dictionary<string, string>();
-            errors["Name"] = "Výrobca s týmto názvom už existuje!";
-            
-            throw new EntityValidationException(errors);
+            throw new EntityValidationException("Name", "Výrobca s týmto názvom už existuje!");
         }
         
         await _aedManufacturersRepository.AddManufacturer(manufacturer);

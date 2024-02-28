@@ -34,10 +34,7 @@ public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand, C
             
             if (courseType == null)
             {
-                var errors = new Dictionary<string, string>();
-                errors["CourseTypeId"] = "Typ školenia neexistuje";
-                
-                throw new EntityValidationException(errors);
+                throw new EntityValidationException("CourseTypeId", "Typ školenia neexistuje");
             }
         }
         
