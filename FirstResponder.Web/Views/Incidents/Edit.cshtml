@@ -1,4 +1,5 @@
 @using FirstResponder.ApplicationCore.Common.Extensions
+@using FirstResponder.ApplicationCore.Common.Enums
 @model FirstResponder.ApplicationCore.Incidents.DTOs.IncidentDTO
 <header class="main-header">
     <h1>@Model.IncidentForm.Address</h1>
@@ -15,6 +16,7 @@
 </header>
 
 <partial name="_SuccessMessage" />
+<partial name="_ErrorMessages" />
 
 <div class="entity-details-page">
     <div class="entity-details-form">
@@ -92,7 +94,14 @@
 
                 <div class="field">
                     <div class="control flex-space-between">
-                        <button id="submit-btn" type="submit" class="button is-link">Aktualizovať</button>
+                        <div class="buttons">
+                            <button id="submit-btn" type="submit" class="button is-link">Aktualizovať</button>
+                            @if (Model.State == IncidentState.Created || Model.State == IncidentState.InProgress)
+                            {
+                                <button type="submit" class="button is-link is-light" form="formNotifyResponders">Notifikovať responderov</button>
+                            }
+                        </div>
+                        
                         <button type="submit" class="button is-danger is-light" form="formDelete">Odstrániť zásah</button>
                     </div>
                 </div>
@@ -100,6 +109,7 @@
             
         </form>
         <form asp-controller="Incidents" asp-action="Delete" asp-route-incidentId="@Model.IncidentId" id="formDelete" onSubmit="return confirm('Naozaj chcete odstrániť tento zásah?') "></form>
+        <form asp-controller="Incidents" asp-action="SearchAndNotifyResponders" asp-route-incidentId="@Model.IncidentId" id="formNotifyResponders" onSubmit="return confirm('Naozaj chcete vyhľadať dostupných responderov v okolí a notifikovať ich o zásahu?') "></form>
         
         <section style="opacity: 0.2">
             <header class="section-header">

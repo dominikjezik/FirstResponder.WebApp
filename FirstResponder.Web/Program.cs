@@ -1,13 +1,17 @@
 using System.Text;
+using System.Text.Json;
+using FirebaseAdmin;
 using FirstResponder.ApplicationCore.Aeds.Queries;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.FileStorage;
+using FirstResponder.Infrastructure.Firebase;
 using FirstResponder.Infrastructure.Identity;
 using FirstResponder.Infrastructure.JWT;
 using FirstResponder.Infrastructure.Mail;
 using FirstResponder.Infrastructure.Repositories;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +58,23 @@ builder.Services.AddAuthentication()
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+// Firebase setup
+var firebaseConfigSection = builder.Configuration.GetSection("Firebase").Get<Dictionary<string, string>>();
+var firebaseConfigJson = JsonSerializer.Serialize(firebaseConfigSection);
+
+try
+{
+    FirebaseApp.Create(new AppOptions
+    {
+        Credential = GoogleCredential.FromJson(firebaseConfigJson),
+    });
+}
+catch (Exception e)
+{
+    // Log error
+    Console.WriteLine(e.Message);
+}
 
 // Configure routing
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true); 
@@ -104,6 +125,7 @@ builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddSingleton<IFileService, LocalFileService>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddSingleton<IMailService, MailKitService>();
+builder.Services.AddSingleton<IMessagingService, FirebaseMessagingService>();
 
 // Seedovanie databázy
 // builder.Services.AddTransient<DatabaseSeeder>();

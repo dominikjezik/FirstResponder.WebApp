@@ -132,6 +132,28 @@ public class IncidentsController : Controller
         }
     }
     
+    [HttpPost]
+    [Route("{incidentId}/[action]")]
+    public async Task<IActionResult> SearchAndNotifyResponders(Guid incidentId)
+    {
+        try
+        {
+            await _mediator.Send(new RequestDeviceLocationsCommand());
+            this.DisplaySuccessMessage("Dostupní responderi v okolí boli úspešne upozornení!");
+            return RedirectToAction(nameof(Edit), new { incidentId });
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception);
+            this.DisplayErrorMessage("Nastala chyba pri upozornení responderov!");
+            return RedirectToAction(nameof(Edit), new { incidentId });
+        }
+    }
+    
     [HttpGet]
     [Route("filtered-table-items")]
     public async Task<IEnumerable<IncidentItemDTO>> FilteredTableItems([FromQuery] IncidentItemFiltersDTO filtersDto, int pageNumber = 0, int pageSize = 0)

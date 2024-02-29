@@ -4,7 +4,6 @@ using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FirstResponder.Web.Controllers.API;
