@@ -27,4 +27,6 @@ public class Incident : AuditableEntity<Guid>
     public double Longitude { get; set; }
     
     public List<IncidentResponder> Responders { get; set; } = new();
+    
+    public List<IncidentMessage> Messages { get; set; } = new();
 }

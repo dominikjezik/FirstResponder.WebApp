@@ -61,30 +61,3 @@
 .theme-gcal {
     font-family: inherit;
 }
-
-
-//TODO: Move to a separate file
-$incident-items-colors: (
-    Created: #f6bf26,
-    InProgress: #009140,
-    Completed: #2196F3,
-    Canceled: #616161,
-);
-
-@each $class, $color in $incident-items-colors {
-    .theme-gcal .cv-item.#{$class} {
-        background-color: $color;
-        color: white;
-    }
-
-    .theme-gcal .cv-item.#{$class}-outsideOfMonth {
-        background-color: $color;
-        color: white;
-        opacity: .5;
-    }
-    
-    // Map marker
-    .incident-icon-#{$class} {
-        color: $color;
-    }
-}

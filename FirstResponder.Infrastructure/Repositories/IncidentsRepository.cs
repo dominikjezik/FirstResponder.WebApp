@@ -238,4 +238,46 @@ public class IncidentsRepository : IIncidentsRepository
         
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<IncidentMessageDTO>> GetIncidentMessages(Guid incidentId)
+    {
+        return await _dbContext.IncidentMessages
+            .Where(m => m.IncidentId == incidentId)
+            .OrderByDescending(m => m.CreatedAt)
+            .Join(
+                _dbContext.Users,
+                m => m.SenderId,
+                u => u.Id,
+                (r, u) => new { Message = r, User = u }
+            )
+            .Select(result => new IncidentMessageDTO
+            {
+                Id = result.Message.Id,
+                CreatedAt = result.Message.CreatedAt,
+                Content = result.Message.Content,
+                SenderName = result.User.FullName
+            }).ToListAsync();
+    }
+
+    public async Task<IncidentMessageDTO> SendMessageToIncident(Incident incident, User user, string message)
+    {
+        var incidentMessage = new IncidentMessage
+        {
+            IncidentId = incident.Id,
+            SenderId = user.Id,
+            Content = message,
+            CreatedAt = DateTime.Now
+        };
+        
+        _dbContext.IncidentMessages.Add(incidentMessage);
+        await _dbContext.SaveChangesAsync();
+        
+        return new IncidentMessageDTO
+        {
+            Id = incidentMessage.Id,
+            CreatedAt = incidentMessage.CreatedAt,
+            Content = incidentMessage.Content,
+            SenderName = user.FullName
+        };
+    }
 }

@@ -273,6 +273,37 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.ToTable("Incidents");
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("IncidentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IncidentId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("IncidentMessages");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentResponder", b =>
                 {
                     b.Property<Guid>("IncidentId")
@@ -690,6 +721,23 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentMessage", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.IncidentAggregate.Incident", "Incident")
+                        .WithMany("Messages")
+                        .HasForeignKey("IncidentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Incident");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentResponder", b =>
                 {
                     b.HasOne("FirstResponder.ApplicationCore.Entities.IncidentAggregate.Incident", "Incident")
@@ -806,6 +854,8 @@ namespace FirstResponder.Infrastructure.Migrations
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.Incident", b =>
                 {
+                    b.Navigation("Messages");
+
                     b.Navigation("Responders");
                 });
 

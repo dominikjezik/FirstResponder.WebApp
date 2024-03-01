@@ -27,4 +27,8 @@ public interface IIncidentsRepository
     Task<IncidentResponder> AcceptIncident(Incident incident, User user);
     
     Task DeclineIncident(Incident incident, User user);
+    
+    Task<IEnumerable<IncidentMessageDTO>> GetIncidentMessages(Guid incidentId);
+    
+    Task<IncidentMessageDTO> SendMessageToIncident(Incident incident, User user, string message);
 }

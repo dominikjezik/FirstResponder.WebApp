@@ -152,7 +152,7 @@ export default {
 </script>
 
 <template>
-    <div id="map" style="height: 500px"></div>
+    <div id="map" style="height: 500px; z-index: 1"></div>
 </template>
 
 <style scoped>

@@ -29,9 +29,12 @@ export default {
     },
     mounted() {
         let now = new Date()
-        let dayOfWeek = now.getDay()
-        this.filterSelect.from = new Date(now.setDate(now.getDate() - dayOfWeek + 1)).toISOString().split('T')[0] + 'T00:00'
-        this.filterSelect.to = new Date(now.setDate(now.getDate() - dayOfWeek + 7)).toISOString().split('T')[0] + 'T23:59'
+        let firstDayOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 1)
+        let firstDayOfNextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 8)
+        
+        // .slice is used to remove seconds and milliseconds from the date
+        this.filterSelect.from = new Date(firstDayOfWeek.getTime() - (firstDayOfWeek.getTimezoneOffset() * 60000)).toISOString().slice(0, -8)
+        this.filterSelect.to = new Date(firstDayOfNextWeek.getTime() - (firstDayOfNextWeek.getTimezoneOffset() * 60000)).toISOString().slice(0, -8)
         
         this.loadItems()
     },

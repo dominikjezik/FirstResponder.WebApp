@@ -1,9 +1,11 @@
+using System.Security.Claims;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.ApplicationCore.Incidents.Queries;
 using FirstResponder.Web.Extensions;
+using FirstResponder.Web.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -186,6 +188,35 @@ public class IncidentsController : Controller
     {
         var responders = await _mediator.Send(new GetIncidentRespondersQuery(incidentId));
         return responders;
+    }
+    
+    [HttpGet]
+    [Route("{incidentId}/messages")]
+    public async Task<IEnumerable<IncidentMessageDTO>> Messages(Guid incidentId)
+    {
+        var messages = await _mediator.Send(new GetIncidentMessagesQuery(incidentId));
+        return messages;
+    }
+    
+    [HttpPost]
+    [IgnoreAntiforgeryToken]
+    [Route("{incidentId}/messages")]
+    public async Task<IActionResult> SendMessage(Guid incidentId, [FromBody] IncidentNewMessageViewModel viewModel)
+    {
+        try
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var incidentMessage = await _mediator.Send(new CreateIncidentMessageCommand(incidentId, userId, viewModel.MessageContent));
+            return Ok(incidentMessage);
+        }
+        catch (EntityValidationException exception)
+        {
+            return BadRequest(exception.ValidationErrors);
+        }
+        catch (EntityNotFoundException)
+        {
+            return BadRequest();
+        }
     }
     
     [HttpGet]

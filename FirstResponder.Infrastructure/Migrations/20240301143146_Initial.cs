@@ -306,6 +306,34 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IncidentMessages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IncidentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncidentMessages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IncidentMessages_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IncidentMessages_Incidents_IncidentId",
+                        column: x => x.IncidentId,
+                        principalTable: "Incidents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "IncidentResponders",
                 columns: table => new
                 {
@@ -553,6 +581,16 @@ namespace FirstResponder.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IncidentMessages_IncidentId",
+                table: "IncidentMessages",
+                column: "IncidentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IncidentMessages_SenderId",
+                table: "IncidentMessages",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_IncidentResponders_ResponderId",
                 table: "IncidentResponders",
                 column: "ResponderId");
@@ -589,6 +627,9 @@ namespace FirstResponder.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "GroupUser");
+
+            migrationBuilder.DropTable(
+                name: "IncidentMessages");
 
             migrationBuilder.DropTable(
                 name: "IncidentResponders");
