@@ -2,11 +2,12 @@ using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Incidents.Commands;
+using FirstResponder.ApplicationCore.Incidents.DTOs;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Incidents.Handlers;
 
-public class AcceptIncidentCommandHandler : IRequestHandler<AcceptIncidentCommand>
+public class AcceptIncidentCommandHandler : IRequestHandler<AcceptIncidentCommand, IncidentResponderItemDTO>
 {
     private readonly IIncidentsRepository _incidentsRepository;
     private readonly IUsersRepository _usersRepository;
@@ -17,7 +18,7 @@ public class AcceptIncidentCommandHandler : IRequestHandler<AcceptIncidentComman
         _usersRepository = usersRepository;
     }
 
-    public async Task Handle(AcceptIncidentCommand request, CancellationToken cancellationToken)
+    public async Task<IncidentResponderItemDTO> Handle(AcceptIncidentCommand request, CancellationToken cancellationToken)
     {
         var incident = await _incidentsRepository.GetIncidentById(request.IncidentId);
         
@@ -43,15 +44,19 @@ public class AcceptIncidentCommandHandler : IRequestHandler<AcceptIncidentComman
             throw new EntityNotFoundException();
         }
         
-        await _incidentsRepository.AcceptIncident(incident, user);
+        var incidentResponder = await _incidentsRepository.AcceptIncident(incident, user);
         
         if (incident.State == IncidentState.Created)
         {
             incident.State = IncidentState.InProgress;
             await _incidentsRepository.UpdateIncident(incident);
         }
-        
-        // TODO: Upozorni zamestnanca o novom responderovi na details incident page
-        
+
+        return new IncidentResponderItemDTO
+        {
+            ResponderId = incidentResponder.ResponderId,
+            FullName = user.FullName,
+            AcceptedAt = incidentResponder.AcceptedAt
+        };
     }
 }

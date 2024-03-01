@@ -20,9 +20,11 @@ public interface IIncidentsRepository
     
     Task DeleteIncident(Incident incident);
     
+    Task<IEnumerable<IncidentResponderItemDTO>> GetIncidentResponders(Guid incidentId);
+    
     Task AssignResponderToIncidents(Guid responderId, IEnumerable<Incident> incidents);
     
-    Task AcceptIncident(Incident incident, User user);
+    Task<IncidentResponder> AcceptIncident(Incident incident, User user);
     
     Task DeclineIncident(Incident incident, User user);
 }

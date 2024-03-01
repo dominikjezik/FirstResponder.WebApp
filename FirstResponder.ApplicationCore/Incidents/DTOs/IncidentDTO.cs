@@ -13,15 +13,4 @@ public class IncidentDTO
     public DateTime CreatedAt { get; set; }
     
     public DateTime? ResolvedAt { get; set; }
-    
-    public List<ResponderItemDTO> Responders { get; set; } = new();
-    
-    public class ResponderItemDTO
-    {
-        public Guid ResponderId { get; set; }
-        
-        public string FullName { get; set; }
-        
-        public DateTime? AcceptedAt { get; set; }
-    }
 }

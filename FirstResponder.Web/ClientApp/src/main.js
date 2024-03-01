@@ -8,23 +8,24 @@ import NavigationCategory from "./components/NavigationCategory.vue"
 import StatusMessage from "./components/StatusMessage.vue";
 import MapWithMarkers from "./components/MapWithMarkers.vue";
 import EventCalendar from "./components/EventCalendar.vue";
-import AedsListTableFilter from "./components/AedsListTableFilter.vue";
-import AedsMapFilter from "./components/AedsMapFilter.vue";
-import PersonalAedOwnerField from "./components/PersonalAedOwnerField.vue"
-import AedImageUploader from "./components/AedImageUploader.vue"
+import AedsListTableFilter from "./components/Aeds/AedsListTableFilter.vue";
+import AedsMapFilter from "./components/Aeds/AedsMapFilter.vue";
+import PersonalAedOwnerField from "./components/Aeds/PersonalAedOwnerField.vue"
+import AedImageUploader from "./components/Aeds/AedImageUploader.vue"
 import EditableTableItem from "./components/EditableTableItem.vue";
 import EditableNewTableItem from "./components/EditableNewTableItem.vue";
-import UsersListTableFilter from "./components/UsersListTableFilter.vue";
-import UserGroupsModal from "./components/UserGroupsModal.vue";
-import GroupMembersModal from "./components/GroupMembersModal.vue";
-import GroupCreateModal from "./components/GroupCreateModal.vue";
-import GroupEditModal from "./components/GroupEditModal.vue";
-import IncidentsListTableFilter from "./components/IncidentsListTableFilter.vue";
-import IncidentsMapFilter from "./components/IncidentsMapFilter.vue";
-import IncidentsCalendar from "./components/IncidentsCalendar.vue";
-import CoursesListTableFilter from "./components/CoursesListTableFilter.vue";
-import CourseParticipantsModal from "./components/CourseParticipantsModal.vue";
-import CourseAddParticipantsFromGroupModal from "./components/CourseAddParticipantsFromGroupModal.vue";
+import UsersListTableFilter from "./components/Users/UsersListTableFilter.vue";
+import UserGroupsModal from "./components/Users/UserGroupsModal.vue";
+import GroupMembersModal from "./components/Groups/GroupMembersModal.vue";
+import GroupCreateModal from "./components/Groups/GroupCreateModal.vue";
+import GroupEditModal from "./components/Groups/GroupEditModal.vue";
+import IncidentsListTableFilter from "./components/Incidents/IncidentsListTableFilter.vue";
+import IncidentsMapFilter from "./components/Incidents/IncidentsMapFilter.vue";
+import IncidentsCalendar from "./components/Incidents/IncidentsCalendar.vue";
+import IncidentSidebarDetails from "./components/Incidents/IncidentSidebarDetails.vue";
+import CoursesListTableFilter from "./components/Courses/CoursesListTableFilter.vue";
+import CourseParticipantsModal from "./components/Courses/CourseParticipantsModal.vue";
+import CourseAddParticipantsFromGroupModal from "./components/Courses/CourseAddParticipantsFromGroupModal.vue";
 
 const app = createApp({
     data() {
@@ -71,6 +72,7 @@ app.component('group-edit-modal', GroupEditModal)
 app.component('incidents-list-table-filter', IncidentsListTableFilter)
 app.component('incidents-map-filter', IncidentsMapFilter)
 app.component('incidents-calendar', IncidentsCalendar)
+app.component('incident-sidebar-details', IncidentSidebarDetails)
 
 // Courses index page components
 app.component('courses-list-table-filter', CoursesListTableFilter)
@@ -84,3 +86,7 @@ app.mount('#app')
 
 // Helper functions
 window.aedHelpers = aedHelpers
+
+// SignalR
+import * as signalR from "@microsoft/signalr";
+window.signalR = signalR

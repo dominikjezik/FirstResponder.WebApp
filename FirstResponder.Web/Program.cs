@@ -11,6 +11,7 @@ using FirstResponder.Infrastructure.Identity;
 using FirstResponder.Infrastructure.JWT;
 using FirstResponder.Infrastructure.Mail;
 using FirstResponder.Infrastructure.Repositories;
+using FirstResponder.Web.Hubs;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -104,6 +105,9 @@ builder.Services.AddAuthorization(options =>
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetAedItemsQuery>());
 
+// Add SignalR
+builder.Services.AddSignalR();
+
 // LocalFileService configuration
 builder.Services.Configure<LocalFileServiceOptions>(options =>
 {
@@ -162,5 +166,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<IncidentsHub>("/hubs/incidents");
 
 app.Run();

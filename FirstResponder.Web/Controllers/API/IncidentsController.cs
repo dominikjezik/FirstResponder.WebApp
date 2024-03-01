@@ -1,10 +1,15 @@
 using System.Security.Claims;
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Exceptions;
+using FirstResponder.ApplicationCore.Common.Extensions;
 using FirstResponder.ApplicationCore.Incidents.Commands;
+using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.ApplicationCore.Incidents.Queries;
+using FirstResponder.Web.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FirstResponder.Web.Controllers.API;
 
@@ -14,10 +19,12 @@ namespace FirstResponder.Web.Controllers.API;
 public class IncidentsController : ApiController
 {
     private readonly IMediator _mediator;
-    
-    public IncidentsController(IMediator mediator)
+    private readonly IHubContext<IncidentsHub> _hubContext;
+
+    public IncidentsController(IMediator mediator, IHubContext<IncidentsHub> hubContext)
     {
         _mediator = mediator;
+        _hubContext = hubContext;
     }
     
     [HttpGet]
@@ -55,17 +62,24 @@ public class IncidentsController : ApiController
     
     [HttpPost]
     [Route("{incidentId}/accept")]
-    public async Task<IActionResult> AcceptIncident(Guid incidentId)
+    public async Task<IActionResult> AcceptIncident(Guid incidentId, double? latitude = null, double? longitude = null, TypeOfResponderTransport? typeOfTransport = null)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         try
         {
-            await _mediator.Send(new AcceptIncidentCommand
+            var incidentResponder = await _mediator.Send(new AcceptIncidentCommand
             {
                 IncidentId = incidentId,
                 ResponderId = userId
             });
+            
+            // Update responders list on edit page (SignalR)
+            incidentResponder.Latitude = latitude;
+            incidentResponder.Longitude = longitude;
+            incidentResponder.TypeOfTransport = typeOfTransport.ToString();
+            
+            await _hubContext.Clients.Group(incidentId.ToString()).SendAsync("ResponderAccepted", incidentResponder);
         }
         catch (EntityNotFoundException)
         {
@@ -75,9 +89,7 @@ public class IncidentsController : ApiController
         {
             return BadRequest(e.Message);
         }
-
-        // TODO: Vratit incident details?
-
+        
         return Ok();
     }
     
@@ -94,6 +106,9 @@ public class IncidentsController : ApiController
                 IncidentId = incidentId,
                 ResponderId = userId
             });
+            
+            //  Update responders list on edit page (SignalR)
+            await _hubContext.Clients.Group(incidentId.ToString()).SendAsync("ResponderDeclined", userId);
         }
         catch (EntityNotFoundException)
         {
@@ -106,5 +121,4 @@ public class IncidentsController : ApiController
 
         return Ok();
     }
-    
 }

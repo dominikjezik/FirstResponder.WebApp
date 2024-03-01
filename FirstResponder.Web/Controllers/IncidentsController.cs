@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
@@ -134,6 +135,31 @@ public class IncidentsController : Controller
     
     [HttpPost]
     [Route("{incidentId}/[action]")]
+    public async Task<IActionResult> Close(Guid incidentId)
+    {
+        try
+        {
+            var incident = await _mediator.Send(new CloseIncidentCommand(incidentId));
+            
+            if (incident.State == IncidentState.Canceled)
+            {
+                this.DisplaySuccessMessage("Zásah bol úspešne zrušený!");
+            }
+            else
+            {
+                this.DisplaySuccessMessage("Zásah bol úspešne ukončený!");
+            }
+            
+            return RedirectToAction(nameof(Edit), new { incidentId });
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+    
+    [HttpPost]
+    [Route("{incidentId}/[action]")]
     public async Task<IActionResult> SearchAndNotifyResponders(Guid incidentId)
     {
         try
@@ -152,6 +178,14 @@ public class IncidentsController : Controller
             this.DisplayErrorMessage("Nastala chyba pri upozornení responderov!");
             return RedirectToAction(nameof(Edit), new { incidentId });
         }
+    }
+    
+    [HttpGet]
+    [Route("{incidentId}/responders")]
+    public async Task<IEnumerable<IncidentResponderItemDTO>> Responders(Guid incidentId)
+    {
+        var responders = await _mediator.Send(new GetIncidentRespondersQuery(incidentId));
+        return responders;
     }
     
     [HttpGet]

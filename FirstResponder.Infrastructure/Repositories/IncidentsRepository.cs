@@ -117,14 +117,7 @@ public class IncidentsRepository : IIncidentsRepository
                     Diagnosis = result.Incident.Diagnosis,
                     Latitude = result.Incident.Latitude,
                     Longitude = result.Incident.Longitude
-                },
-                Responders = result.Responders
-                    .Select(r => new IncidentDTO.ResponderItemDTO
-                    {
-                        ResponderId = r.User.Id,
-                        FullName = r.User.FullName,
-                        AcceptedAt = r.Responder.AcceptedAt
-                    }).ToList()
+                }
             })
             .FirstOrDefaultAsync();
     }
@@ -154,6 +147,25 @@ public class IncidentsRepository : IIncidentsRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<IEnumerable<IncidentResponderItemDTO>> GetIncidentResponders(Guid incidentId)
+    {
+        return await _dbContext.IncidentResponders
+            .Where(r => r.IncidentId == incidentId)
+            .Where(r => r.AcceptedAt != null)
+            .Join(
+                _dbContext.Users,
+                r => r.ResponderId,
+                u => u.Id,
+                (r, u) => new IncidentResponderItemDTO
+                {
+                    ResponderId = r.ResponderId,
+                    FullName = u.FullName,
+                    AcceptedAt = r.AcceptedAt,
+                }
+            )
+            .ToListAsync();
+    }
+
     public async Task AssignResponderToIncidents(Guid responderId, IEnumerable<Incident> incidents)
     {
         // Filter out incidents that have already been assigned to a responder
@@ -176,7 +188,7 @@ public class IncidentsRepository : IIncidentsRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task AcceptIncident(Incident incident, User user)
+    public async Task<IncidentResponder> AcceptIncident(Incident incident, User user)
     {
         var responderIncident = await _dbContext.IncidentResponders
             .Where(r => r.IncidentId == incident.Id && r.ResponderId == user.Id)
@@ -199,6 +211,7 @@ public class IncidentsRepository : IIncidentsRepository
         responderIncident.DeclinedAt = null;
         
         await _dbContext.SaveChangesAsync();
+        return responderIncident;
     }
 
     public async Task DeclineIncident(Incident incident, User user)
