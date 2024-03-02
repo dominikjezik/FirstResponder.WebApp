@@ -28,6 +28,8 @@ import IncidentNewMessageModal from "./components/Incidents/IncidentNewMessageMo
 import CoursesListTableFilter from "./components/Courses/CoursesListTableFilter.vue";
 import CourseParticipantsModal from "./components/Courses/CourseParticipantsModal.vue";
 import CourseAddParticipantsFromGroupModal from "./components/Courses/CourseAddParticipantsFromGroupModal.vue";
+import NotificationsListTableFilter from "./components/Notifications/NotificationsListTableFilter.vue";
+import NotificationFormModal from "./components/Notifications/NotificationFormModal.vue";
 
 const app = createApp({
     data() {
@@ -84,6 +86,10 @@ app.component('courses-list-table-filter', CoursesListTableFilter)
 // Course page components
 app.component('course-participants-modal', CourseParticipantsModal)
 app.component('course-add-participants-from-group-modal', CourseAddParticipantsFromGroupModal)
+
+// Notifications index page components
+app.component('notifications-list-table-filter', NotificationsListTableFilter)
+app.component('notification-form-modal', NotificationFormModal)
 
 app.mount('#app')
 

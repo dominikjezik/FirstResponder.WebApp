@@ -132,6 +132,21 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AedModels",
                 columns: table => new
                 {
@@ -356,6 +371,30 @@ namespace FirstResponder.Infrastructure.Migrations
                         name: "FK_IncidentResponders_Incidents_IncidentId",
                         column: x => x.IncidentId,
                         principalTable: "Incidents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotificationUser",
+                columns: table => new
+                {
+                    NotificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotificationUser", x => new { x.NotificationId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_NotificationUser_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_NotificationUser_Notifications_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notifications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -596,6 +635,11 @@ namespace FirstResponder.Infrastructure.Migrations
                 column: "ResponderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NotificationUser_UserId",
+                table: "NotificationUser",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersonalAeds_OwnerId",
                 table: "PersonalAeds",
                 column: "OwnerId");
@@ -635,6 +679,9 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "IncidentResponders");
 
             migrationBuilder.DropTable(
+                name: "NotificationUser");
+
+            migrationBuilder.DropTable(
                 name: "PersonalAeds");
 
             migrationBuilder.DropTable(
@@ -651,6 +698,9 @@ namespace FirstResponder.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Incidents");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

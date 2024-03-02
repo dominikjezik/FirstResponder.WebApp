@@ -32,6 +32,8 @@ public class ApplicationUser : IdentityUser<Guid>, IAuditable
     
     public ICollection<GroupUser> Groups { get; set; } = new List<GroupUser>();
     
+    public ICollection<NotificationUser> Notifications { get; set; } = new List<NotificationUser>();
+    
     public ICollection<IncidentResponder> Incidents { get; set; } = new List<IncidentResponder>();
     
     public ICollection<CourseUser> Courses { get; set; } = new List<CourseUser>();

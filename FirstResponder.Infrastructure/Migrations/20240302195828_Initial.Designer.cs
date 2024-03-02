@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FirstResponder.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240301143146_Initial")]
+    [Migration("20240302195828_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -368,6 +368,45 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("GroupUser");
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.NotificationUser", b =>
+                {
+                    b.Property<Guid>("NotificationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("NotificationId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("NotificationUser");
                 });
 
             modelBuilder.Entity("FirstResponder.Infrastructure.Identity.ApplicationRole", b =>
@@ -775,6 +814,23 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Navigation("Group");
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.NotificationUser", b =>
+                {
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.UserAggregate.Notification", "Notification")
+                        .WithMany("Recipients")
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationRole", null)
@@ -867,6 +923,11 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.Notification", b =>
+                {
+                    b.Navigation("Recipients");
+                });
+
             modelBuilder.Entity("FirstResponder.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Navigation("Courses");
@@ -874,6 +935,8 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Navigation("Groups");
 
                     b.Navigation("Incidents");
+
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>

@@ -30,6 +30,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Group> Groups { get; set; }
     public DbSet<GroupUser> GroupUser { get; set; }
     
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<NotificationUser> NotificationUser { get; set; }
+    
     // Incident Aggregate
     public DbSet<Incident> Incidents { get; set; }
     public DbSet<IncidentResponder> IncidentResponders { get; set; }
@@ -79,6 +82,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .HasOne<ApplicationUser>()
             .WithMany(user => user.Groups)
             .HasForeignKey(a => a.UserId)
+            .IsRequired();
+        
+        modelBuilder.Entity<NotificationUser>()
+            .HasKey(notificationUser => new { notificationUser.NotificationId, notificationUser.UserId });
+        
+        modelBuilder.Entity<NotificationUser>()
+            .HasOne<ApplicationUser>()
+            .WithMany(user => user.Notifications)
+            .HasForeignKey(n => n.UserId)
             .IsRequired();
         
         modelBuilder.Entity<IncidentResponder>()

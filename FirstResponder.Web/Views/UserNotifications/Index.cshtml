@@ -1,0 +1,63 @@
+@{
+    ViewBag.Title = "Notifikácie";
+}
+
+<header class="main-header">
+    <h1>Notifikácie</h1>
+    <div class="buttons">
+        <button class="button button-with-icon" id="btn-create-notification">
+            <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </span>
+            <span>Vytvoriť notifikáciu</span>
+        </button>
+    </div>
+</header>
+
+<partial name="_SuccessMessage" />
+<partial name="_ErrorMessages"/>
+
+<div>
+    <notifications-list-table-filter />
+</div>
+
+<div>
+    <notification-form-modal>
+        <template v-slot:anti-forgery>
+            @Html.AntiForgeryToken()
+        </template>
+    </notification-form-modal>
+</div>
+
+@* <div> *@
+@*     <group-members-modal> *@
+@*         <template v-slot:anti-forgery> *@
+@*             @Html.AntiForgeryToken() *@
+@*         </template> *@
+@*     </group-members-modal> *@
+@* </div> *@
+@* *@
+
+@section Scripts
+{
+    <script>
+        // Zobrazenie modalu na vytvorenie skupiny
+        document.getElementById('btn-create-notification').onclick = () => {
+            window.dispatchEvent(new CustomEvent('display-edit-modal', { detail: {}}))
+        }
+    </script>
+}
+
+@* @section Scripts *@
+@* { *@
+@*     <script> *@
+@*         // Zobrazenie modalu na upravu pouzivatelov skupiny *@
+@*         document.querySelectorAll('.btn-users-list').forEach(btn => { *@
+@*             btn.onclick = () => { *@
+@*                 window.dispatchEvent(new CustomEvent('display-users-list-modal', { detail: { groupId: btn.closest('tr').dataset.groupid } })) *@
+@*             } *@
+@*         }) *@
+@*     </script> *@
+@* } *@

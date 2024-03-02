@@ -138,12 +138,6 @@ public class UsersController : Controller
         this.DisplaySuccessMessage("Odkaz na resetovanie hesla bol úspešne odoslaný!");
         return RedirectToAction(nameof(Edit), "Users", new { userId });
     }
-
-    [Route("[action]")]
-    public IActionResult Map()
-    {
-        return View();
-    }
     
     [Route("search")]
     public async Task<IEnumerable<UserSearchResultDTO>> Search(string query)

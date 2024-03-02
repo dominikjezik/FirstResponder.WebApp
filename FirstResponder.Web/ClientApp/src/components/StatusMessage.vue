@@ -8,8 +8,6 @@
             }
         },
         mounted() {
-            console.log(this.$el)
-            
             const deleteButton = this.$el.querySelector('.delete')
             deleteButton.addEventListener('click', () => {
                 this.$el.remove()
