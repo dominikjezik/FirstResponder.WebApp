@@ -1,10 +1,10 @@
+using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Courses.Commands;
 using FirstResponder.ApplicationCore.Courses.DTOs;
 using FirstResponder.ApplicationCore.Courses.Queries;
 using FirstResponder.ApplicationCore.Entities.CourseAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
-using FirstResponder.ApplicationCore.Groups.Commands;
 using FirstResponder.ApplicationCore.Groups.Queries;
 using FirstResponder.Web.Extensions;
 using MediatR;
@@ -19,10 +19,12 @@ namespace FirstResponder.Web.Controllers;
 public class CoursesController : Controller
 {
     private readonly IMediator _mediator;
+    private readonly IMailService _mailService;
 
-    public CoursesController(IMediator mediator)
+    public CoursesController(IMediator mediator, IMailService mailService)
     {
         _mediator = mediator;
+        _mailService = mailService;
     }
     
     [Route("")]
@@ -125,6 +127,48 @@ public class CoursesController : Controller
             await _mediator.Send(new DeleteCourseCommand(courseId));
             this.DisplaySuccessMessage("Školenie bolo úspešne vymazané!");
             return RedirectToAction(nameof(Index));
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+    
+    [HttpPost]
+    [Route("{courseId}/[action]")]
+    public async Task<IActionResult> SendEmails(Guid courseId)
+    {
+        try
+        {
+            var course = await _mediator.Send(new GetCourseByIdQuery(courseId));
+            
+            if (course == null)
+            {
+                return NotFound();
+            }
+            
+            var emailsAndNames = course.Participants
+                .Select(m => Tuple.Create(m.Email, m.FullName))
+                .ToArray();
+            
+            var mailBody = "<h1>Pozvánka na školenie</h1>" +
+                "<p>Boli ste pozvaný na školenie " + course.CourseForm.Name + ".</p>" +
+                "<p>Typ školenia: " + (course.CourseTypeName ?? "-") + "</p>" +
+                "<p>Školenie sa bude konať " + course.CourseForm.StartDate.ToString("dd.MM.yyyy HH:mm") + " - " + course.CourseForm.EndDate.ToString("dd.MM.yyyy HH:mm") + ".</p>" +
+                "<p>Adresa: " + course.CourseForm.Location + "</p>" +
+                "<p>Školiteľ: " + course.CourseForm.Trainer + "</p>" +
+                "<p>Popis: " + course.CourseForm.Description + "</p>";
+            
+            var isSuccessful = _mailService.SendMailToMultipleRecipients(emailsAndNames, "Pozvánka na školenie", mailBody);
+            
+            if (!isSuccessful)
+            {
+                this.DisplayErrorMessage("Nepodarilo sa odoslať email na obnovenie hesla");
+                return RedirectToAction(nameof(Edit), new { courseId });
+            }
+            
+            this.DisplaySuccessMessage("Pozvánky boli úspešne odoslané!");
+            return RedirectToAction(nameof(Edit), new { courseId });
         }
         catch (EntityNotFoundException)
         {

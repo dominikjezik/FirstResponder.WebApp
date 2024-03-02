@@ -207,7 +207,11 @@ public class AccountController : Controller
             var resetPasswordUrl = Url.Action(nameof(ResetPassword), "Account", new { token, email = model.Email },
                 HttpContext.Request.Scheme);
 
-            var mailBody = $"Svoje heslo si môžete obnoviť na <a href='{resetPasswordUrl}'>tomto odkaze</a>.";
+            var mailBody = "<h1>Obnovenie hesla</h1>" +
+                           "<p>Ak ste zabudli svoje heslo alebo si ho prajete obnoviť, kliknite na link:</p>" +
+                           "<a href='" + resetPasswordUrl + "'>Obnoviť heslo</a>" +
+                           "<p>Ak ste si nevyžiadali obnovenie hesla, môžete tento e-mail ignorovať.</p>";
+            
             var isSuccessful = _mailService.SendMail(model.Email, user.FullName, "Obnovenie hesla", mailBody);
             
             if (!isSuccessful)

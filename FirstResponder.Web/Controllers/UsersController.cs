@@ -117,8 +117,11 @@ public class UsersController : Controller
         {
             var token = await _authService.GeneratePasswordResetTokenAsync(user.Email);
             var resetPasswordUrl = Url.Action("ResetPassword", "Account", new { token, email = user.Email  }, HttpContext.Request.Scheme);
-        
-            var mailBody = $"Svoje nové heslo si môžete nastaviť na <a href='{resetPasswordUrl}'>tomto odkaze</a>.";
+
+            var mailBody = "<h1>Nastavenie hesla</h1>" +
+                           "<p>Heslo pre svoj účet si môžete nastaviť kliknutím na link:</p>" +
+                           "<a href='" + resetPasswordUrl + "'>Obnoviť heslo</a>";
+            
             var isSuccessful = _mailService.SendMail(user.Email, user.FullName, "Obnovenie hesla", mailBody);
         
             if (!isSuccessful)

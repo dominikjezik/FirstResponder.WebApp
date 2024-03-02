@@ -50,6 +50,7 @@ public class CoursesRepository : ICoursesRepository
     {
         return await _dbContext.Courses
             .Where(c => c.Id == courseId)
+            .Include(c => c.CourseType)
             .Include(c => c.Participants)
             .Select(c => new
             {
@@ -76,11 +77,13 @@ public class CoursesRepository : ICoursesRepository
                     Trainer = result.Course.Trainer,
                     Description = result.Course.Description,
                 },
+                CourseTypeName = result.Course.CourseType.Name,
                 Participants = result.Participants
                     .Select(p => new CourseDTO.ParticipantItemDTO
                     {
                         ParticipantId = p.u.Id,
                         FullName = p.u.FullName,
+                        Email = p.u.Email,
                         CreatedAt = p.c.CreatedAt
                     }).ToList()
             })

@@ -79,12 +79,18 @@
             
             <div class="field">
                 <div class="control flex-space-between">
-                    <button type="submit" class="button is-link">Uložiť</button>
+                    <div class="buttons">
+                        <button type="submit" class="button is-link">Uložiť</button>
+                        <button type="submit" class="button is-link is-light" form="formSendEmails" @(Model.Participants.Any() ? "" : "disabled")>
+                            Odoslať pozvánky na školenie
+                        </button>
+                    </div>
                     <button type="submit" class="button is-danger is-light" form="formDelete">Odstrániť školenie</button>
                 </div>
             </div>
         </form>
         <form asp-controller="Courses" asp-action="Delete" asp-route-courseId="@Model.CourseId" id="formDelete" onSubmit="return confirm('Naozaj chcete odstrániť toto školenie?') "></form>
+        <form asp-controller="Courses" asp-action="SendEmails" asp-route-courseId="@Model.CourseId" id="formSendEmails" onSubmit="return confirm('Naozaj chcete odoslať pozvánky na email všetkým zaradeným účastníkom?')"></form>
     </div>
 
     <aside class="entity-details-aside">

@@ -50,4 +50,48 @@ public class MailKitService : IMailService
             return false;
         }
     }
+
+    public bool SendMailToMultipleRecipients(Tuple<string, string>[] emailsAndNames, string subject, string body)
+    {
+        try
+        {
+            using var emailMessage = new MimeMessage();
+
+            var list = new InternetAddressList();
+            
+            foreach (var emailAndName in emailsAndNames)
+            {
+                list.Add(new MailboxAddress(emailAndName.Item2, emailAndName.Item1));
+            }
+            
+            emailMessage.From.Add(new MailboxAddress(_configuration["MailSettings:SenderName"],
+                _configuration["MailSettings:SenderEmail"]));
+            emailMessage.To.AddRange(list);
+            
+            emailMessage.Subject = subject;
+
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = body
+            };
+
+            using SmtpClient mailClient = new SmtpClient();
+            mailClient.Connect(
+                _configuration["MailSettings:Server"],
+                int.Parse(_configuration["MailSettings:Port"]),
+                MailKit.Security.SecureSocketOptions.StartTls
+            );
+
+            mailClient.Authenticate(_configuration["MailSettings:UserName"], _configuration["MailSettings:Password"]);
+            mailClient.Send(emailMessage);
+            mailClient.Disconnect(true);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            // TODO: Log exception
+            return false;
+        }
+    }
 }

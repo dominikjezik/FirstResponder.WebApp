@@ -83,9 +83,9 @@ public class DatabaseSeeder
         var fakerUsers = new Faker<ApplicationUser>()
             .RuleFor(u => u.Id, f => Guid.NewGuid())
             .RuleFor(u => u.FullName, f => f.Name.FullName())
-            .RuleFor(u => u.UserName, f => f.Internet.UserName())
-            .RuleFor(u => u.NormalizedUserName, (f, u) => u.UserName.ToUpper())
             .RuleFor(u => u.Email, (f, u) => f.Internet.Email())
+            .RuleFor(u => u.UserName, (f, u) => u.Email)
+            .RuleFor(u => u.NormalizedUserName, (f, u) => u.Email.ToUpper())
             .RuleFor(u => u.NormalizedEmail, (f, u) => u.Email.ToUpper())
             .RuleFor(u => u.EmailConfirmed, f => f.Random.Bool())
             .RuleFor(u => u.PasswordHash, f => "AQAAAAIAAYagAAAAEEBlNmh1Dg1K0iOOd5OpuZWN75eNALqi89MQFEyZC/V6y7j+p0iYOEsQL3EFbF/hcw==")
@@ -93,10 +93,10 @@ public class DatabaseSeeder
             .RuleFor(u => u.ConcurrencyStamp, f => Guid.NewGuid().ToString())
             .RuleFor(u => u.PhoneNumber, f => f.Phone.PhoneNumber())
             .RuleFor(u => u.PhoneNumberConfirmed, f => f.Random.Bool())
-            .RuleFor(u => u.TwoFactorEnabled, f => f.Random.Bool())
-            .RuleFor(u => u.LockoutEnd, f => f.Date.Future())
-            .RuleFor(u => u.LockoutEnabled, f => f.Random.Bool())
-            .RuleFor(u => u.AccessFailedCount, f => f.Random.Int(0, 10));
+            .RuleFor(u => u.TwoFactorEnabled, f => false)
+            .RuleFor(u => u.LockoutEnd, f => null)
+            .RuleFor(u => u.LockoutEnabled, f => false)
+            .RuleFor(u => u.AccessFailedCount, f => 0);
         
         var users = fakerUsers.Generate(100);
         _context.Users.AddRange(users);
