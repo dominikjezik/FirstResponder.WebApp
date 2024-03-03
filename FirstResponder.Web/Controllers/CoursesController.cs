@@ -1,4 +1,5 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Courses.Commands;
 using FirstResponder.ApplicationCore.Courses.DTOs;
@@ -193,7 +194,7 @@ public class CoursesController : Controller
     
     [HttpGet]
     [Route("{courseId}/users")]
-    public async Task<IEnumerable<UserWithCourseInfoDTO>> Users(Guid courseId, string query = "")
+    public async Task<IEnumerable<UserWithAssociationInfoDTO>> Users(Guid courseId, string query = "")
     {
         var users = await _mediator.Send(new GetUsersWithCourseInfoQuery(courseId, query));
         return users;
@@ -201,8 +202,8 @@ public class CoursesController : Controller
     
     [HttpPost]
     [IgnoreAntiforgeryToken]
-    [Route("{courseId}/users")]
-    public async Task<IActionResult> ChangeUsers([FromBody] ChangeUsersInCourseDTO model)
+    [Route("{entityId}/users")]
+    public async Task<IActionResult> ChangeUsers([FromBody] UsersAssociationChangeDTO model)
     {
         await _mediator.Send(new ChangeUsersInCourseCommand(model));
         return Ok();

@@ -20,7 +20,11 @@
 <partial name="_ErrorMessages"/>
 
 <div>
-    <notifications-list-table-filter />
+    <notifications-list-table-filter>
+        <template v-slot:anti-forgery>
+            @Html.AntiForgeryToken()
+        </template>
+    </notifications-list-table-filter>
 </div>
 
 <div>
@@ -31,14 +35,18 @@
     </notification-form-modal>
 </div>
 
-@* <div> *@
-@*     <group-members-modal> *@
-@*         <template v-slot:anti-forgery> *@
-@*             @Html.AntiForgeryToken() *@
-@*         </template> *@
-@*     </group-members-modal> *@
-@* </div> *@
-@* *@
+@* Modal for editing notification recipients *@
+<div>
+    <entity-user-association-modal
+        modal-title="Zoznam príjemcov"
+        save-changes-base-url="/users/notifications"
+        search-base-url="/users/notifications"
+        >
+        <template v-slot:anti-forgery>
+            @Html.AntiForgeryToken()
+        </template>
+    </entity-user-association-modal>
+</div>
 
 @section Scripts
 {
@@ -49,15 +57,3 @@
         }
     </script>
 }
-
-@* @section Scripts *@
-@* { *@
-@*     <script> *@
-@*         // Zobrazenie modalu na upravu pouzivatelov skupiny *@
-@*         document.querySelectorAll('.btn-users-list').forEach(btn => { *@
-@*             btn.onclick = () => { *@
-@*                 window.dispatchEvent(new CustomEvent('display-users-list-modal', { detail: { groupId: btn.closest('tr').dataset.groupid } })) *@
-@*             } *@
-@*         }) *@
-@*     </script> *@
-@* } *@

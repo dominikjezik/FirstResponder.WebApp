@@ -1,14 +1,15 @@
-using FirstResponder.ApplicationCore.Groups.DTOs;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Groups.Commands;
 
 public class ChangeUsersInGroupCommand : IRequest
 {
-    public ChangeUsersInGroupDTO ChangeUsersInGroupDTO { get; private set; }
+    public UsersAssociationChangeDTO UsersAssociationChangeDTO { get; private set; }
+
     
-    public ChangeUsersInGroupCommand(ChangeUsersInGroupDTO changeUsersInGroupDTO)
+    public ChangeUsersInGroupCommand(UsersAssociationChangeDTO usersAssociationChangeDTO)
     {
-        ChangeUsersInGroupDTO = changeUsersInGroupDTO;
+        UsersAssociationChangeDTO = usersAssociationChangeDTO;
     }
 }

@@ -29,8 +29,12 @@ export default {
     },
     mounted() {
         let now = new Date()
-        let firstDayOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 1)
-        let firstDayOfNextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 8)
+        
+        // Get day of the week, 1 is Monday, 2 is Tuesday, ..., 7 is Sunday
+        let currentDay = now.getDay() || 7
+        
+        let firstDayOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - currentDay + 1)
+        let firstDayOfNextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - currentDay + 8)
         
         // .slice is used to remove seconds and milliseconds from the date
         this.filterSelect.from = new Date(firstDayOfWeek.getTime() - (firstDayOfWeek.getTimezoneOffset() * 60000)).toISOString().slice(0, -8)

@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Groups.DTOs;
 
@@ -17,7 +18,7 @@ public interface IGroupsRepository
     
 	Task DeleteGroup(Group group);
 	
-	Task<IEnumerable<UserWithGroupInfoDTO>> GetUsersWithGroupInfoAsync(Guid groupId, string searchQuery, int limitResultsCount, bool includeNotInGroup = false);
+	Task<IEnumerable<UserWithAssociationInfoDTO>> GetUsersWithGroupInfoAsync(Guid groupId, string searchQuery, int limitResultsCount, bool includeNotInGroup = false);
 	
 	Task ChangeUsersInGroup(Guid groupId, IEnumerable<Guid> addUsers, IEnumerable<Guid> removeUsers);
 	

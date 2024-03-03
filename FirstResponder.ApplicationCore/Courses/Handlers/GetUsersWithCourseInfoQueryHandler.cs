@@ -1,11 +1,11 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
-using FirstResponder.ApplicationCore.Courses.DTOs;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Courses.Queries;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Courses.Handlers;
 
-public class GetUsersWithCourseInfoQueryHandler : IRequestHandler<GetUsersWithCourseInfoQuery, IEnumerable<UserWithCourseInfoDTO>>
+public class GetUsersWithCourseInfoQueryHandler : IRequestHandler<GetUsersWithCourseInfoQuery, IEnumerable<UserWithAssociationInfoDTO>>
 {
     private readonly ICoursesRepository _coursesRepository;
     
@@ -14,7 +14,7 @@ public class GetUsersWithCourseInfoQueryHandler : IRequestHandler<GetUsersWithCo
         _coursesRepository = coursesRepository;
     }
     
-    public async Task<IEnumerable<UserWithCourseInfoDTO>> Handle(GetUsersWithCourseInfoQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<UserWithAssociationInfoDTO>> Handle(GetUsersWithCourseInfoQuery request, CancellationToken cancellationToken)
     {
         bool includeNotInCourse = request.Query != "";
         int limitResultsCount = request.Query != "" ? 30 : 0;

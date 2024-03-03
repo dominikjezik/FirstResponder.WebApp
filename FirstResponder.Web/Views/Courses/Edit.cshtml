@@ -141,15 +141,21 @@
     </aside>
 </div>
 
+@* Modal for adding and editing participants of the course *@
 <div>
-    <course-participants-modal
-        course-id-prop="@Model.CourseId">
+    <entity-user-association-modal
+        modal-title="Zaradení účastníci"
+        save-changes-base-url="/courses"
+        search-base-url="/courses"
+        :on-save-reload-page="true"
+        >
         <template v-slot:anti-forgery>
             @Html.AntiForgeryToken()
         </template>
-    </course-participants-modal>
+    </entity-user-association-modal>
 </div>
 
+@* Modal for adding participants from a specific group *@
 <div>
     <course-add-participants-from-group-modal
         course-id-prop="@Model.CourseId">
@@ -164,7 +170,9 @@
     <script>
         // Show modal for editing participants
         document.querySelector('#btn-edit-participants').onclick = () => {
-            window.dispatchEvent(new CustomEvent('display-edit-participants-modal'))
+            window.dispatchEvent(new CustomEvent('display-users-list-modal', { detail: {
+                entityId: "@Model.CourseId"
+            }}))
         }
         
         // Show modal for adding participants from group

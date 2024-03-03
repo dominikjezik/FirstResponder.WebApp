@@ -46,7 +46,24 @@ export default {
         },
     },
     methods: {
-        onItemClicked(item) {
+        onItemClicked(item, e) {
+            if (e.target.classList.contains('btn-send-notification')) {
+                if (confirm('Naozaj chcete odoslať túto notifikáciu zadaným príjemcom?')) {
+                    this.$refs.notificationId.value = item.id
+                    this.$refs.sendNotificationForm.submit()
+                }
+                
+                return
+            }
+            
+            if (e.target.classList.contains('btn-users-list')) {
+                window.dispatchEvent(new CustomEvent('display-users-list-modal', { detail: {
+                    entityId: item.id
+                }}))
+                
+                return
+            }
+            
             window.dispatchEvent(new CustomEvent('display-edit-modal', { detail: {
                 notificationId: item.id,
                 content: item.content
@@ -152,19 +169,26 @@ export default {
             <th>Vytvorená</th>
             <th>Odosielateľ</th>
             <th>Obsah</th>
-            <th></th>
+            <th style="width: 0"></th>
         </tr>
         </thead>
         <tbody id="table-body">
-        <tr v-for="item in items" :key="item.id" @click="() => onItemClicked(item)">
+        <tr v-for="item in items" :key="item.id" @click="(e) => onItemClicked(item, e)">
             <td>{{ item.createdAt }}</td>
             <td>{{ item.senderName }}</td>
             <td>{{ item.content }}</td>
-            <td></td>
+            <td>
+                <a class="btn-users-list" style="margin-right: 1rem;">Príjemcovia</a>
+                <a class="btn-send-notification">Odoslať</a>
+            </td>
         </tr>
         </tbody>
     </table>
 
-    <p v-if="isMessageVisible" class="has-text-centered">{{ messageText }}</p>
+    <form action="/users/notifications/send" method="post" ref="sendNotificationForm">
+        <slot name="anti-forgery"></slot>
+        <input type="hidden" name="NotificationId" ref="notificationId">
+    </form>
 
+    <p v-if="isMessageVisible" class="has-text-centered">{{ messageText }}</p>
 </template>

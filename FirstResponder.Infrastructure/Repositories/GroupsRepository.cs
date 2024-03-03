@@ -1,4 +1,5 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Groups.DTOs;
 using FirstResponder.Infrastructure.DbContext;
@@ -54,7 +55,7 @@ public class GroupsRepository : IGroupsRepository
 		await _dbContext.SaveChangesAsync();
 	}
 
-	public async Task<IEnumerable<UserWithGroupInfoDTO>> GetUsersWithGroupInfoAsync(Guid groupId, string searchQuery, int limitResultsCount = 0, bool includeNotInGroup = false)
+	public async Task<IEnumerable<UserWithAssociationInfoDTO>> GetUsersWithGroupInfoAsync(Guid groupId, string searchQuery, int limitResultsCount = 0, bool includeNotInGroup = false)
 	{
 		// GroupJoin will do a left outer join, so it will take the users and
 		// if the user is in that group it will take GroupUser as well.
@@ -74,12 +75,12 @@ public class GroupsRepository : IGroupsRepository
 			.OrderByDescending(groupUser => groupUser.User.CreatedAt)
 			.SelectMany(
 				userGroup => userGroup.GroupUsers.DefaultIfEmpty(),
-				(userGroup, groupUser) => new UserWithGroupInfoDTO
+				(userGroup, groupUser) => new UserWithAssociationInfoDTO
 				{
 					UserId = userGroup.User.Id,
 					FullName = userGroup.User.FullName,
 					Email = userGroup.User.Email,
-					IsInGroup = groupUser != null
+					IsAssociated = groupUser != null
 				}
 			);
 

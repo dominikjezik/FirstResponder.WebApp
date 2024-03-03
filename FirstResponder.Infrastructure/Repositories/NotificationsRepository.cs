@@ -1,4 +1,5 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Notifications.DTOs;
 using FirstResponder.Infrastructure.DbContext;
@@ -71,6 +72,72 @@ public class NotificationsRepository : INotificationsRepository
     public async Task DeleteNotification(Notification notification)
     {
         _dbContext.Notifications.Remove(notification);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<UserWithAssociationInfoDTO>> GetUsersWithNotificationInfoAsync(Guid notificationId, string searchQuery, int limitResultsCount, bool includeNotInNotification = false)
+    {
+        var queryable = _dbContext.Users
+            .GroupJoin(
+                _dbContext.NotificationUser.Where(notificationUser => notificationUser.NotificationId == notificationId),
+                user => user.Id,
+                notificationUser => notificationUser.UserId,
+                (user, notificationUser) => new { User = user, NotificationUser = notificationUser }
+            )
+            .Where(notificationUser => 
+                notificationUser.User.FullName.Contains(searchQuery) || 
+                notificationUser.User.Email.Contains(searchQuery)
+            )
+            .Where(notificationUser => includeNotInNotification || notificationUser.NotificationUser.Any())
+            .OrderByDescending(notificationUser => notificationUser.User.CreatedAt)
+            .SelectMany(
+                notificationUser => notificationUser.NotificationUser.DefaultIfEmpty(),
+                (user, notificationUser) => new UserWithAssociationInfoDTO
+                {
+                    UserId = user.User.Id,
+                    FullName = user.User.FullName,
+                    Email = user.User.Email,
+                    IsAssociated = notificationUser != null,
+                }
+            );
+
+        if (limitResultsCount > 0)
+        {
+            queryable = queryable.Take(limitResultsCount);
+        }
+        
+        return await queryable.ToListAsync();
+    }
+
+    public async Task ChangeUsersInNotification(Guid notificationId, IEnumerable<Guid> addUsers, IEnumerable<Guid> removeUsers)
+    {
+        // Users that are in the notification
+        var usersNotification = await _dbContext.NotificationUser
+            .Where(notificationUser => notificationUser.NotificationId == notificationId)
+            .Select(notificationUser => notificationUser.UserId)
+            .ToListAsync();
+		
+        // Filter out already added users
+        addUsers = addUsers.Except(usersNotification);
+		
+        // Filter out users not in the notification
+        removeUsers = removeUsers.Intersect(usersNotification);
+		
+        var addNotificationUsers = addUsers.Select(userId => new NotificationUser
+        {
+            NotificationId = notificationId,
+            UserId = userId,
+        });
+		
+        var removeNotificationUsers = removeUsers.Select(userId => new NotificationUser
+        {
+            NotificationId = notificationId,
+            UserId = userId
+        });
+		
+        _dbContext.NotificationUser.AddRange(addNotificationUsers);
+        _dbContext.NotificationUser.RemoveRange(removeNotificationUsers);
+		
         await _dbContext.SaveChangesAsync();
     }
 }

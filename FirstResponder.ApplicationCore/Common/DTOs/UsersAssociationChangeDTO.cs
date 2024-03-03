@@ -1,8 +1,8 @@
-namespace FirstResponder.ApplicationCore.Courses.DTOs;
+namespace FirstResponder.ApplicationCore.Common.DTOs;
 
-public class ChangeUsersInCourseDTO
+public class UsersAssociationChangeDTO
 {
-    public Guid CourseId { get; set; }
+    public Guid EntityId { get; set; }
     
     public IEnumerable<Guid> CheckedOnUserIds { get; set; } = new List<Guid>();
     

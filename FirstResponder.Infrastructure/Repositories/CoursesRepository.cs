@@ -1,4 +1,5 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Courses.DTOs;
 using FirstResponder.ApplicationCore.Entities.CourseAggregate;
 using FirstResponder.Infrastructure.DbContext;
@@ -108,7 +109,7 @@ public class CoursesRepository : ICoursesRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<UserWithCourseInfoDTO>> GetUsersWithCourseInfoAsync(Guid courseId, string searchQuery, int limitResultsCount = 0, bool includeNotInCourse = false)
+    public async Task<IEnumerable<UserWithAssociationInfoDTO>> GetUsersWithCourseInfoAsync(Guid courseId, string searchQuery, int limitResultsCount = 0, bool includeNotInCourse = false)
     {
         var queryable = _dbContext.Users
             .GroupJoin(
@@ -125,12 +126,12 @@ public class CoursesRepository : ICoursesRepository
             .OrderByDescending(courseUser => courseUser.User.CreatedAt)
             .SelectMany(
                 courseUser => courseUser.CourseUser.DefaultIfEmpty(),
-                (user, courseUser) => new UserWithCourseInfoDTO
+                (user, courseUser) => new UserWithAssociationInfoDTO
                 {
                     UserId = user.User.Id,
                     FullName = user.User.FullName,
                     Email = user.User.Email,
-                    IsInCourse = courseUser != null
+                    IsAssociated = courseUser != null
                 }
             );
 

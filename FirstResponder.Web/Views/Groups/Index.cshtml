@@ -72,12 +72,17 @@
     </group-edit-modal>
 </div>
 
+@* Modal for changing group members *@
 <div>
-    <group-members-modal>
+    <entity-user-association-modal
+        modal-title="Zaradení responderi new"
+        save-changes-base-url="/groups"
+        search-base-url="/groups"
+        >
         <template v-slot:anti-forgery>
             @Html.AntiForgeryToken()
         </template>
-    </group-members-modal>
+    </entity-user-association-modal>
 </div>
 
 @section Scripts
@@ -126,7 +131,7 @@
         // Zobrazenie modalu na upravu pouzivatelov skupiny
         document.querySelectorAll('.btn-users-list').forEach(btn => {
             btn.onclick = () => {
-                window.dispatchEvent(new CustomEvent('display-users-list-modal', { detail: { groupId: btn.closest('tr').dataset.groupid } }))
+                window.dispatchEvent(new CustomEvent('display-users-list-modal', { detail: { entityId: btn.closest('tr').dataset.groupid } }))
             }
         })
     </script>

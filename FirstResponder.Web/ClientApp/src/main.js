@@ -16,7 +16,6 @@ import EditableTableItem from "./components/EditableTableItem.vue";
 import EditableNewTableItem from "./components/EditableNewTableItem.vue";
 import UsersListTableFilter from "./components/Users/UsersListTableFilter.vue";
 import UserGroupsModal from "./components/Users/UserGroupsModal.vue";
-import GroupMembersModal from "./components/Groups/GroupMembersModal.vue";
 import GroupCreateModal from "./components/Groups/GroupCreateModal.vue";
 import GroupEditModal from "./components/Groups/GroupEditModal.vue";
 import IncidentsListTableFilter from "./components/Incidents/IncidentsListTableFilter.vue";
@@ -26,10 +25,10 @@ import IncidentSidebarDetails from "./components/Incidents/IncidentSidebarDetail
 import IncidentMessages from "./components/Incidents/IncidentMessages.vue";
 import IncidentNewMessageModal from "./components/Incidents/IncidentNewMessageModal.vue";
 import CoursesListTableFilter from "./components/Courses/CoursesListTableFilter.vue";
-import CourseParticipantsModal from "./components/Courses/CourseParticipantsModal.vue";
 import CourseAddParticipantsFromGroupModal from "./components/Courses/CourseAddParticipantsFromGroupModal.vue";
 import NotificationsListTableFilter from "./components/Notifications/NotificationsListTableFilter.vue";
 import NotificationFormModal from "./components/Notifications/NotificationFormModal.vue";
+import EntityUserAssociationModal from "./components/EntityUserAssociationModal.vue";
 
 const app = createApp({
     data() {
@@ -68,7 +67,6 @@ app.component('users-list-table-filter', UsersListTableFilter)
 app.component('user-groups-modal', UserGroupsModal)
 
 // Group page components
-app.component('group-members-modal', GroupMembersModal)
 app.component('group-create-modal', GroupCreateModal)
 app.component('group-edit-modal', GroupEditModal)
 
@@ -84,12 +82,14 @@ app.component('incident-new-message-modal', IncidentNewMessageModal)
 app.component('courses-list-table-filter', CoursesListTableFilter)
 
 // Course page components
-app.component('course-participants-modal', CourseParticipantsModal)
 app.component('course-add-participants-from-group-modal', CourseAddParticipantsFromGroupModal)
 
 // Notifications index page components
 app.component('notifications-list-table-filter', NotificationsListTableFilter)
 app.component('notification-form-modal', NotificationFormModal)
+
+// Entity user association modal
+app.component('entity-user-association-modal', EntityUserAssociationModal)
 
 app.mount('#app')
 

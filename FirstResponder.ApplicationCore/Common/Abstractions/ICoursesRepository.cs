@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Courses.DTOs;
 using FirstResponder.ApplicationCore.Entities.CourseAggregate;
 
@@ -17,7 +18,7 @@ public interface ICoursesRepository
     
     Task DeleteCourse(Course course);
     
-    Task<IEnumerable<UserWithCourseInfoDTO>> GetUsersWithCourseInfoAsync(Guid courseId, string searchQuery, int limitResultsCount, bool includeNotInCourse = false);
+    Task<IEnumerable<UserWithAssociationInfoDTO>> GetUsersWithCourseInfoAsync(Guid courseId, string searchQuery, int limitResultsCount, bool includeNotInCourse = false);
 	
     Task ChangeUsersInCourse(Guid courseId, IEnumerable<Guid> addUsers, IEnumerable<Guid> removeUsers);
 }

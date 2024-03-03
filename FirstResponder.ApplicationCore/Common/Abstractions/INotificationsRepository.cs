@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Notifications.DTOs;
 
@@ -14,4 +15,8 @@ public interface INotificationsRepository
     Task UpdateNotification(Notification notification);
     
     Task DeleteNotification(Notification notification);
+    
+    Task<IEnumerable<UserWithAssociationInfoDTO>> GetUsersWithNotificationInfoAsync(Guid notificationId, string searchQuery, int limitResultsCount, bool includeNotInNotification = false);
+	
+    Task ChangeUsersInNotification(Guid notificationId, IEnumerable<Guid> addUsers, IEnumerable<Guid> removeUsers);
 }

@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Groups.Commands;
 using FirstResponder.ApplicationCore.Groups.DTOs;
@@ -95,7 +96,7 @@ public class GroupsController : Controller
 	
 	[HttpGet]
 	[Route("{groupId}/users")]
-	public async Task<IEnumerable<UserWithGroupInfoDTO>> Users(Guid groupId, string query = "")
+	public async Task<IEnumerable<UserWithAssociationInfoDTO>> Users(Guid groupId, string query = "")
 	{
 		var users = await _mediator.Send(new GetUsersWithGroupInfoQuery(groupId, query));
 		return users;
@@ -103,8 +104,8 @@ public class GroupsController : Controller
 
 	[HttpPost]
 	[IgnoreAntiforgeryToken]
-	[Route("{groupId}/users")]
-	public async Task<IActionResult> ChangeUsers([FromBody] ChangeUsersInGroupDTO model)
+	[Route("{entityId}/users")]
+	public async Task<IActionResult> ChangeUsers([FromBody] UsersAssociationChangeDTO model)
 	{
 		await _mediator.Send(new ChangeUsersInGroupCommand(model));
 		return Ok();

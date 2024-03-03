@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Notifications.Commands;
 using FirstResponder.ApplicationCore.Notifications.DTOs;
@@ -97,10 +98,44 @@ public class UserNotificationsController  : Controller
         return RedirectToAction(nameof(Index));
     }
     
+    [HttpPost]
+    [Route("send")]
+    public async Task<IActionResult> Send(Guid notificationId)
+    {
+        try
+        {
+            // TODO:
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        
+        //this.DisplaySuccessMessage("Notifikácia bola úspešne odoslaná príjemcom!");
+        return RedirectToAction(nameof(Index));
+    }
+    
     [HttpGet]
     [Route("filtered-table-items")]
     public async Task<IEnumerable<NotificationDTO>> FilteredTableItems(int pageNumber, [FromQuery] NotificationFiltersDTO filtersDTO)
     {
         return await _mediator.Send(new GetNotificationsQuery() { PageNumber = pageNumber, Filters = filtersDTO });
+    }
+    
+    [HttpGet]
+    [Route("{notificationId}/users")]
+    public async Task<IEnumerable<UserWithAssociationInfoDTO>> Users(Guid notificationId, string query = "")
+    {
+        var users = await _mediator.Send(new GetUsersWithNotificationInfoQuery(notificationId, query));
+        return users;
+    }
+
+    [HttpPost]
+    [IgnoreAntiforgeryToken]
+    [Route("{entityId}/users")]
+    public async Task<IActionResult> ChangeUsers([FromBody] UsersAssociationChangeDTO model)
+    {
+        await _mediator.Send(new ChangeUsersInNotificationCommand(model));
+        return Ok();
     }
 }

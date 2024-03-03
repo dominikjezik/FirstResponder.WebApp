@@ -15,7 +15,7 @@ export default {
             searchedUsers: [],
             searchQuery: '',
             data: {
-                courseId: this.courseIdProp,
+                entityId: this.courseIdProp,
                 checkedOnUserIds: []
             }
         }
@@ -75,7 +75,7 @@ export default {
             }
         },
         saveChanges() {
-            fetch(`/courses/${this.data.courseId}/users`, {
+            fetch(`/courses/${this.data.entityId}/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(this.data),

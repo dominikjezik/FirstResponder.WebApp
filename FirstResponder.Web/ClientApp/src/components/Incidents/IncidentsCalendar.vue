@@ -82,11 +82,14 @@ export default {
             let lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0)
 
             // Get first day of week (Monday)
-            let day = (firstDayOfMonth.getDay() - 1) % 7 // Monday - 0, Sunday - 6
-            firstDayOfMonth.setDate(firstDayOfMonth.getDate() - day)
+            // Monday - 1, ..., Sunday - 7
+            let day = firstDayOfMonth.getDay() || 7
+            firstDayOfMonth.setDate(firstDayOfMonth.getDate() - day + 1)
             
-            // Get last day of week (Sunday) // Sunday - 0, Saturday - 6
-            lastDayOfMonth.setDate(lastDayOfMonth.getDate() + (7 - lastDayOfMonth.getDay()) % 7)
+            // Get last day of week (Sunday)
+            // Monday - 1, ..., Sunday - 7
+            day = lastDayOfMonth.getDay() || 7
+            lastDayOfMonth.setDate(lastDayOfMonth.getDate() + 7 - day)
             
             // lastDayOfMonth + one day
             lastDayOfMonth.setDate(lastDayOfMonth.getDate() + 1)
@@ -98,6 +101,9 @@ export default {
             this.filterSelect.from = firstDayOfMonthIso
             this.filterSelect.to = firstDayOfNextMonthIso
             this.centralDate = date
+            
+            console.log(this.filterSelect.from)
+            console.log(this.filterSelect.to)
             
             this.loadItems()
         }

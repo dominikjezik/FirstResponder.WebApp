@@ -1,13 +1,13 @@
 using FirstResponder.ApplicationCore.Common.DTOs;
 using MediatR;
 
-namespace FirstResponder.ApplicationCore.Courses.Commands;
+namespace FirstResponder.ApplicationCore.Notifications.Commands;
 
-public class ChangeUsersInCourseCommand : IRequest
+public class ChangeUsersInNotificationCommand : IRequest
 {
     public UsersAssociationChangeDTO UsersAssociationChangeDTO { get; private set; }
     
-    public ChangeUsersInCourseCommand(UsersAssociationChangeDTO usersAssociationChangeDTO)
+    public ChangeUsersInNotificationCommand(UsersAssociationChangeDTO usersAssociationChangeDTO)
     {
         UsersAssociationChangeDTO = usersAssociationChangeDTO;
     }
