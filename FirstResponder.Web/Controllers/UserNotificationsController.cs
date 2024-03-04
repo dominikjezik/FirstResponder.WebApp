@@ -104,7 +104,7 @@ public class UserNotificationsController  : Controller
     {
         try
         {
-            // TODO:
+            await _mediator.Send(new SendNotificationCommand(notificationId));
         }
         catch (EntityNotFoundException)
         {

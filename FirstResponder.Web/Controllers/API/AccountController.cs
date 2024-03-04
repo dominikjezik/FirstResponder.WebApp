@@ -17,12 +17,14 @@ public class AccountController : ApiController
     private readonly IMediator _mediator;
     private readonly IAuthService _authService;
     private readonly ITokenService _tokenService;
+    private readonly IMessagingService _messagingService;
 
-    public AccountController(IMediator mediator, IAuthService authService, ITokenService tokenService)
+    public AccountController(IMediator mediator, IAuthService authService, ITokenService tokenService, IMessagingService messagingService)
     {
         _mediator = mediator;
         _authService = authService;
         _tokenService = tokenService;
+        _messagingService = messagingService;
     }
     
     [HttpPost]
@@ -39,6 +41,13 @@ public class AccountController : ApiController
         
         // Generate JWT token
         var token = _tokenService.GenerateToken(user);
+        
+        // Store device token
+        if (!string.IsNullOrEmpty(model.DeviceToken))
+        {
+            await _messagingService.StoreDeviceTokenAsync(user, model.DeviceToken);
+        }
+        
         return Ok(new { token });
     }
 

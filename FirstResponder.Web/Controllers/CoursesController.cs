@@ -5,8 +5,6 @@ using FirstResponder.ApplicationCore.Courses.Commands;
 using FirstResponder.ApplicationCore.Courses.DTOs;
 using FirstResponder.ApplicationCore.Courses.Queries;
 using FirstResponder.ApplicationCore.Entities.CourseAggregate;
-using FirstResponder.ApplicationCore.Entities.UserAggregate;
-using FirstResponder.ApplicationCore.Groups.Queries;
 using FirstResponder.Web.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -207,13 +205,6 @@ public class CoursesController : Controller
     {
         await _mediator.Send(new ChangeUsersInCourseCommand(model));
         return Ok();
-    }
-    
-    [HttpGet]
-    [Route("groups")]
-    public async Task<IEnumerable<Group>> Groups()
-    {
-        return await _mediator.Send(new GetAllGroupsQuery());
     }
     
     #region Helpers

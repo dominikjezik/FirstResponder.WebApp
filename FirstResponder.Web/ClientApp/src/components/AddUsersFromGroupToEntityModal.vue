@@ -1,8 +1,26 @@
 <script>
 export default {
     props: {
-        courseIdProp: {
+        modalTitle: {
+            type: String,
             required: true
+        },
+        saveChangesBaseUrl: {
+            type: String,
+            required: true
+        },
+        loadGroupsUrl: {
+            type: String,
+            required: true
+        },
+        loadUsersFromGroupBaseUrl: {
+            type: String,
+            required: true
+        },
+        onSaveReloadPage: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data() {
@@ -15,7 +33,7 @@ export default {
             searchedUsers: [],
             searchQuery: '',
             data: {
-                entityId: this.courseIdProp,
+                entityId: null,
                 checkedOnUserIds: []
             }
         }
@@ -35,7 +53,7 @@ export default {
         },
         searchQuery() {
             let query = this.searchQuery.trim().toLowerCase()
-            
+
             if (this.selectedGroup != null) {
                 this.searchedUsers = this.users.filter(user => {
                     return user.fullName.toLowerCase().includes(query) || user.email.toLowerCase().includes(query)
@@ -75,16 +93,16 @@ export default {
             }
         },
         saveChanges() {
-            fetch(`/courses/${this.data.entityId}/users`, {
+            fetch(`${this.saveChangesBaseUrl}/${this.data.entityId}/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(this.data),
             })
-                .then(res => window.location.reload())
+                .then(res => this.onSaveReloadPage ? location.reload() : this.closeModal())
                 .catch(error => console.log(error))
         },
         loadGroups() {
-            fetch(`/courses/groups`)
+            fetch(this.loadGroupsUrl)
                 .then(response => response.json())
                 .then(groups => {
                     this.groups = groups
@@ -96,9 +114,9 @@ export default {
             this.searchQuery = ''
             this.searchedGroups = this.groups
             this.selectedGroup = group
-            
+
             // Nacitanie uzivatelov zo skupiny
-            fetch(`/groups/${group.id}/users`)
+            fetch(`${this.loadUsersFromGroupBaseUrl}/${group.id}/users`)
                 .then(response => response.json())
                 .then(users => {
                     users.forEach(user => {
@@ -117,6 +135,7 @@ export default {
     mounted() {
         window.addEventListener('display-add-from-group-modal', (e) => {
             this.isShown = true
+            this.data.entityId = e.detail.entityId
         })
 
         document.addEventListener('keydown', (event) => {
@@ -133,7 +152,7 @@ export default {
         <div class="modal-background" @click="closeModal"></div>
         <div class="modal-card" style="height: 100%">
             <header class="modal-card-head">
-                <p class="modal-card-title" style="margin-bottom: 0">Pridať účastníkov zo skupiny {{ selectedGroup != null ? selectedGroup.name : '' }}</p>
+                <p class="modal-card-title" style="margin-bottom: 0">{{ modalTitle }} {{ selectedGroup != null ? selectedGroup.name : '' }}</p>
                 <button @click="closeModal" type="button" class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
@@ -143,7 +162,7 @@ export default {
                         <input v-model="searchQuery" class="input" type="text">
                     </div>
                 </div>
-                
+
                 <table class="table is-striped is-narrow is-hoverable is-fullwidth" v-if="selectedGroup == null">
                     <thead>
                     <tr>
@@ -159,7 +178,7 @@ export default {
                     </tr>
                     </tbody>
                 </table>
-                
+
                 <table class="table is-striped is-narrow is-hoverable is-fullwidth" v-if="selectedGroup != null">
                     <thead>
                     <tr>
@@ -178,7 +197,7 @@ export default {
                 </table>
             </section>
             <footer class="modal-card-foot">
-                <button @click="saveChanges" :disabled="selectedGroup == null" type="submit" class="button is-success">Pridať účastníkov</button>
+                <button @click="saveChanges" :disabled="selectedGroup == null" type="submit" class="button is-success">Pridať</button>
                 <button @click="goBack" type="button" class="button">{{ this.selectedGroup != null ? 'Späť' : 'Zrušiť' }}</button>
             </footer>
         </div>

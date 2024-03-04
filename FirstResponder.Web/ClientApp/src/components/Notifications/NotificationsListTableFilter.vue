@@ -64,6 +64,14 @@ export default {
                 return
             }
             
+            if (e.target.classList.contains('btn-add-group')) {
+                window.dispatchEvent(new CustomEvent('display-add-from-group-modal', { detail: {
+                    entityId: item.id
+                }}))
+                
+                return
+            }
+            
             window.dispatchEvent(new CustomEvent('display-edit-modal', { detail: {
                 notificationId: item.id,
                 content: item.content
@@ -135,6 +143,9 @@ export default {
 
             return url
         },
+        maxLength(value, max) {
+            return value.length > max ? value.substring(0, max) + '...' : value
+        }
     }
 }
 </script>
@@ -176,10 +187,11 @@ export default {
         <tr v-for="item in items" :key="item.id" @click="(e) => onItemClicked(item, e)">
             <td>{{ item.createdAt }}</td>
             <td>{{ item.senderName }}</td>
-            <td>{{ item.content }}</td>
+            <td>{{ maxLength(item.content, 70) }}</td>
             <td>
+                <a class="btn-add-group" style="margin-right: 1rem;">Pridať&nbsp;skupinu</a>
                 <a class="btn-users-list" style="margin-right: 1rem;">Príjemcovia</a>
-                <a class="btn-send-notification">Odoslať</a>
+                <a class="btn-send-notification has-text-success">Odoslať</a>
             </td>
         </tr>
         </tbody>

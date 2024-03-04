@@ -15,4 +15,6 @@ public class LoginViewModel
 
     [Display(Name = "Zapamätať si ma")]
     public bool RememberMe { get; set; }
+    
+    public string? DeviceToken { get; set; }
 }

@@ -25,10 +25,10 @@ import IncidentSidebarDetails from "./components/Incidents/IncidentSidebarDetail
 import IncidentMessages from "./components/Incidents/IncidentMessages.vue";
 import IncidentNewMessageModal from "./components/Incidents/IncidentNewMessageModal.vue";
 import CoursesListTableFilter from "./components/Courses/CoursesListTableFilter.vue";
-import CourseAddParticipantsFromGroupModal from "./components/Courses/CourseAddParticipantsFromGroupModal.vue";
 import NotificationsListTableFilter from "./components/Notifications/NotificationsListTableFilter.vue";
 import NotificationFormModal from "./components/Notifications/NotificationFormModal.vue";
 import EntityUserAssociationModal from "./components/EntityUserAssociationModal.vue";
+import AddUsersFromGroupToEntityModal from "./components/AddUsersFromGroupToEntityModal.vue";
 
 const app = createApp({
     data() {
@@ -81,15 +81,13 @@ app.component('incident-new-message-modal', IncidentNewMessageModal)
 // Courses index page components
 app.component('courses-list-table-filter', CoursesListTableFilter)
 
-// Course page components
-app.component('course-add-participants-from-group-modal', CourseAddParticipantsFromGroupModal)
-
 // Notifications index page components
 app.component('notifications-list-table-filter', NotificationsListTableFilter)
 app.component('notification-form-modal', NotificationFormModal)
 
 // Entity user association modal
 app.component('entity-user-association-modal', EntityUserAssociationModal)
+app.component('add-users-from-group-to-entity-modal', AddUsersFromGroupToEntityModal)
 
 app.mount('#app')
 

@@ -1,5 +1,6 @@
 using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Common.Exceptions;
+using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Groups.Commands;
 using FirstResponder.ApplicationCore.Groups.DTOs;
 using FirstResponder.ApplicationCore.Groups.Queries;
@@ -109,5 +110,12 @@ public class GroupsController : Controller
 	{
 		await _mediator.Send(new ChangeUsersInGroupCommand(model));
 		return Ok();
+	}
+	
+	[HttpGet]
+	[Route("list")]
+	public async Task<IEnumerable<Group>> Groups()
+	{
+		return await _mediator.Send(new GetAllGroupsQuery());
 	}
 }

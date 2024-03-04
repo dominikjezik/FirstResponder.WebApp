@@ -148,21 +148,18 @@
         save-changes-base-url="/courses"
         search-base-url="/courses"
         :on-save-reload-page="true"
-        >
-        <template v-slot:anti-forgery>
-            @Html.AntiForgeryToken()
-        </template>
-    </entity-user-association-modal>
+    />
 </div>
 
-@* Modal for adding participants from a specific group *@
+@* Modal for adding participants from a specific group to the course *@
 <div>
-    <course-add-participants-from-group-modal
-        course-id-prop="@Model.CourseId">
-        <template v-slot:anti-forgery>
-            @Html.AntiForgeryToken()
-        </template>
-    </course-add-participants-from-group-modal>
+    <add-users-from-group-to-entity-modal 
+        modal-title="Pridať účastníkov zo skupiny"
+        save-changes-base-url="/courses"
+        load-groups-url="/groups/list"
+        load-users-from-group-base-url="/groups"
+        :on-save-reload-page="true"
+    />
 </div>
 
 @section Scripts
@@ -177,7 +174,9 @@
         
         // Show modal for adding participants from group
         document.querySelector('#btn-add-from-group').onclick = () => {
-            window.dispatchEvent(new CustomEvent('display-add-from-group-modal'))
+            window.dispatchEvent(new CustomEvent('display-add-from-group-modal', { detail: {
+                entityId: "@Model.CourseId"
+            }}))
         }
     </script>
 }

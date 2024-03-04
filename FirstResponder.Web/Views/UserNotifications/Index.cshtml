@@ -41,11 +41,17 @@
         modal-title="Zoznam príjemcov"
         save-changes-base-url="/users/notifications"
         search-base-url="/users/notifications"
-        >
-        <template v-slot:anti-forgery>
-            @Html.AntiForgeryToken()
-        </template>
-    </entity-user-association-modal>
+    />
+</div>
+
+@* Modal for adding users from group to notification *@
+<div>
+    <add-users-from-group-to-entity-modal 
+        modal-title="Pridať príjemcov zo skupiny"
+        save-changes-base-url="/users/notifications"
+        load-groups-url="/groups/list"
+        load-users-from-group-base-url="/groups"
+    />
 </div>
 
 @section Scripts

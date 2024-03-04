@@ -22,6 +22,15 @@ public class NotificationsRepository : INotificationsRepository
             .FirstOrDefaultAsync(n => n.Id == notificationId);
     }
 
+    public async Task<Notification?> GetNotificationByIdWithUsers(Guid notificationId)
+    {
+        // TODO: nacitanie novej tabulky s device tokenmi
+        
+        return await _dbContext.Notifications
+            .Include(n => n.Recipients)
+            .FirstOrDefaultAsync(n => n.Id == notificationId);
+    }
+
     public async Task<IEnumerable<NotificationDTO>> GetNotifications(int pageNumber, int pageSize, NotificationFiltersDTO? filtersDTO = null)
     {
         var query = _dbContext.Notifications
@@ -53,6 +62,27 @@ public class NotificationsRepository : INotificationsRepository
                 Content = result.Notification.Content,
                 SenderName = result.Sender.FullName,
                 CreatedAt = result.Notification.CreatedAt,
+            })
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<NotificationDTO>> GetNotificationsByUserIdAsync(Guid userId)
+    {
+        return await _dbContext.NotificationUser
+            .Where(notificationUser => notificationUser.UserId == userId)
+            .Include(notificationUser => notificationUser.Notification)
+            .Join(
+                _dbContext.Users,
+                notificationUser => notificationUser.Notification.SenderId,
+                user => user.Id,
+                (notificationUser, user) => new { NotificationUser = notificationUser, Sender = user }
+            )
+            .Select(result => new NotificationDTO
+            {
+                Id = result.NotificationUser.Notification.Id,
+                Content = result.NotificationUser.Notification.Content,
+                SenderName = result.Sender.FullName,
+                CreatedAt = result.NotificationUser.Notification.CreatedAt,
             })
             .ToListAsync();
     }
