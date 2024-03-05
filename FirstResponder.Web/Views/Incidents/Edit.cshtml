@@ -79,14 +79,14 @@
                         <div class="field">
                             <label class="label">Zemepisná šírka *</label>
                             <div class="control">
-                                <input asp-for="IncidentForm.Latitude" class="input" type="number" step=".000001" min="-90" max="90" required>
+                                <input asp-for="IncidentForm.Latitude" id="latitude" class="input" type="number" step=".000001" min="-90" max="90" required>
                             </div>
                         </div>
         
                         <div class="field">
                             <label class="label">Zemepisná dĺžka *</label>
                             <div class="control">
-                                <input asp-for="IncidentForm.Longitude" class="input" type="number" step=".000001" min="-90" max="90" required>
+                                <input asp-for="IncidentForm.Longitude" id="longitude" class="input" type="number" step=".000001" min="-90" max="90" required>
                             </div>
                         </div>
                     </div>
@@ -138,3 +138,28 @@
         />
     </aside>
 </div>
+
+@section Scripts {
+    <script>
+        // On change of the input fields, update marker on the map
+        const latitude = document.getElementById('latitude')
+        const longitude = document.getElementById('longitude')
+        const icon = "incident-icon-Created"
+        
+        const onInput = () => {
+            let lat = parseFloat(latitude.value)
+            let lon = parseFloat(longitude.value)
+            window.dispatchEvent(new CustomEvent('location-changed', { detail: { lat, lon, id: "new_location", icon, initialZoom: true } }))
+        };
+        
+        latitude.addEventListener('input', onInput)
+        longitude.addEventListener('input', onInput)
+        
+        // On map click, update input fields
+        window.addEventListener('on-map-click', (e) => {
+            latitude.value = e.detail.lat
+            longitude.value = e.detail.lon
+            window.dispatchEvent(new CustomEvent('location-changed', { detail: { lat: e.detail.lat, lon: e.detail.lon, id: "new_location", icon, initialZoom: false } }))
+        })
+    </script>
+}
