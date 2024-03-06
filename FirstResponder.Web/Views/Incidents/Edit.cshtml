@@ -94,20 +94,23 @@
 
                 <div class="field">
                     <div class="control flex-space-between">
-                        <div class="buttons">
-                            <button id="submit-btn" type="submit" class="button is-link">Aktualizovať</button>
-                            @if (Model.State == IncidentState.Created || Model.State == IncidentState.InProgress)
-                            {
-                                <button type="submit" class="button is-link is-light" form="formNotifyResponders">Notifikovať responderov</button>
-                            }
+                        <div>
+                            <div class="buttons">
+                                <button id="submit-btn" type="submit" class="button is-link">Aktualizovať</button>
+                                @if (Model.State == IncidentState.Created || Model.State == IncidentState.InProgress)
+                                {
+                                    <button type="submit" class="button is-link is-light" form="formNotifyResponders">Notifikovať responderov</button>
+                                }
+                            </div>
                         </div>
-                        
-                        <div class="buttons">
-                            @if (Model.State == IncidentState.Created || Model.State == IncidentState.InProgress)
-                            {
-                                <button type="submit" class="button is-danger is-light" form="formClose">@(Model.State == IncidentState.Created ? "Zrušiť zásah" : "Ukončiť zásah")</button>
-                            }
-                            <button type="submit" class="button is-danger" form="formDelete">Odstrániť zásah</button>
+                        <div>
+                            <div class="buttons">
+                                @if (Model.State == IncidentState.Created || Model.State == IncidentState.InProgress)
+                                {
+                                    <button type="submit" class="button is-danger is-light" form="formClose">@(Model.State == IncidentState.Created ? "Zrušiť zásah" : "Ukončiť zásah")</button>
+                                }
+                                <button type="submit" class="button is-danger" form="formDelete">Odstrániť zásah</button>
+                            </div>
                         </div>
                     </div>
                 </div>

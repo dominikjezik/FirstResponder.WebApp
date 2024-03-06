@@ -37,6 +37,8 @@ public class ApplicationUser : IdentityUser<Guid>, IAuditable
     public ICollection<IncidentResponder> Incidents { get; set; } = new List<IncidentResponder>();
     
     public ICollection<CourseUser> Courses { get; set; } = new List<CourseUser>();
+    
+    public ICollection<DeviceToken> DeviceTokens { get; set; } = new List<DeviceToken>();
 }
 
 public static class ApplicationUserExtensions

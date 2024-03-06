@@ -1,3 +1,4 @@
+using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
@@ -16,6 +17,7 @@ public class FirebaseMessagingService : IMessagingService
             throw new Exception("Nastala chyba pri inicializácii FirebaseMessaging");
         }
         
+        // When using Data instead of Notification, the message is not displayed to the user
         var message = new Message
         {
             Topic = "incidents-request-location",
@@ -23,6 +25,12 @@ public class FirebaseMessagingService : IMessagingService
             {
                 { "title", "" },
                 { "body", "" },
+                { "type", "request-location" }
+            },
+            Android = new AndroidConfig
+            {
+                TimeToLive = TimeSpan.FromMinutes(10),
+                Priority = Priority.High
             }
         };
         
@@ -31,11 +39,21 @@ public class FirebaseMessagingService : IMessagingService
         Console.WriteLine("Successfully sent message: " + response);
     }
 
-    public async Task SendNotificationAsync(List<User> users, string title, string message)
+    public async Task<IList<DeviceToken>> SendNotificationAsync(IList<DeviceToken> deviceTokens, string title, string message)
     {
-        // TODO: z userov ziskat device tokeny a poslat im notifikaciu
-        // TEMP: Docasne ziskania device tokenov
-        var deviceTokens = new List<string> { "device-token-1", "device-token-2" };
+        // Limit characters to 1000
+        if (message.Length > 1000)
+        {
+            message = message.Substring(0, 997) + "...";
+        }
+        
+        // Limit title to 100
+        if (title.Length > 100)
+        {
+            title = title.Substring(0, 97) + "...";
+        }
+        
+        // TODO: multicast ma obmedzenie na 500 zariadeni, treba to rozdelit na viac multicastov
         
         var firebaseMessaging = FirebaseMessaging.DefaultInstance;
         
@@ -44,17 +62,24 @@ public class FirebaseMessagingService : IMessagingService
             throw new Exception("Nastala chyba pri inicializácii FirebaseMessaging");
         }
         
+        // When using Notification instead of Data, the message is displayed to the user
         var multicastMessage = new MulticastMessage
         {
-            Tokens = deviceTokens,
+            Tokens = deviceTokens.Select(dt => dt.Token).ToList(),
             Notification = new Notification()
             {
                 Title = title,
                 Body = message
+            },
+            Data = new Dictionary<string, string>
+            {
+                { "type", "display-notification" }
             }
         };
         
         var response = await firebaseMessaging.SendMulticastAsync(multicastMessage);
+        
+        var failedTokens = new List<DeviceToken>();
         
         if (response.FailureCount > 0)
         {
@@ -62,21 +87,20 @@ public class FirebaseMessagingService : IMessagingService
             {
                 if (!response.Responses[i].IsSuccess)
                 {
-                    Console.WriteLine("Failed to send message to " + deviceTokens[i]);
-                }
-                else
-                {
-                    Console.WriteLine("Successfully sent message: " + response.Responses[i]);
+                    // NotFound -> when the token is no longer valid
+                    // InvalidArgument -> when the token is not valid or error in the payload
+                    if (response.Responses[i].Exception.ErrorCode == ErrorCode.InvalidArgument || response.Responses[i].Exception.ErrorCode == ErrorCode.NotFound)
+                    {
+                        failedTokens.Add(deviceTokens[i]);
+                    }
+                    else
+                    {
+                        // TODO: Logovat neznamu chybu
+                    }
                 }
             }
         }
         
-        // TODO: odstranit neplatne device tokeny
-    }
-
-    public async Task StoreDeviceTokenAsync(User user, string deviceToken)
-    {
-        Console.WriteLine("Storing device token: " + deviceToken);
-        // TODO: ulozit device token do tabulky device tokenov
+        return failedTokens;
     }
 }

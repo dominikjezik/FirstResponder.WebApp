@@ -33,6 +33,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<NotificationUser> NotificationUser { get; set; }
     
+    public DbSet<DeviceToken> DeviceTokens { get; set; }
+    
     // Incident Aggregate
     public DbSet<Incident> Incidents { get; set; }
     public DbSet<IncidentResponder> IncidentResponders { get; set; }
@@ -121,6 +123,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .HasOne<ApplicationUser>()
             .WithMany()
             .HasForeignKey(a => a.SenderId)
+            .IsRequired();
+        
+        modelBuilder.Entity<DeviceToken>()
+            .HasOne<ApplicationUser>()
+            .WithMany(user => user.DeviceTokens)
+            .HasForeignKey(a => a.UserId)
             .IsRequired();
     }
     

@@ -17,14 +17,12 @@ public class AccountController : ApiController
     private readonly IMediator _mediator;
     private readonly IAuthService _authService;
     private readonly ITokenService _tokenService;
-    private readonly IMessagingService _messagingService;
 
-    public AccountController(IMediator mediator, IAuthService authService, ITokenService tokenService, IMessagingService messagingService)
+    public AccountController(IMediator mediator, IAuthService authService, ITokenService tokenService)
     {
         _mediator = mediator;
         _authService = authService;
         _tokenService = tokenService;
-        _messagingService = messagingService;
     }
     
     [HttpPost]
@@ -45,7 +43,7 @@ public class AccountController : ApiController
         // Store device token
         if (!string.IsNullOrEmpty(model.DeviceToken))
         {
-            await _messagingService.StoreDeviceTokenAsync(user, model.DeviceToken);
+            await _mediator.Send(new StoreUserDeviceTokenCommand(user, model.DeviceToken));
         }
         
         return Ok(new { token });
@@ -61,12 +59,31 @@ public class AccountController : ApiController
             
             // Generate JWT token
             var token = _tokenService.GenerateToken(user);
+            
+            // Store device token
+            if (!string.IsNullOrEmpty(model.DeviceToken))
+            {
+                await _mediator.Send(new StoreUserDeviceTokenCommand(user, model.DeviceToken));
+            }
+            
             return Ok(new { user, token });
         }
         catch (EntityValidationException exception)
         {
             return BadRequest(exception.ValidationErrors);
         }
+    }
+    
+    [HttpPost]
+    [Authorize("Bearer")]
+    [Route("[action]")]
+    public async Task<IActionResult> UpdateDeviceToken(string? newDeviceToken = null, string? oldDeviceToken = null)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        await _mediator.Send(new UpdateUserDeviceTokenCommand(userId, newDeviceToken, oldDeviceToken));
+        
+        return Ok();
     }
     
     [HttpGet]

@@ -33,4 +33,6 @@ public class User : AuditableEntity<Guid>
     public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     
     public ICollection<Course> Courses { get; set; } = new List<Course>();
+    
+    public ICollection<DeviceToken> DeviceTokens { get; set; } = new List<DeviceToken>();
 }

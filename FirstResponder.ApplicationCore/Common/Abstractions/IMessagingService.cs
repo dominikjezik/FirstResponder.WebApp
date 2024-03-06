@@ -6,7 +6,5 @@ public interface IMessagingService
 {
     Task RequestDeviceLocationsAsync();
     
-    Task SendNotificationAsync(List<User> users, string title, string message);
-    
-    Task StoreDeviceTokenAsync(User user, string deviceToken);
+    Task<IList<DeviceToken>> SendNotificationAsync(IList<DeviceToken> deviceTokens, string title, string message);
 }

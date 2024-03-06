@@ -106,12 +106,18 @@ public class UserNotificationsController  : Controller
         {
             await _mediator.Send(new SendNotificationCommand(notificationId));
         }
-        catch (EntityNotFoundException)
+        catch (NotificationNotSentException exception)
         {
-            return NotFound();
+            this.DisplayErrorMessage(exception.Message);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (EntityNotFoundException exception)
+        {
+            this.DisplayErrorMessage(exception.Message);
+            return RedirectToAction(nameof(Index));
         }
         
-        //this.DisplaySuccessMessage("Notifikácia bola úspešne odoslaná príjemcom!");
+        this.DisplaySuccessMessage("Notifikácia bola úspešne odoslaná príjemcom!");
         return RedirectToAction(nameof(Index));
     }
     

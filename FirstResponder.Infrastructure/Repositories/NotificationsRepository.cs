@@ -3,6 +3,7 @@ using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Notifications.DTOs;
 using FirstResponder.Infrastructure.DbContext;
+using FirstResponder.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FirstResponder.Infrastructure.Repositories;
@@ -24,11 +25,33 @@ public class NotificationsRepository : INotificationsRepository
 
     public async Task<Notification?> GetNotificationByIdWithUsers(Guid notificationId)
     {
-        // TODO: nacitanie novej tabulky s device tokenmi
-        
         return await _dbContext.Notifications
+            .Where(n => n.Id == notificationId)
             .Include(n => n.Recipients)
-            .FirstOrDefaultAsync(n => n.Id == notificationId);
+            .Select(n => new
+            {
+                Notification = n,
+                Recipients = n.Recipients
+                    .Join(
+                        _dbContext.Users,
+                        n => n.UserId,
+                        u => u.Id,
+                        (n, u) => new { n, u }
+                    ).ToList()
+            })
+            .Select(result => new Notification
+            {
+                Id = result.Notification.Id,
+                Content = result.Notification.Content,
+                CreatedAt = result.Notification.CreatedAt,
+                Recipients = result.Recipients
+                    .Select(r => new NotificationUser
+                    {
+                        UserId = r.u.Id,
+                        User = r.u.ToDomainUser(),
+                    }).ToList()
+            })
+            .FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<NotificationDTO>> GetNotifications(int pageNumber, int pageSize, NotificationFiltersDTO? filtersDTO = null)
