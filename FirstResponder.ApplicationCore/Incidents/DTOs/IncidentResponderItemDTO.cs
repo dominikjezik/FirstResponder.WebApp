@@ -1,5 +1,3 @@
-using FirstResponder.ApplicationCore.Common.Enums;
-
 namespace FirstResponder.ApplicationCore.Incidents.DTOs;
 
 public class IncidentResponderItemDTO
@@ -15,4 +13,6 @@ public class IncidentResponderItemDTO
     public double? Longitude { get; set; }
     
     public string? TypeOfTransport { get; set; }
+    
+    public bool ReportSubmitted { get; set; }
 }

@@ -143,8 +143,20 @@ public class IncidentsRepository : IIncidentsRepository
 
     public async Task DeleteIncident(Incident incident)
     {
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        
+        var reportIds = _dbContext.IncidentResponders
+            .Where(r => r.IncidentId == incident.Id)
+            .Select(r => r.ReportId);
+        
+        await _dbContext.IncidentReports
+            .Where(r => reportIds.Contains(r.Id))
+            .ExecuteDeleteAsync();
+        
         _dbContext.Incidents.Remove(incident);
+        
         await _dbContext.SaveChangesAsync();
+        await transaction.CommitAsync();
     }
 
     public async Task<IEnumerable<IncidentResponderItemDTO>> GetIncidentResponders(Guid incidentId)
@@ -161,9 +173,61 @@ public class IncidentsRepository : IIncidentsRepository
                     ResponderId = r.ResponderId,
                     FullName = u.FullName,
                     AcceptedAt = r.AcceptedAt,
+                    ReportSubmitted = r.ReportId != null
                 }
             )
             .ToListAsync();
+    }
+
+    public async Task<IncidentResponder?> GetIncidentResponder(Guid incidentId, Guid responderId)
+    {
+        return await _dbContext.IncidentResponders
+            .Where(r => r.IncidentId == incidentId && r.ResponderId == responderId)
+            .Include(r => r.Report)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<IncidentReportDTO?> GetIncidentReport(Guid incidentId, Guid responderId)
+    {
+        return await _dbContext.IncidentResponders
+            .Where(ir => ir.IncidentId == incidentId && ir.ResponderId == responderId && ir.ReportId != null)
+            .Include(ir => ir.Report)
+            .Join(
+                _dbContext.Users,
+                r => r.ResponderId,
+                u => u.Id,
+                (ir, u) => new IncidentReportDTO
+                {
+                    IncidentId = ir.IncidentId,
+                    ResponderId = ir.ResponderId,
+                    Responder = u.FullName,
+                    SubmittedAt = ir.Report!.CreatedAt.ToString("dd.MM.yyyy HH:mm"),
+                    IncidentReportForm = new IncidentReportFormDTO
+                    {
+                        Details = ir.Report!.Details,
+                        AedUsed = ir.Report.AedUsed,
+                        AedShocks = ir.Report.AedShocks,
+                    }
+                }
+            )
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task CreateOrUpdateIncidentReport(IncidentResponder incidentResponder, IncidentReport report)
+    {
+        if (incidentResponder.ReportId == null)
+        {
+            incidentResponder.Report = report;
+            _dbContext.IncidentReports.Add(report);
+        }
+        else
+        {
+            incidentResponder.Report!.Details = report.Details;
+            incidentResponder.Report.AedUsed = report.AedUsed;
+            incidentResponder.Report.AedShocks = report.AedShocks;
+        }
+        
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task AssignResponderToIncidents(Guid responderId, IEnumerable<Incident> incidents)

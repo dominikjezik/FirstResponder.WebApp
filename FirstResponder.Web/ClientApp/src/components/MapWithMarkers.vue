@@ -55,17 +55,24 @@ export default {
             })
 
             this.markers.forEach(marker => {
-                L.marker([marker.lat, marker.lon], {
+                let leafletMarker = L.marker([marker.lat, marker.lon], {
                     icon: L.divIcon({
                         className: '',
                         iconAnchor: [12.5, 40],
+                        popupAnchor: [0, -40],
                         html: this.getIcon(marker.icon)
                     })
                 }).on('click', function() {
                     if (marker.onClickUrl) {
                         window.location = marker.onClickUrl
                     }
-                }).addTo(this.map)
+                })
+                
+                if (marker.popup) {
+                    leafletMarker.bindPopup(marker.popup)
+                }
+                
+                leafletMarker.addTo(this.map)
             })
         },
         loadLeaflet() {
@@ -80,7 +87,7 @@ export default {
                 }).addTo(this.map)
                 
                 this.markers.forEach(marker => {
-                    L.marker([marker.lat, marker.lon], {
+                    let leafletMarker = L.marker([marker.lat, marker.lon], {
                         icon: L.divIcon({
                             className: '',
                             iconAnchor: [12.5, 40],
@@ -90,7 +97,15 @@ export default {
                         if (marker.onClickUrl) {
                             window.location = marker.onClickUrl
                         }
-                    }).addTo(this.map)
+                    })
+                    
+                    console.log(marker)
+                    
+                    if (marker.popup) {
+                        leafletMarker.bindPopup(marker.popup)
+                    }
+
+                    leafletMarker.addTo(this.map)
                 });
                 
                 if (this.markers.length === 1) {

@@ -191,6 +191,20 @@ public class IncidentsController : Controller
     }
     
     [HttpGet]
+    [Route("{incidentId}/reports/{responderId}")]
+    public async Task<IActionResult> Report(Guid incidentId, Guid responderId)
+    {
+        var report = await _mediator.Send(new GetIncidentResponderReportQuery(incidentId, responderId));
+        
+        if (report == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(report);
+    }
+    
+    [HttpGet]
     [Route("{incidentId}/messages")]
     public async Task<IEnumerable<IncidentMessageDTO>> Messages(Guid incidentId)
     {

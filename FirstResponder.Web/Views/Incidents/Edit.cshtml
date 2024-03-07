@@ -136,6 +136,7 @@
     <aside class="entity-details-aside">
         <incident-sidebar-details
             incident-id="@Model.IncidentId"
+            :is-opened="@((Model.State == IncidentState.Created || Model.State == IncidentState.InProgress).ToString().ToLower())"
             incident-lat="@Model.IncidentForm.Latitude.ToString().Replace(",", ".")"
             incident-lon=" @Model.IncidentForm.Longitude.ToString().Replace(",", ".")" 
         />

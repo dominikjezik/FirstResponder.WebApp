@@ -22,6 +22,12 @@ public interface IIncidentsRepository
     
     Task<IEnumerable<IncidentResponderItemDTO>> GetIncidentResponders(Guid incidentId);
     
+    Task<IncidentResponder?> GetIncidentResponder(Guid incidentId, Guid responderId);
+    
+    Task<IncidentReportDTO?> GetIncidentReport(Guid incidentId, Guid responderId);
+    
+    Task CreateOrUpdateIncidentReport(IncidentResponder incidentResponder, IncidentReport report);
+    
     Task AssignResponderToIncidents(Guid responderId, IEnumerable<Incident> incidents);
     
     Task<IncidentResponder> AcceptIncident(Incident incident, User user);

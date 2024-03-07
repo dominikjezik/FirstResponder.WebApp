@@ -39,6 +39,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Incident> Incidents { get; set; }
     public DbSet<IncidentResponder> IncidentResponders { get; set; }
     
+    public DbSet<IncidentReport> IncidentReports { get; set; }
+    
     public DbSet<IncidentMessage> IncidentMessages { get; set; }
     
     // Course Aggregate
@@ -103,6 +105,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .WithMany(user => user.Incidents)
             .HasForeignKey(a => a.ResponderId)
             .IsRequired();
+
+        modelBuilder.Entity<IncidentResponder>()
+            .HasOne<IncidentReport>(i => i.Report)
+            .WithOne()
+            .HasForeignKey<IncidentResponder>(a => a.ReportId)
+            .OnDelete(DeleteBehavior.SetNull);
         
         modelBuilder.Entity<CourseType>()
             .HasMany<Course>()

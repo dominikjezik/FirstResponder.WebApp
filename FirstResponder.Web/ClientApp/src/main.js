@@ -24,6 +24,7 @@ import IncidentsCalendar from "./components/Incidents/IncidentsCalendar.vue";
 import IncidentSidebarDetails from "./components/Incidents/IncidentSidebarDetails.vue";
 import IncidentMessages from "./components/Incidents/IncidentMessages.vue";
 import IncidentNewMessageModal from "./components/Incidents/IncidentNewMessageModal.vue";
+import IncidentReportModal from "./components/Incidents/IncidentReportModal.vue";
 import CoursesListTableFilter from "./components/Courses/CoursesListTableFilter.vue";
 import NotificationsListTableFilter from "./components/Notifications/NotificationsListTableFilter.vue";
 import NotificationFormModal from "./components/Notifications/NotificationFormModal.vue";
@@ -77,6 +78,7 @@ app.component('incidents-calendar', IncidentsCalendar)
 app.component('incident-sidebar-details', IncidentSidebarDetails)
 app.component('incident-messages', IncidentMessages)
 app.component('incident-new-message-modal', IncidentNewMessageModal)
+app.component('incident-report-modal', IncidentReportModal)
 
 // Courses index page components
 app.component('courses-list-table-filter', CoursesListTableFilter)

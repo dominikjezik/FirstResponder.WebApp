@@ -304,6 +304,32 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.ToTable("IncidentMessages");
                 });
 
+            modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AedShocks")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AedUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IncidentReports");
+                });
+
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentResponder", b =>
                 {
                     b.Property<Guid>("IncidentId")
@@ -321,7 +347,14 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Property<DateTime?>("DeclinedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("ReportId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("IncidentId", "ResponderId");
+
+                    b.HasIndex("ReportId")
+                        .IsUnique()
+                        .HasFilter("[ReportId] IS NOT NULL");
 
                     b.HasIndex("ResponderId");
 
@@ -811,6 +844,11 @@ namespace FirstResponder.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentReport", "Report")
+                        .WithOne()
+                        .HasForeignKey("FirstResponder.ApplicationCore.Entities.IncidentAggregate.IncidentResponder", "ReportId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany("Incidents")
                         .HasForeignKey("ResponderId")
@@ -818,6 +856,8 @@ namespace FirstResponder.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Incident");
+
+                    b.Navigation("Report");
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.UserAggregate.DeviceToken", b =>

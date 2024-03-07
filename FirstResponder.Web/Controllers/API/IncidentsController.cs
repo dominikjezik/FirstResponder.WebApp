@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Exceptions;
-using FirstResponder.ApplicationCore.Common.Extensions;
 using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.ApplicationCore.Incidents.Queries;
@@ -111,6 +110,36 @@ public class IncidentsController : ApiController
             await _hubContext.Clients.Group(incidentId.ToString()).SendAsync("ResponderDeclined", userId);
         }
         catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (EntityValidationException e)
+        {
+            return BadRequest(e.Message);
+        }
+
+        return Ok();
+    }
+    
+    [HttpPost]
+    [Route("{incidentId}/report")]
+    public async Task<IActionResult> StoreReport(Guid incidentId, [FromBody] IncidentReportFormDTO model)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        try
+        {
+            await _mediator.Send(new StoreIncidentReportCommand
+            {
+                IncidentId = incidentId,
+                ResponderId = userId,
+                Report = model
+            });
+            
+            // Update responder item on edit page (SignalR)
+            await _hubContext.Clients.Group(incidentId.ToString()).SendAsync("ResponderReportSubmitted", userId);
+        }
+        catch (EntityNotFoundException e)
         {
             return NotFound();
         }

@@ -112,6 +112,22 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IncidentReports",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AedUsed = table.Column<bool>(type: "bit", nullable: false),
+                    AedShocks = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncidentReports", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Incidents",
                 columns: table => new
                 {
@@ -271,6 +287,27 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DeviceTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeviceTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DeviceTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
@@ -356,7 +393,8 @@ namespace FirstResponder.Infrastructure.Migrations
                     ResponderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AcceptedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeclinedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeclinedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReportId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -367,6 +405,12 @@ namespace FirstResponder.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IncidentResponders_IncidentReports_ReportId",
+                        column: x => x.ReportId,
+                        principalTable: "IncidentReports",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_IncidentResponders_Incidents_IncidentId",
                         column: x => x.IncidentId,
@@ -615,6 +659,11 @@ namespace FirstResponder.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DeviceTokens_UserId",
+                table: "DeviceTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GroupUser_UserId",
                 table: "GroupUser",
                 column: "UserId");
@@ -628,6 +677,13 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "IX_IncidentMessages_SenderId",
                 table: "IncidentMessages",
                 column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IncidentResponders_ReportId",
+                table: "IncidentResponders",
+                column: "ReportId",
+                unique: true,
+                filter: "[ReportId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IncidentResponders_ResponderId",
@@ -670,6 +726,9 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "CourseUser");
 
             migrationBuilder.DropTable(
+                name: "DeviceTokens");
+
+            migrationBuilder.DropTable(
                 name: "GroupUser");
 
             migrationBuilder.DropTable(
@@ -695,6 +754,9 @@ namespace FirstResponder.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "IncidentReports");
 
             migrationBuilder.DropTable(
                 name: "Incidents");

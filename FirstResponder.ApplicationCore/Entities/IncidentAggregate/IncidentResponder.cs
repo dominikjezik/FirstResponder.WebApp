@@ -15,4 +15,7 @@ public class IncidentResponder
     public DateTime? AcceptedAt { get; set; }
     
     public DateTime? DeclinedAt { get; set; }
+    
+    public Guid? ReportId { get; set; }
+    public IncidentReport? Report { get; set; }
 }
