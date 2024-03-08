@@ -209,6 +209,16 @@
 {
     <script>
         /**
+        * Script for selecting availability of the AED.
+        */
+        @if(Model.AedFormDTO.GeneralType == AedGeneralType.Public)
+        {
+            <text>
+                window.aedHelpers.displayCorrectAvailabilityFields();
+            </text>
+        }
+        
+        /**
         * Script for loading models based on the selected manufacturer.
         */
         window.aedHelpers.handleManufacturerModelSelects('manufacturer-select', 'model-select', '@Url.Action("Models", "Aed")')

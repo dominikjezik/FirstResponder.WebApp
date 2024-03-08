@@ -30,6 +30,8 @@ public class PublicAed : Aed
 
     public string? DescriptionLocation { get; set; }
     
+    // Contact person fields
+    
     public string? ContactPerson { get; set; }
 
     public string? ContactPersonPhone { get; set; }
@@ -37,5 +39,26 @@ public class PublicAed : Aed
     [EmailAddress]
     public string? ContactPersonEmail { get; set; }
     
+    [Required]
+    public PublicAedAvailability? Availability { get; set; }
+    
     public ICollection<AedPhoto>? Photos { get; set; }
+    
+    public class PublicAedAvailability
+    {
+        [Required]
+        public AedAvailabilityType Type { get; set; }
+        
+        public TimeSpan? TimeFrom { get; set; }
+        
+        public TimeSpan? TimeTo { get; set; }
+        
+        public DaysOfWeek? Days { get; set; }
+        
+        public DateTime? DateFrom { get; set; }
+        
+        public DateTime? DateTo { get; set; }
+        
+        public string? Description { get; set; }
+    }
 }

@@ -63,79 +63,86 @@
     </div>
 </section>
 
-<section class="form-section" style="opacity: 0.2">
+<section class="form-section">
     <h2>Dostupnosť</h2>
     <div class="field">
         <label class="label">Dostupnosť</label>
         <div class="control">
             <div class="select select-full-width">
-                <select>
-                    <option>Prevádzkové časy</option>
-                    <option>???</option>
+                <select id="selectAvailabilityType" asp-for="AedFormDTO.AvailabilityType" asp-items="Html.GetEnumSelectList<AedAvailabilityType>()">
                 </select>
             </div>
         </div>
     </div>
     
-    <div class="field">
-        <label class="label">Dostupnosť v termíne (od - do)</label>
+    <div class="field" id="divAvailabilityTime">
+        <label class="label">Dostupnosť v čase (od - do)*</label>
         <div class="control control-multiple-inputs">
-            <input class="input" type="date">
-            <input class="input" type="date">
+            <input asp-for="AedFormDTO.AvailabilityTimeFrom" class="input" type="time">
+            <input asp-for="AedFormDTO.AvailabilityTimeTo" class="input" type="time">
         </div>
     </div>
     
-    <div class="field">
-        <label class="label">Dostupnosť v čase (od - do)</label>
-        <div class="control control-multiple-inputs">
-            <input class="input" type="time">
-            <input class="input" type="time">
-        </div>
-    </div>
-    
-    <div class="field">
+    <div class="field" id="divAvailabilityDays">
         <label class="label">Dostupnosť v dňoch</label>
         <div class="control">
             <label class="checkbox">
-                <input type="checkbox">
+                <input type="checkbox" asp-for="AedFormDTO.AvailabilityMonday">
                 Pondelok
             </label>
         </div>
         <div class="control">
             <label class="checkbox">
-                <input type="checkbox">
+                <input type="checkbox" asp-for="AedFormDTO.AvailabilityTuesday">
                 Utorok
             </label>
         </div>
         <div class="control">
             <label class="checkbox">
-                <input type="checkbox">
+                <input type="checkbox" asp-for="AedFormDTO.AvailabilityWednesday">
                 Streda
             </label>
         </div>
         <div class="control">
             <label class="checkbox">
-                <input type="checkbox">
+                <input type="checkbox" asp-for="AedFormDTO.AvailabilityThursday">
                 Štvrtok
             </label>
         </div>
         <div class="control">
             <label class="checkbox">
-                <input type="checkbox">
+                <input type="checkbox" asp-for="AedFormDTO.AvailabilityFriday">
                 Piatok
             </label>
         </div>
         <div class="control">
             <label class="checkbox">
-                <input type="checkbox">
+                <input type="checkbox" asp-for="AedFormDTO.AvailabilitySaturday">
                 Sobota
             </label>
         </div>
         <div class="control">
             <label class="checkbox">
-                <input type="checkbox">
+                <input type="checkbox" asp-for="AedFormDTO.AvailabilitySunday">
                 Nedeľa
             </label>
+        </div>
+    </div>
+    
+    <div class="field" id="divAvailabilityDate">
+        <label class="label">Dostupnosť v termíne (od - do)*</label>
+        <div class="control control-multiple-inputs">
+            <input asp-for="AedFormDTO.AvailabilityDateFrom" class="input" type="date">
+            <input asp-for="AedFormDTO.AvailabilityDateTo" class="input" type="date">
+        </div>
+    </div>
+    
+    <div class="field">
+        <div class="field">
+            <label class="label">Popis dostupnosti</label>
+            <div class="control">
+                <textarea asp-for="AedFormDTO.AvailabilityDescription" class="textarea"></textarea>
+            </div>
         </div>
     </div>
 </section>

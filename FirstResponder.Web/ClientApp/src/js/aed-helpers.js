@@ -24,5 +24,28 @@ export default {
                     })
                 })
         }
+    },
+    displayCorrectAvailabilityFields: function() {
+        const selectAvailabilityType = document.getElementById('selectAvailabilityType')
+
+        const displayCorrectAvailabilityFieldsCallback = () => {
+            const selectedValue = selectAvailabilityType.value
+            if (selectedValue === '1') {
+                document.getElementById('divAvailabilityTime').style.display = 'block'
+                document.getElementById('divAvailabilityDays').style.display = 'block'
+                document.getElementById('divAvailabilityDate').style.display = 'none'
+            } else if (selectedValue === '2') {
+                document.getElementById('divAvailabilityTime').style.display = 'none'
+                document.getElementById('divAvailabilityDays').style.display = 'none'
+                document.getElementById('divAvailabilityDate').style.display = 'block'
+            } else {
+                document.getElementById('divAvailabilityTime').style.display = 'none'
+                document.getElementById('divAvailabilityDays').style.display = 'none'
+                document.getElementById('divAvailabilityDate').style.display = 'none'
+            }
+        }
+
+        selectAvailabilityType.addEventListener('change', displayCorrectAvailabilityFieldsCallback)
+        displayCorrectAvailabilityFieldsCallback()
     }
 }

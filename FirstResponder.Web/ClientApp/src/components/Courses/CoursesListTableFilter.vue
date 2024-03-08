@@ -79,8 +79,6 @@ export default {
             fetch(this.getURL())
                 .then((response) => response.json())
                 .then(items => {
-                    console.log(items)
-                    
                     if (items.length === 0) {
                         if (this.page === 0) {
                             this.isMessageVisible = true

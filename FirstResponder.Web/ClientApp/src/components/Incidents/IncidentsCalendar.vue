@@ -102,9 +102,6 @@ export default {
             this.filterSelect.to = firstDayOfNextMonthIso
             this.centralDate = date
             
-            console.log(this.filterSelect.from)
-            console.log(this.filterSelect.to)
-            
             this.loadItems()
         }
     }

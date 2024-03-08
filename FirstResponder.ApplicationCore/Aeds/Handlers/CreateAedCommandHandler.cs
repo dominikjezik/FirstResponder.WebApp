@@ -1,4 +1,5 @@
 using FirstResponder.ApplicationCore.Aeds.Commands;
+using FirstResponder.ApplicationCore.Aeds.Validators;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Exceptions;
@@ -11,20 +12,16 @@ namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 public class CreateAedCommandHandler : IRequestHandler<CreateAedCommand, Aed>
 {
     private readonly IAedRepository _aedRepository;
-    private readonly IAedModelsRepository _aedModelsRepository;
-    private readonly IAedManufacturersRepository _aedManufacturersRepository;
-    private readonly IAedLanguagesRepository _aedLanguagesRepository;
     private readonly IUsersRepository _usersRepository;
     private readonly IFileService _fileService;
+    private readonly AedValidator _aedValidator;
 
-    public CreateAedCommandHandler(IAedRepository aedRepository, IAedModelsRepository aedModelsRepository, IAedManufacturersRepository aedManufacturersRepository, IAedLanguagesRepository aedLanguagesRepository, IUsersRepository usersRepository, IFileService fileService)
+    public CreateAedCommandHandler(IAedRepository aedRepository, IUsersRepository usersRepository, IFileService fileService, AedValidator aedValidator)
     {
         _aedRepository = aedRepository;
-        _aedModelsRepository = aedModelsRepository;
-        _aedManufacturersRepository = aedManufacturersRepository;
-        _aedLanguagesRepository = aedLanguagesRepository;
         _usersRepository = usersRepository;
         _fileService = fileService;
+        _aedValidator = aedValidator;
     }
     
     public async Task<Aed> Handle(CreateAedCommand request, CancellationToken cancellationToken)
@@ -41,8 +38,13 @@ public class CreateAedCommandHandler : IRequestHandler<CreateAedCommand, Aed>
                 throw new EntityValidationException("OwnerId", "Owner not found");
             }
         }
+        else
+        {
+            var publicAed = aed as PublicAed;
+            _aedValidator.ValidateAvailability(publicAed?.Availability);
+        }
 
-        await ValidateRelatedEntities(aed);
+        await _aedValidator.ValidateRelatedEntities(aed);
         
         await _aedRepository.AddAed(aed);
         
@@ -69,44 +71,6 @@ public class CreateAedCommandHandler : IRequestHandler<CreateAedCommand, Aed>
             };
 
             await _aedRepository.AddAedPhoto(aedPhoto);
-        }
-    }
-
-    private async Task ValidateRelatedEntities(Aed aed)
-    {
-        if (aed.ManufacturerId != null)
-        {
-            var manufacturer = await _aedManufacturersRepository.GetManufacturerById(aed.ManufacturerId.Value);
-            
-            if (manufacturer == null)
-            {
-                throw new EntityValidationException("ManufacturerId", "Vyrobca AED neexistuje!");
-            }
-        }
-        
-        if (aed.ModelId != null)
-        {
-            var model = await _aedModelsRepository.GetModelById(aed.ModelId.Value);
-            
-            if (model == null)
-            {
-                throw new EntityValidationException("ModelId", "Model AED neexistuje!");
-            }
-            
-            if (model.ManufacturerId != aed.ManufacturerId)
-            {
-                throw new EntityValidationException("ModelId", "Model AED nepatri pod vyrobcu!");
-            }
-        }
-        
-        if (aed.LanguageId != null)
-        {
-            var language = await _aedLanguagesRepository.GetLanguageById(aed.LanguageId.Value);
-            
-            if (language == null)
-            {
-                throw new EntityValidationException("LanguageId", "Jazyk AED neexistuje!");
-            }
         }
     }
 }

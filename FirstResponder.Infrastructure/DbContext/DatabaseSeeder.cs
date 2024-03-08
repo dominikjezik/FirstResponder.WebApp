@@ -74,7 +74,8 @@ public class DatabaseSeeder
             .RuleFor(a => a.Notes, f => f.Lorem.Sentence())
             .RuleFor(a => a.LanguageId, f => languages[f.Random.Int(0, languages.Count - 1)].Id)
             .RuleFor(a => a.ManufacturerId, f => manufacturers[f.Random.Int(0, manufacturers.Count - 1)].Id)
-            .RuleFor(a => a.ModelId, f => models[f.Random.Int(0, models.Count - 1)].Id);
+            .RuleFor(a => a.ModelId, f => models[f.Random.Int(0, models.Count - 1)].Id)
+            .RuleFor(a => a.Availability, a => new PublicAed.PublicAedAvailability {Type = AedAvailabilityType.Anytime });
         
         var publicAeds = fakerPublicAeds.Generate(100);
         _context.PublicAeds.AddRange(publicAeds);

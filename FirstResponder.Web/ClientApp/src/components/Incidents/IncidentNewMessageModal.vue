@@ -38,7 +38,6 @@ export default {
                 this.errorMessage = 'Nastala chyba pri odosielaní správy.'
             })
             .then(message => {
-                console.log(message)
                 this.$emit('message-sent', message)
                 this.closeModal()
             })

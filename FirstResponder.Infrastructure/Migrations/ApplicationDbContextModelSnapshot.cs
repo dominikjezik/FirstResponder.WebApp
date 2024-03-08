@@ -976,6 +976,43 @@ namespace FirstResponder.Infrastructure.Migrations
                         .HasForeignKey("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsOne("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed+PublicAedAvailability", "Availability", b1 =>
+                        {
+                            b1.Property<Guid>("PublicAedId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime?>("DateFrom")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime?>("DateTo")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<int?>("Days")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Description")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<TimeSpan?>("TimeFrom")
+                                .HasColumnType("time");
+
+                            b1.Property<TimeSpan?>("TimeTo")
+                                .HasColumnType("time");
+
+                            b1.Property<int>("Type")
+                                .HasColumnType("int");
+
+                            b1.HasKey("PublicAedId");
+
+                            b1.ToTable("PublicAeds");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PublicAedId");
+                        });
+
+                    b.Navigation("Availability")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.CourseAggregate.Course", b =>

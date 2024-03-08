@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using FirebaseAdmin;
 using FirstResponder.ApplicationCore.Aeds.Queries;
+using FirstResponder.ApplicationCore.Aeds.Validators;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.Infrastructure.DbContext;
@@ -126,6 +127,8 @@ builder.Services.AddScoped<ICoursesRepository, CoursesRepository>();
 builder.Services.AddScoped<ICourseTypesRepository, CourseTypesRepository>();
 builder.Services.AddScoped<INotificationsRepository, NotificationsRepository>();
 builder.Services.AddScoped<IDeviceTokensRepository, DeviceTokensRepository>();
+
+builder.Services.AddScoped<AedValidator>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddSingleton<IFileService, LocalFileService>();

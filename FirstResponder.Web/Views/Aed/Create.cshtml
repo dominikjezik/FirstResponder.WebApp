@@ -136,6 +136,11 @@
         }
         
         /**
+        * Script for selecting availability of the AED.
+        */
+        window.aedHelpers.displayCorrectAvailabilityFields();
+        
+        /**
         * Script for loading models based on the selected manufacturer.
         */
         window.aedHelpers.handleManufacturerModelSelects('manufacturer-select', 'model-select', '@Url.Action("Models", "Aed")')

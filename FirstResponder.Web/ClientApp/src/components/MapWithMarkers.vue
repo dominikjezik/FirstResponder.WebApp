@@ -99,8 +99,6 @@ export default {
                         }
                     })
                     
-                    console.log(marker)
-                    
                     if (marker.popup) {
                         leafletMarker.bindPopup(marker.popup)
                     }

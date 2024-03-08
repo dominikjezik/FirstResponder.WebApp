@@ -61,6 +61,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .HasForeignKey(a => a.OwnerId)
             .IsRequired();
         
+        modelBuilder.Entity<PublicAed>()
+            .OwnsOne(a => a.Availability);
+        
         modelBuilder.Entity<Manufacturer>()
             .HasMany<Aed>()
             .WithOne(a => a.Manufacturer)

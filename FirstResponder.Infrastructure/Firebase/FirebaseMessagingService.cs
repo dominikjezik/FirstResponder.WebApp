@@ -41,6 +41,11 @@ public class FirebaseMessagingService : IMessagingService
 
     public async Task<IList<DeviceToken>> SendNotificationAsync(IList<DeviceToken> deviceTokens, string title, string message)
     {
+        if (!deviceTokens.Any())
+        {
+            return new List<DeviceToken>();
+        }
+        
         // Limit characters to 1000
         if (message.Length > 1000)
         {

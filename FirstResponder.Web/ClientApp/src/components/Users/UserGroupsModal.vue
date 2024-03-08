@@ -98,8 +98,6 @@ export default {
                     }
 
                     this.groups = groups.sort((a, b) => a.name.localeCompare(b.name))
-                     
-                    console.log(groups)
                 })
                 .catch(error => console.log(error))
         }

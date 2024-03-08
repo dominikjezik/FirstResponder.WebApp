@@ -550,7 +550,14 @@ namespace FirstResponder.Infrastructure.Migrations
                     DescriptionLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContactPersonPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactPersonEmail = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ContactPersonEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Availability_Type = table.Column<int>(type: "int", nullable: false),
+                    Availability_TimeFrom = table.Column<TimeSpan>(type: "time", nullable: true),
+                    Availability_TimeTo = table.Column<TimeSpan>(type: "time", nullable: true),
+                    Availability_Days = table.Column<int>(type: "int", nullable: true),
+                    Availability_DateFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Availability_DateTo = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Availability_Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
