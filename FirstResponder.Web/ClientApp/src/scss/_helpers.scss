@@ -1,3 +1,5 @@
+@use 'layout';
+
 // Helpers
 .select-full-width {
     width: 100%;
@@ -60,4 +62,8 @@
 // Calendar
 .theme-gcal {
     font-family: inherit;
+}
+
+.theme-gcal .cv-day.today .cv-day-number {
+    background-color: layout.$accent-color !important;
 }

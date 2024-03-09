@@ -89,7 +89,8 @@ public class DatabaseSeeder
             .RuleFor(u => u.NormalizedUserName, (f, u) => u.Email.ToUpper())
             .RuleFor(u => u.NormalizedEmail, (f, u) => u.Email.ToUpper())
             .RuleFor(u => u.EmailConfirmed, f => f.Random.Bool())
-            .RuleFor(u => u.PasswordHash, f => "AQAAAAIAAYagAAAAEEBlNmh1Dg1K0iOOd5OpuZWN75eNALqi89MQFEyZC/V6y7j+p0iYOEsQL3EFbF/hcw==")
+            .RuleFor(u => u.PasswordHash,
+                f => "AQAAAAIAAYagAAAAEEBlNmh1Dg1K0iOOd5OpuZWN75eNALqi89MQFEyZC/V6y7j+p0iYOEsQL3EFbF/hcw==")
             .RuleFor(u => u.SecurityStamp, f => Guid.NewGuid().ToString())
             .RuleFor(u => u.ConcurrencyStamp, f => Guid.NewGuid().ToString())
             .RuleFor(u => u.PhoneNumber, f => f.Phone.PhoneNumber())
@@ -97,7 +98,8 @@ public class DatabaseSeeder
             .RuleFor(u => u.TwoFactorEnabled, f => false)
             .RuleFor(u => u.LockoutEnd, f => null)
             .RuleFor(u => u.LockoutEnabled, f => false)
-            .RuleFor(u => u.AccessFailedCount, f => 0);
+            .RuleFor(u => u.AccessFailedCount, f => 0)
+            .RuleFor(u => u.Region, f => f.PickRandom<RegionOfState>());
         
         var users = fakerUsers.Generate(100);
         _context.Users.AddRange(users);

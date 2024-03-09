@@ -121,6 +121,27 @@ public class IncidentsController : ApiController
         return Ok();
     }
     
+    [HttpGet]
+    [Route("{incidentId}/report")]
+    public async Task<IActionResult> GetReport(Guid incidentId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        if (!Guid.TryParse(userId, out var userGuid))
+        {
+            return BadRequest();
+        }
+        
+        var report = await _mediator.Send(new GetIncidentResponderReportQuery(incidentId, userGuid));
+        
+        if (report == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(report);
+    }
+    
     [HttpPost]
     [Route("{incidentId}/report")]
     public async Task<IActionResult> StoreReport(Guid incidentId, [FromBody] IncidentReportFormDTO model)

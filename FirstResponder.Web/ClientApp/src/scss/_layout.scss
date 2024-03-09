@@ -2,6 +2,7 @@
 $side-bar-width: 250px;
 $mobile-top-menu-bar-height: 60px;
 $main-app-color: #000000;
+$accent-color: #485fc7;
 
 .sidebar-layout {
     .main-logo {
@@ -97,7 +98,7 @@ $main-app-color: #000000;
         }
 
         .sub-nav > .selected > a {
-            background: #00d1b2;
+            background: $accent-color;
             color: #fff;
         }
 

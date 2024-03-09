@@ -27,7 +27,14 @@ export default {
                 { id: 5, name: 'Zrušený' }
             ],
             optionsRegion: [
-                { id: 0, name: 'Trenčiansky kraj' }
+                { id: 0, name: 'Bratislavský kraj' },
+                { id: 1, name: 'Trnavský kraj' },
+                { id: 2, name: 'Trenčiansky kraj' },
+                { id: 3, name: 'Nitriansky kraj' },
+                { id: 4, name: 'Žilinský kraj' },
+                { id: 5, name: 'Banskobystrický kraj' },
+                { id: 6, name: 'Prešovský kraj' },
+                { id: 7, name: 'Košický kraj' },
             ],
             optionsManufacturer: [],
             optionsModel: [],
