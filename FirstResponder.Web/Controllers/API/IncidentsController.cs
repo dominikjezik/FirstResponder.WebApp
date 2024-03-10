@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using UnauthorizedAccessException = FirstResponder.ApplicationCore.Common.Exceptions.UnauthorizedAccessException;
 
 namespace FirstResponder.Web.Controllers.API;
 
@@ -55,6 +56,22 @@ public class IncidentsController : ApiController
                 r.Responder = null;
             });
         });
+        
+        return Ok(incidents);
+    }
+    
+    [HttpGet]
+    [Route("my-list")]
+    public async Task<IActionResult> GetMyIncidents()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        if (!Guid.TryParse(userId, out var userGuid))
+        {
+            return BadRequest();
+        }
+
+        var incidents = await _mediator.Send(new GetIncidentsForResponderRequest(userGuid));
         
         return Ok(incidents);
     }
@@ -119,6 +136,34 @@ public class IncidentsController : ApiController
         }
 
         return Ok();
+    }
+    
+    [HttpGet]
+    [Route("{incidentId}")]
+    public async Task<IActionResult> GetIncident(Guid incidentId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        if (!Guid.TryParse(userId, out var userGuid))
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            var incident = await _mediator.Send(new GetIncidentForResponderRequest(incidentId, userGuid));
+            
+            if (incident == null)
+            {
+                return NotFound();
+            }
+            
+            return Ok(incident);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
     
     [HttpGet]

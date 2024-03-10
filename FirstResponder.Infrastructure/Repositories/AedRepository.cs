@@ -2,6 +2,7 @@ using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Extensions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.Infrastructure.DbContext;
 using FirstResponder.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -239,5 +240,74 @@ public class AedRepository : IAedRepository
         
         _dbContext.AedPhotos.RemoveRange(photos);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<AedEventDTO>> GetAedEvents(DateTime from, DateTime to)
+    {
+        var publicAeds = await _dbContext.PublicAeds
+            .Where(a => (a.BatteryExpiration <= to && a.BatteryExpiration >= from) ||
+                (a.ElectrodesAdultsExpiration <= to && a.ElectrodesAdultsExpiration >= from) ||
+                (a.ElectrodesChildrenExpiration <= to && a.ElectrodesChildrenExpiration >= from)
+            ).OfType<Aed>()
+            .ToListAsync();
+
+        var personalAeds = await _dbContext.PersonalAeds
+            .Where(a => (a.BatteryExpiration <= to && a.BatteryExpiration >= from) ||
+                        (a.ElectrodesAdultsExpiration <= to && a.ElectrodesAdultsExpiration >= from) ||
+                        (a.ElectrodesChildrenExpiration <= to && a.ElectrodesChildrenExpiration >= from)
+            ).Join(
+                _dbContext.Users,
+                a => a.OwnerId,
+                u => u.Id,
+                (a, u) => new { Aed = a, User = u }
+            ).ToListAsync();
+
+        var personalAedsWithOwners = personalAeds.Select(result =>
+        {
+            result.Aed.Owner = result.User.ToDomainUser();
+            return (Aed)result.Aed;
+        }).ToList();
+        
+        var aeds = publicAeds.Concat(personalAedsWithOwners).ToList();
+                    
+        var aedEvents = new List<AedEventDTO>();
+        
+        foreach (var aed in aeds)
+        {
+            if (aed.BatteryExpiration != null && aed.BatteryExpiration <= to && aed.BatteryExpiration >= from)
+            {
+                aedEvents.Add(new AedEventDTO
+                {
+                    AedId = aed.Id,
+                    EventDate = aed.BatteryExpiration.Value,
+                    HolderName = aed.GetDisplayHolder(),
+                    Type = "BatteryExpiration"
+                });
+            }
+            
+            if (aed.ElectrodesAdultsExpiration != null && aed.ElectrodesAdultsExpiration <= to && aed.ElectrodesAdultsExpiration >= from)
+            {
+                aedEvents.Add(new AedEventDTO
+                {
+                    AedId = aed.Id,
+                    EventDate = aed.ElectrodesAdultsExpiration.Value,
+                    HolderName = aed.GetDisplayHolder(),
+                    Type = "ElectrodesAdultsExpiration"
+                });
+            }
+            
+            if (aed.ElectrodesChildrenExpiration != null && aed.ElectrodesChildrenExpiration <= to && aed.ElectrodesChildrenExpiration >= from)
+            {
+                aedEvents.Add(new AedEventDTO
+                {
+                    AedId = aed.Id,
+                    EventDate = aed.ElectrodesChildrenExpiration.Value,
+                    HolderName = aed.GetDisplayHolder(),
+                    Type = "ElectrodesChildrenExpiration"
+                });
+            }
+        }
+        
+        return aedEvents;
     }
 }

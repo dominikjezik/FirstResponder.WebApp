@@ -10,8 +10,9 @@ import MapWithMarkers from "./components/MapWithMarkers.vue";
 import EventCalendar from "./components/EventCalendar.vue";
 import AedsListTableFilter from "./components/Aeds/AedsListTableFilter.vue";
 import AedsMapFilter from "./components/Aeds/AedsMapFilter.vue";
-import PersonalAedOwnerField from "./components/Aeds/PersonalAedOwnerField.vue"
-import AedImageUploader from "./components/Aeds/AedImageUploader.vue"
+import PersonalAedOwnerField from "./components/Aeds/PersonalAedOwnerField.vue";
+import AedImageUploader from "./components/Aeds/AedImageUploader.vue";
+import AedsCalendar from "./components/Aeds/AedsCalendar.vue";
 import EditableTableItem from "./components/EditableTableItem.vue";
 import EditableNewTableItem from "./components/EditableNewTableItem.vue";
 import UsersListTableFilter from "./components/Users/UsersListTableFilter.vue";
@@ -49,9 +50,10 @@ app.component('map-with-markers', MapWithMarkers)
 // Event calendar
 app.component('event-calendar', EventCalendar)
 
-// Aed index/map page components
+// Aed index/map/calendar page components
 app.component('aeds-list-table-filter', AedsListTableFilter)
 app.component('aeds-map-filter', AedsMapFilter)
+app.component('aeds-calendar', AedsCalendar)
 
 // Aed create/edit page components
 app.component('personal-aed-owner-field', PersonalAedOwnerField)

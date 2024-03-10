@@ -88,37 +88,31 @@ public class IncidentsRepository : IIncidentsRepository
         return await incidents.ToListAsync();
     }
     
+    public async Task<IEnumerable<IncidentDTO>> GetUserIncidents(Guid userId)
+    {
+        return await _dbContext.Incidents
+            .Where(i => i.Responders
+                .Where(ir => ir.AcceptedAt != null)
+                .Any(r => r.ResponderId == userId)
+            )
+            .OrderByDescending(i => i.CreatedAt)
+            .Select(incident => incident.ToDTO())
+            .ToListAsync();
+    }
+
     public async Task<IncidentDTO?> GetIncidentDetailsById(Guid incidentId)
     {
         return await _dbContext.Incidents
             .Where(i => i.Id == incidentId)
+            .Select(incident => incident.ToDTO())
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Incident?> GetIncidentWithRespondersById(Guid incidentId)
+    {
+        return await _dbContext.Incidents
+            .Where(i => i.Id == incidentId)
             .Include(i => i.Responders)
-            .Select(i => new {
-                Incident = i,
-                Responders = i.Responders
-                    .Where(r => r.AcceptedAt != null)
-                    .Join(
-                        _dbContext.Users,
-                        r => r.ResponderId,
-                        u => u.Id,
-                        (r, u) => new { Responder = r, User = u }
-                    ).ToList()
-            })
-            .Select(result => new IncidentDTO
-            {
-                IncidentId = result.Incident.Id,
-                CreatedAt = result.Incident.CreatedAt,
-                State = result.Incident.State,
-                ResolvedAt = result.Incident.ResolvedAt,
-                IncidentForm = new IncidentFormDTO
-                {
-                    Patient = result.Incident.Patient,
-                    Address = result.Incident.Address,
-                    Diagnosis = result.Incident.Diagnosis,
-                    Latitude = result.Incident.Latitude,
-                    Longitude = result.Incident.Longitude
-                }
-            })
             .FirstOrDefaultAsync();
     }
 

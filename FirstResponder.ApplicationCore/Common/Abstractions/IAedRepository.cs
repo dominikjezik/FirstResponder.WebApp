@@ -1,5 +1,6 @@
 using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.ApplicationCore.Incidents.DTOs;
 
 namespace FirstResponder.ApplicationCore.Common.Abstractions;
 
@@ -30,4 +31,6 @@ public interface IAedRepository
     Task<ICollection<AedPhoto>> GetAedPhotosByIds(Guid aedId, string[] photosIdsForDelete);
     
     Task DeleteAedPhotosByIds(Guid aedId, string[] photosIdsForDelete);
+    
+    Task<IEnumerable<AedEventDTO>> GetAedEvents(DateTime from, DateTime to);
 }

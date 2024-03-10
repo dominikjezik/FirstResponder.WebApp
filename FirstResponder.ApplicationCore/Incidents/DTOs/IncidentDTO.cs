@@ -1,4 +1,5 @@
 using FirstResponder.ApplicationCore.Common.Enums;
+using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
 
 namespace FirstResponder.ApplicationCore.Incidents.DTOs;
 
@@ -13,4 +14,26 @@ public class IncidentDTO
     public DateTime CreatedAt { get; set; }
     
     public DateTime? ResolvedAt { get; set; }
+}
+
+public static class IncidentExtensions
+{
+    public static IncidentDTO ToDTO(this Incident incident)
+    {
+        return new IncidentDTO
+        {
+            IncidentId = incident.Id,
+            IncidentForm = new IncidentFormDTO
+            {
+                Address = incident.Address,
+                Patient = incident.Patient,
+                Diagnosis = incident.Diagnosis,
+                Latitude = incident.Latitude,
+                Longitude = incident.Longitude
+            },
+            State = incident.State,
+            CreatedAt = incident.CreatedAt,
+            ResolvedAt = incident.ResolvedAt
+        };
+    }
 }

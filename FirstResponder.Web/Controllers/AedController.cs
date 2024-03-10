@@ -4,6 +4,8 @@ using FirstResponder.ApplicationCore.Aeds.Queries;
 using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Entities.AedAggregate;
+using FirstResponder.ApplicationCore.Incidents.DTOs;
+using FirstResponder.ApplicationCore.Incidents.Queries;
 using FirstResponder.Web.Extensions;
 using FirstResponder.Web.ViewModels;
 using MediatR;
@@ -32,6 +34,12 @@ public class AedController : Controller
     
     [Route("[action]")]
     public async Task<IActionResult> Map()
+    {
+        return View();
+    }
+    
+    [Route("[action]")]
+    public async Task<IActionResult> Calendar()
     {
         return View();
     }
@@ -197,6 +205,13 @@ public class AedController : Controller
     public async Task<IEnumerable<AedItemDTO>> MapItems()
     {
         return await _mediator.Send(new GetAllPublicAedItemsQuery());
+    }
+    
+    [HttpGet]
+    [Route("events")]
+    public async Task<IEnumerable<AedEventDTO>> Events(DateTime from, DateTime to)
+    {
+        return await _mediator.Send(new GetAedEventsQuery(from, to));
     }
 
     #region Helpers
