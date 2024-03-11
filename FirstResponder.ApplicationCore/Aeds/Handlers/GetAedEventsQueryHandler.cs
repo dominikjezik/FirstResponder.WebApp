@@ -1,9 +1,9 @@
+using FirstResponder.ApplicationCore.Aeds.Queries;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
-using FirstResponder.ApplicationCore.Incidents.Queries;
 using MediatR;
 
-namespace FirstResponder.ApplicationCore.Incidents.Handlers;
+namespace FirstResponder.ApplicationCore.Aeds.Handlers;
 
 public class GetAedEventsQueryHandler : IRequestHandler<GetAedEventsQuery, IEnumerable<AedEventDTO>>
 {

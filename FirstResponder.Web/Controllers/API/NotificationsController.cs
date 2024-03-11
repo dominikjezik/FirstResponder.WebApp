@@ -18,6 +18,7 @@ public class NotificationsController : ApiController
     
     [HttpGet]
     [Authorize("Bearer")]
+    [Authorize("IsResponderOrEmployee")]
     [Route("")]
     public async Task<IActionResult> GetNotifications()
     {

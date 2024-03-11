@@ -1,7 +1,7 @@
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using MediatR;
 
-namespace FirstResponder.ApplicationCore.Incidents.Queries;
+namespace FirstResponder.ApplicationCore.Aeds.Queries;
 
 public class GetAedEventsQuery : IRequest<IEnumerable<AedEventDTO>>
 {

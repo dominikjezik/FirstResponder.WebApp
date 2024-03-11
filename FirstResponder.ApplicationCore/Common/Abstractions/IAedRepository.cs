@@ -16,6 +16,8 @@ public interface IAedRepository
     
     Task<IEnumerable<AedItemDTO>> GetAllPublicAedItems();
     
+    Task<IEnumerable<AedItemDTO>> GetPersonalAedItemsByOwnerId(Guid ownerId);
+    
     Task<Aed?> GetAedById(Guid id);
 
     Task AddAed(Aed aed);

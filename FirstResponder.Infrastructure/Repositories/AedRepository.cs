@@ -187,6 +187,29 @@ public class AedRepository : IAedRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<AedItemDTO>> GetPersonalAedItemsByOwnerId(Guid ownerId)
+    {
+        return await _dbContext.PersonalAeds
+            .Include(aed => aed.Manufacturer)
+            .OrderByDescending(a => a.CreatedAt)
+            .Where(a => a.OwnerId == ownerId)
+            .Join(
+                _dbContext.Users,
+                a => a.OwnerId,
+                u => u.Id,
+                (a, u) => new { Aed = a, User = u }
+            ).Select(result => new AedItemDTO()
+            {
+                Id = result.Aed.Id,
+                State = result.Aed.State.ToString(),
+                DisplayState = result.User.FullName,
+                Holder = result.User.FullName,
+                CreatedAt = result.Aed.CreatedAt.ToString("dd.MM.yyyy HH:mm").ToUpper(),
+                SerialNumber = result.Aed.SerialNumber,
+                Manufacturer = result.Aed.Manufacturer.Name
+            }).ToListAsync();
+    }
+
     public async Task AddAed(Aed aed)
     {
         _dbContext.Aeds.Add(aed);
