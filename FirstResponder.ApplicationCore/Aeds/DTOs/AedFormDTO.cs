@@ -13,6 +13,7 @@ public class AedFormDTO
     public AedGeneralType GeneralType { get; set; }
     
     [Display(Name = "Stav")]
+    [EnumDataType(typeof(AedState), ErrorMessage = "Neplatný stav AED")]
     public AedState State { get; set; }
     
     [Display(Name = "Výrobca")]

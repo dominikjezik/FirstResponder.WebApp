@@ -9,7 +9,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using UnauthorizedAccessException = FirstResponder.ApplicationCore.Common.Exceptions.UnauthorizedAccessException;
 
 namespace FirstResponder.Web.Controllers.API;
 
@@ -160,7 +159,7 @@ public class IncidentsController : ApiController
             
             return Ok(incident);
         }
-        catch (UnauthorizedAccessException e)
+        catch (UnauthorizedException e)
         {
             return Unauthorized(e.Message);
         }
