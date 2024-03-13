@@ -28,7 +28,7 @@ public class DeleteAedCommandTests
         // Arrange
         var aedId = Guid.NewGuid();
         
-        var command = new DeleteAedCommand(aedId.ToString());
+        var command = new DeleteAedCommand(aedId);
         var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object, _fileServiceMock.Object);
         
         _aedRepositoryMock
@@ -48,34 +48,12 @@ public class DeleteAedCommandTests
     }
     
     [Fact]
-    public async Task InvalidAedId_ThrowsArgumentException()
-    {
-        // Arrange
-        var aedId = "totoUrciteNieJeGuid";
-        
-        var command = new DeleteAedCommand(aedId);
-        var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object, _fileServiceMock.Object);
-        
-        //Act
-        var action = async () =>
-        {
-            await handler.Handle(command, CancellationToken.None);
-        };
-        
-        // Assert
-        await action.Should().ThrowAsync<ArgumentException>()
-            .Where(e => e.Message == "Invalid aedId Guid format.");
-        
-        _aedRepositoryMock.Verify(r => r.DeleteAed(It.IsAny<Aed>()), Times.Never());
-    }
-    
-    [Fact]
     public async Task AedFound_DeletesAed()
     {
         // Arrange
         var aedId = Guid.NewGuid();
         
-        var command = new DeleteAedCommand(aedId.ToString());
+        var command = new DeleteAedCommand(aedId);
         var handler = new DeleteAedCommandHandler(_aedRepositoryMock.Object, _fileServiceMock.Object);
         
         var aed = _fixture.Create<PublicAed>();
@@ -94,7 +72,4 @@ public class DeleteAedCommandTests
         // Assert
         _aedRepositoryMock.Verify(r => r.DeleteAed(aed), Times.Once());
     }
-    
-    
-    
 }

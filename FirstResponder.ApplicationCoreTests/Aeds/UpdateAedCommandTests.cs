@@ -2,6 +2,7 @@ using AutoFixture;
 using FirstResponder.ApplicationCore.Aeds.Commands;
 using FirstResponder.ApplicationCore.Aeds.DTOs;
 using FirstResponder.ApplicationCore.Aeds.Handlers;
+using FirstResponder.ApplicationCore.Aeds.Validators;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.DTOs;
 using FirstResponder.ApplicationCore.Common.Exceptions;
@@ -18,7 +19,10 @@ public class UpdateAedCommandTests
     private readonly Mock<IAedRepository> _aedRepositoryMock = new();
     private readonly Mock<IUsersRepository> _usersRepositoryMock = new();
     private readonly Mock<IFileService> _fileServiceMock = new();
-
+    private readonly Mock<IAedModelsRepository> _aedModelsRepository = new();
+    private readonly Mock<IAedManufacturersRepository> _aedManufacturersRepository = new();
+    private readonly Mock<IAedLanguagesRepository> _aedLanguagesRepository = new();
+    
     public UpdateAedCommandTests()
     {
         _fixture.Register<FileUploadDto>(() => null);
@@ -31,7 +35,12 @@ public class UpdateAedCommandTests
         var aedFormDto = _fixture.Create<AedFormDTO>();
         
         var command = new UpdateAedCommand(aedFormDto);
-        var handler = new UpdateAedCommandHandler(_aedRepositoryMock.Object, _usersRepositoryMock.Object, _fileServiceMock.Object);
+        var handler = new UpdateAedCommandHandler(
+            _aedRepositoryMock.Object, 
+            _usersRepositoryMock.Object, 
+            _fileServiceMock.Object, 
+            new AedValidator(_aedModelsRepository.Object, _aedManufacturersRepository.Object, _aedLanguagesRepository.Object)
+        );
         
         _aedRepositoryMock
             .Setup(r => r.GetAedById(It.IsAny<Guid>()))
