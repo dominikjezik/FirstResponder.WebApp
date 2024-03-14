@@ -167,7 +167,10 @@ public class IncidentsRepository : IIncidentsRepository
                     ResponderId = r.ResponderId,
                     FullName = u.FullName,
                     AcceptedAt = r.AcceptedAt,
-                    ReportSubmitted = r.ReportId != null
+                    ReportSubmitted = r.ReportId != null,
+                    Latitude = r.LastLatitude,
+                    Longitude = r.LastLongitude,
+                    TypeOfTransport = r.TypeOfTransport == null ? null : r.TypeOfTransport.ToString()
                 }
             )
             .ToListAsync();
@@ -246,7 +249,7 @@ public class IncidentsRepository : IIncidentsRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IncidentResponder> AcceptIncident(Incident incident, User user)
+    public async Task<IncidentResponder> AcceptIncident(Incident incident, User user, double? latitude = null, double? longitude = null, TypeOfResponderTransport? typeOfTransport = null)
     {
         var responderIncident = await _dbContext.IncidentResponders
             .Where(r => r.IncidentId == incident.Id && r.ResponderId == user.Id)
@@ -260,13 +263,23 @@ public class IncidentsRepository : IIncidentsRepository
                 IncidentId = incident.Id,
                 CreatedAt = DateTime.Now
             };
-            
             incident.Responders.Add(responderIncident);
             _dbContext.IncidentResponders.Add(responderIncident);
         }
         
         responderIncident.AcceptedAt = DateTime.Now;
         responderIncident.DeclinedAt = null;
+        
+        if (latitude != null && longitude != null)
+        {
+            responderIncident.LastLatitude = latitude;
+            responderIncident.LastLongitude = longitude;
+        }
+        
+        if (typeOfTransport != null)
+        {
+            responderIncident.TypeOfTransport = typeOfTransport.Value;
+        }
         
         await _dbContext.SaveChangesAsync();
         return responderIncident;

@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using MediatR;
 
@@ -8,4 +9,10 @@ public class AcceptIncidentCommand : IRequest<IncidentResponderItemDTO>
     public string ResponderId { get; init; }
 
     public Guid IncidentId { get; init; }
+    
+    public double? Latitude { get; set; }
+    
+    public double? Longitude { get; set; }
+    
+    public TypeOfResponderTransport? TypeOfTransport { get; set; }
 }

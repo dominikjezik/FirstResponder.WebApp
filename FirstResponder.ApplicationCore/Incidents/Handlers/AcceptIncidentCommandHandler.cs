@@ -44,7 +44,7 @@ public class AcceptIncidentCommandHandler : IRequestHandler<AcceptIncidentComman
             throw new EntityNotFoundException();
         }
         
-        var incidentResponder = await _incidentsRepository.AcceptIncident(incident, user);
+        var incidentResponder = await _incidentsRepository.AcceptIncident(incident, user, request.Latitude, request.Longitude, request.TypeOfTransport);
         
         if (incident.State == IncidentState.Created)
         {

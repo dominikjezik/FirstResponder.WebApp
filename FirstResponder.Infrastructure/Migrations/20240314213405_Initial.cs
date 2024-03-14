@@ -394,6 +394,9 @@ namespace FirstResponder.Infrastructure.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AcceptedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeclinedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastLatitude = table.Column<double>(type: "float", nullable: true),
+                    LastLongitude = table.Column<double>(type: "float", nullable: true),
+                    TypeOfTransport = table.Column<int>(type: "int", nullable: true),
                     ReportId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>

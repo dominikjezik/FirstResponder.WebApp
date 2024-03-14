@@ -86,7 +86,10 @@ public class IncidentsController : ApiController
             var incidentResponder = await _mediator.Send(new AcceptIncidentCommand
             {
                 IncidentId = incidentId,
-                ResponderId = userId
+                ResponderId = userId,
+                Latitude = latitude,
+                Longitude = longitude,
+                TypeOfTransport = typeOfTransport
             });
             
             // Update responders list on edit page (SignalR)

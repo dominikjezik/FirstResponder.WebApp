@@ -42,8 +42,26 @@ export default {
                 .then(data => {
                     this.responders = data.map(responder => {
                         responder.acceptedAt = new Date(responder.acceptedAt).toLocaleString()
+                        
+                        if (responder.latitude === null || responder.longitude === null) {
+                            return responder
+                        }
+                        
+                        console.log(responder)
+
+                        this.markers.push({
+                            type: 'responder',
+                            responderId: responder.responderId,
+                            lat: responder.latitude,
+                            lon: responder.longitude,
+                            icon: `responder-${responder.typeOfTransport === null ? 'walking' : responder.typeOfTransport.toLowerCase()}`,
+                            popup: `${responder.fullName}`
+                        })
+                        
                         return responder
                     })
+                    
+                    this.$refs.mapWithMarkers.refreshMarkers()
 
                     if (data.length === 0) {
                         if (this.isOpened) {

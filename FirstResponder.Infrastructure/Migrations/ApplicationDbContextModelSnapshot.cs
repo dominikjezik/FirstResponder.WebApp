@@ -347,8 +347,17 @@ namespace FirstResponder.Infrastructure.Migrations
                     b.Property<DateTime?>("DeclinedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<double?>("LastLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("LastLongitude")
+                        .HasColumnType("float");
+
                     b.Property<Guid?>("ReportId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("TypeOfTransport")
+                        .HasColumnType("int");
 
                     b.HasKey("IncidentId", "ResponderId");
 

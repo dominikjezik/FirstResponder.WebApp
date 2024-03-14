@@ -1,3 +1,4 @@
+using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Entities.IncidentAggregate;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
@@ -34,7 +35,7 @@ public interface IIncidentsRepository
     
     Task AssignResponderToIncidents(Guid responderId, IEnumerable<Incident> incidents);
     
-    Task<IncidentResponder> AcceptIncident(Incident incident, User user);
+    Task<IncidentResponder> AcceptIncident(Incident incident, User user, double? latitude = null, double? longitude = null, TypeOfResponderTransport? typeOfTransport = null);
     
     Task DeclineIncident(Incident incident, User user);
     
