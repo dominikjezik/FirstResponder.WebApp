@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FirstResponder.ApplicationCore\FirstResponder.ApplicationCore.csproj" />
+      <ProjectReference Include="..\..\src\FirstResponder.ApplicationCore\FirstResponder.ApplicationCore.csproj" />
     </ItemGroup>
 
 </Project>

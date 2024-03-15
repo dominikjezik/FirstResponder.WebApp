@@ -10,11 +10,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoFixture" Version="4.18.0" />
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.14" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0"/>
-        <PackageReference Include="Moq" Version="4.20.70" />
+        <PackageReference Include="Selenium.WebDriver" Version="4.15.0" />
+        <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.33.0" />
         <PackageReference Include="xunit" Version="2.4.2"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -27,7 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FirstResponder.Infrastructure\FirstResponder.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\src\FirstResponder.Infrastructure\FirstResponder.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\src\FirstResponder.Web\FirstResponder.Web.csproj" />
     </ItemGroup>
 
 </Project>
