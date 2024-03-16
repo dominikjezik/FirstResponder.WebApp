@@ -16,6 +16,14 @@ public class StoreUserDeviceTokenCommandHandler : IRequestHandler<StoreUserDevic
     
     public async Task Handle(StoreUserDeviceTokenCommand request, CancellationToken cancellationToken)
     {
+        // Check if same token already exists
+        var existingToken = await _deviceTokensRepository.DeviceTokenExists(request.DeviceToken, request.User.Id);
+        
+        if (existingToken)
+        {
+            return;
+        }
+        
         var deviceTokenEntity = new DeviceToken
         {
             UserId = request.User.Id,

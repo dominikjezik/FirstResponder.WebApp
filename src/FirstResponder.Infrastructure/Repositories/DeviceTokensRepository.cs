@@ -29,6 +29,12 @@ public class DeviceTokensRepository : IDeviceTokensRepository
             .ToListAsync();
     }
 
+    public async Task<bool> DeviceTokenExists(string deviceToken, Guid userId)
+    {
+        return await _dbContext.DeviceTokens
+            .AnyAsync(dt => dt.UserId == userId && dt.Token == deviceToken);
+    }
+
     public async Task RemoveTokens(IList<DeviceToken> deviceTokens)
     {
         _dbContext.DeviceTokens.RemoveRange(deviceTokens);

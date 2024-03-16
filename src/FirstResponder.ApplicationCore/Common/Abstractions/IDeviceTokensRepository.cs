@@ -8,6 +8,8 @@ public interface IDeviceTokensRepository
     
     Task<IList<DeviceToken>> GetDeviceTokensForUsers(IEnumerable<User> users);
     
+    Task<bool> DeviceTokenExists(string deviceToken, Guid userId);
+    
     Task RemoveTokens(IList<DeviceToken> deviceTokens);
     
     Task RemoveDeviceToken(string deviceToken, Guid userId);
