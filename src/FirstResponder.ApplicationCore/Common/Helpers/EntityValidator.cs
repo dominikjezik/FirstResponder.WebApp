@@ -19,7 +19,7 @@ public static class EntityValidator
             {
                 foreach (var memberName in validationResult.MemberNames)
                 {
-                    errors[memberName] = validationResult.ErrorMessage;
+                    errors[memberName] = validationResult.ErrorMessage!;
                 }
             }
             

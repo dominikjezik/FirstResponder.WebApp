@@ -8,5 +8,5 @@ public class GetCoursesQuery : IRequest<IEnumerable<Course>>
 {
     public int PageNumber { get; set; }
     
-    public CourseFiltersDTO Filters { get; set; }
+    public CourseFiltersDTO? Filters { get; set; }
 }

@@ -19,7 +19,7 @@ public class DeleteAedCommandTests
 
     public DeleteAedCommandTests()
     {
-        _fixture.Register<FileUploadDto>(() => null);
+        _fixture.Register<FileUploadDto>(() => null!);
     }
     
     [Fact]
@@ -33,7 +33,7 @@ public class DeleteAedCommandTests
         
         _aedRepositoryMock
             .Setup(r => r.GetAedById(It.IsAny<Guid>()))
-            .ReturnsAsync((Aed)null);
+            .ReturnsAsync((Aed)null!);
         
         //Act
         var action = async () =>

@@ -11,7 +11,6 @@ public class UserUpdateTests : IDisposable
 
     private readonly string _testEmail = "dominik@example.com";
     private readonly string _testPassword = "Password1";
-    private readonly string _testFullName = "Dominik Ježík";
     
     private readonly string _targetUserGuid = "21e0e51a-5eb1-40e8-199d-08dbf3ed49ef";
 

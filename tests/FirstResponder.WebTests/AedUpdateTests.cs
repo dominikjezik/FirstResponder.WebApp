@@ -12,7 +12,6 @@ public class AedUpdateTests : IDisposable
 
     private readonly string _testEmail = "dominik@example.com";
     private readonly string _testPassword = "Password1";
-    private readonly string _testFullName = "Dominik Ježík";
     
     private readonly string _targetAedGuid = "4cc7d74c-335c-4e98-9599-08dbf3f95942";
 

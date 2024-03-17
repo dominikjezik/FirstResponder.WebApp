@@ -26,7 +26,7 @@ public class CreateAedCommandTests
 
     public CreateAedCommandTests()
     {
-        _fixture.Register<FileUploadDto>(() => null);
+        _fixture.Register<FileUploadDto>(() => null!);
     }
     
     [Fact]
@@ -59,7 +59,7 @@ public class CreateAedCommandTests
         // Assert
         await action.Should().ThrowAsync<EntityValidationException>()
             .Where(e =>
-                e.ValidationErrors.ContainsKey("OwnerId") &&
+                e.ValidationErrors!.ContainsKey("OwnerId") &&
                 e.ValidationErrors["OwnerId"] == "Owner not found");
         
         _aedRepositoryMock.Verify(foo => foo.AddAed(It.IsAny<Aed>()), Times.Never());

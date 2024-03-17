@@ -25,7 +25,7 @@ public class UpdateAedCommandTests
     
     public UpdateAedCommandTests()
     {
-        _fixture.Register<FileUploadDto>(() => null);
+        _fixture.Register<FileUploadDto>(() => null!);
     }
     
     [Fact]
@@ -44,7 +44,7 @@ public class UpdateAedCommandTests
         
         _aedRepositoryMock
             .Setup(r => r.GetAedById(It.IsAny<Guid>()))
-            .ReturnsAsync((Aed)null);
+            .ReturnsAsync((Aed)null!);
         
         //Act
         var action = async () =>

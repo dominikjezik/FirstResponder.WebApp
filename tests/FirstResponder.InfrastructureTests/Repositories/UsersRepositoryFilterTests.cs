@@ -19,9 +19,9 @@ public class UsersRepositoryFilterTests : IDisposable
             .UseInMemoryDatabase(databaseName: "FirstResponderTestDatabase" + nameof(UsersRepositoryFilterTests))
             .Options;
     
-    private readonly Mock<UserManager<ApplicationUser>> _userManagerMock = new(Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);
+    private readonly Mock<UserManager<ApplicationUser>> _userManagerMock = new(Mock.Of<IUserStore<ApplicationUser>>(), null!, null!, null!, null!, null!, null!, null!, null!);
 
-    public async Task SeedDatabase(ApplicationDbContext context)
+    private async Task SeedDatabase(ApplicationDbContext context)
     {
         var data = new List<User>
         {
@@ -34,7 +34,7 @@ public class UsersRepositoryFilterTests : IDisposable
 
         foreach (var user in data)
         {
-            context.Users.Add(user.ToApplicationUser());
+            context.Users.Add(user.ToApplicationUser()!);
         }
         
         await context.SaveChangesAsync();

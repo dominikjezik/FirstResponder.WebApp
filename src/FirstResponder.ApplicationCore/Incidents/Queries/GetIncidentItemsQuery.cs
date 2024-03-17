@@ -9,5 +9,5 @@ public class GetIncidentItemsQuery : IRequest<IEnumerable<IncidentItemDTO>>
     
     public int PageSize { get; set; }
     
-    public IncidentItemFiltersDTO Filters { get; set; }
+    public IncidentItemFiltersDTO? Filters { get; set; }
 }

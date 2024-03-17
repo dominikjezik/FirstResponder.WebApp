@@ -13,16 +13,16 @@ namespace FirstResponder.InfrastructureTests.Repositories;
 
 public class UsersRepositorySearchTests : IDisposable
 {
-    private readonly DbContextOptions<ApplicationDbContext> dbContextOptions = 
+    private readonly DbContextOptions<ApplicationDbContext> _dbContextOptions = 
         new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: "FirstResponderTestDatabase"+ nameof(UsersRepositorySearchTests))
             .Options;
     
     private readonly IFixture _fixture = new Fixture();
     
-    private readonly Mock<UserManager<ApplicationUser>> _userManagerMock = new(Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);
+    private readonly Mock<UserManager<ApplicationUser>> _userManagerMock = new(Mock.Of<IUserStore<ApplicationUser>>(), null!, null!, null!, null!, null!, null!, null!, null!);
     
-    public async Task SeedDatabase(ApplicationDbContext context)
+    private async Task SeedDatabase(ApplicationDbContext context)
     {
         var data = new List<string[]>
         {
@@ -40,7 +40,7 @@ public class UsersRepositorySearchTests : IDisposable
                 .With(u => u.FullName, item[1])
                 .Create();
         
-            context.Users.Add(user.ToApplicationUser());
+            context.Users.Add(user.ToApplicationUser()!);
         }
         
         await context.SaveChangesAsync();
@@ -50,7 +50,7 @@ public class UsersRepositorySearchTests : IDisposable
     public async Task SearchQueryIsInFullNameOrEmail_ReturnsCorrectUsers()
     {
         // Arrange
-        await using var context = new ApplicationDbContext(dbContextOptions);
+        await using var context = new ApplicationDbContext(_dbContextOptions);
         await SeedDatabase(context);
         
         var usersRepository = new UsersRepository(context, _userManagerMock.Object);
@@ -70,7 +70,7 @@ public class UsersRepositorySearchTests : IDisposable
     public async Task SearchQueryWithLimit_ReturnsCorrectCountOfUsers()
     {
         // Arrange
-        await using var context = new ApplicationDbContext(dbContextOptions);
+        await using var context = new ApplicationDbContext(_dbContextOptions);
         await SeedDatabase(context);
         
         var usersRepository = new UsersRepository(context, _userManagerMock.Object);
@@ -86,7 +86,7 @@ public class UsersRepositorySearchTests : IDisposable
     public async Task SearchQueryWithNoMatchingUsers_ReturnsEmptyList()
     {
         // Arrange
-        await using var context = new ApplicationDbContext(dbContextOptions);
+        await using var context = new ApplicationDbContext(_dbContextOptions);
         await SeedDatabase(context);
         
         var usersRepository = new UsersRepository(context, _userManagerMock.Object);
@@ -101,7 +101,7 @@ public class UsersRepositorySearchTests : IDisposable
 
     public void Dispose()
     {
-        using var context = new ApplicationDbContext(dbContextOptions);
+        using var context = new ApplicationDbContext(_dbContextOptions);
         context.Database.EnsureDeleted();
         context.Dispose();
     }
