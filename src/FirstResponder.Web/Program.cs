@@ -57,7 +57,7 @@ builder.Services.AddAuthentication()
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
         };
     });
 
@@ -127,12 +127,13 @@ builder.Services.AddScoped<ICoursesRepository, CoursesRepository>();
 builder.Services.AddScoped<ICourseTypesRepository, CourseTypesRepository>();
 builder.Services.AddScoped<INotificationsRepository, NotificationsRepository>();
 builder.Services.AddScoped<IDeviceTokensRepository, DeviceTokensRepository>();
+builder.Services.AddScoped<IRefreshTokensRepository, RefreshTokensRepository>();
 
 builder.Services.AddScoped<AedValidator>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton<IFileService, LocalFileService>();
-builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddSingleton<IMailService, MailKitService>();
 builder.Services.AddSingleton<IMessagingService, FirebaseMessagingService>();
 

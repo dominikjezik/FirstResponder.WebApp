@@ -38,7 +38,10 @@ public class AccountController : ApiController
         }
         
         // Generate JWT token
-        var token = _tokenService.GenerateToken(user);
+        var authToken = _tokenService.GenerateAccessToken(user);
+        
+        // Generate and store refresh token
+        var refreshToken = await _tokenService.GenerateAndStoreRefreshToken(user);
         
         // Store device token
         if (!string.IsNullOrEmpty(model.DeviceToken))
@@ -46,7 +49,12 @@ public class AccountController : ApiController
             await _mediator.Send(new StoreUserDeviceTokenCommand(user, model.DeviceToken));
         }
         
-        return Ok(new { token });
+        return Ok(new
+        {
+            authToken, 
+            refreshToken = refreshToken.Token, 
+            refreshTokenExpires = refreshToken.Expires
+        });
     }
 
     [HttpPost]
@@ -58,15 +66,24 @@ public class AccountController : ApiController
             var user = await _mediator.Send(new CreateUserCommand(model));
             
             // Generate JWT token
-            var token = _tokenService.GenerateToken(user);
-            
+            var authToken = _tokenService.GenerateAccessToken(user);
+        
+            // Generate and store refresh token
+            var refreshToken = await _tokenService.GenerateAndStoreRefreshToken(user);
+        
             // Store device token
             if (!string.IsNullOrEmpty(model.DeviceToken))
             {
                 await _mediator.Send(new StoreUserDeviceTokenCommand(user, model.DeviceToken));
             }
-            
-            return Ok(new { user, token });
+        
+            return Ok(new
+            {
+                user, 
+                authToken, 
+                refreshToken = refreshToken.Token, 
+                refreshTokenExpires = refreshToken.Expires
+            });
         }
         catch (EntityValidationException exception)
         {
@@ -75,13 +92,89 @@ public class AccountController : ApiController
     }
     
     [HttpPost]
+    [Route("refresh-token")]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenViewModel refreshToken)
+    {
+        // Get (expired) JWT token from request
+        var jwtToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        
+        if (string.IsNullOrEmpty(jwtToken))
+        {
+            return Unauthorized();
+        }
+        
+        // Get user id from JWT token without expiration validation
+        var userId = _tokenService.GetUserIdFromExpiredToken(jwtToken);
+        
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+        
+        // Get refresh token model
+        var refreshTokenModel = await _tokenService.GetRefreshTokenModel(refreshToken.RefreshToken, userId.Value);
+        
+        if (refreshTokenModel == null || refreshTokenModel.UserId != userId)
+        {
+            return Unauthorized("Invalid refresh token");
+        }
+        
+        // Check if refresh token is expired
+        if (refreshTokenModel.Expires < DateTime.UtcNow)
+        {
+            // Delete refresh token
+            await _tokenService.DeleteRefreshToken(refreshTokenModel);
+            return Unauthorized("Refresh token expired");
+        }
+        
+        var user = await _mediator.Send(new GetUserEntityByIdQuery(userId.Value));
+        
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+        
+        // Generate JWT token
+        var newAccessToken = _tokenService.GenerateAccessToken(user);
+        
+        // If refresh token is about to expire, generate new one
+        if (refreshTokenModel.Expires < DateTime.UtcNow.AddDays(7))
+        {
+            // Delete old refresh token
+            await _tokenService.DeleteRefreshToken(refreshTokenModel);
+            
+            // Generate and store refresh token
+            refreshTokenModel = await _tokenService.GenerateAndStoreRefreshToken(user);
+        }
+        
+        return Ok(new
+        {
+            authToken = newAccessToken, 
+            refreshToken = refreshTokenModel.Token, 
+            refreshTokenExpires = refreshTokenModel.Expires
+        });
+    }
+    
+    [HttpPost]
     [Authorize("Bearer")]
-    [Route("[action]")]
-    public async Task<IActionResult> UpdateDeviceToken(string? newDeviceToken = null, string? oldDeviceToken = null)
+    [Route("update-device-token")]
+    public async Task<IActionResult> UpdateDeviceToken([FromBody] UpdateDeviceTokenViewModel model)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         
-        await _mediator.Send(new UpdateUserDeviceTokenCommand(userId, newDeviceToken, oldDeviceToken));
+        await _mediator.Send(new UpdateUserDeviceTokenCommand(userId, model.NewDeviceToken, model.OldDeviceToken));
+        
+        return Ok();
+    }
+    
+    [HttpPost]
+    [Authorize("Bearer")]
+    [Route("logout")]
+    public async Task<IActionResult> Logout(LogoutViewModel model)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        await _mediator.Send(new LogoutUserCommand(userId, model.RefreshToken, model.DeviceToken));
         
         return Ok();
     }

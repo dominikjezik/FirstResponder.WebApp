@@ -35,13 +35,13 @@ public class DeviceTokensRepository : IDeviceTokensRepository
             .AnyAsync(dt => dt.UserId == userId && dt.Token == deviceToken);
     }
 
-    public async Task RemoveTokens(IList<DeviceToken> deviceTokens)
+    public async Task DeleteTokens(IList<DeviceToken> deviceTokens)
     {
         _dbContext.DeviceTokens.RemoveRange(deviceTokens);
         await _dbContext.SaveChangesAsync();
     }
     
-    public async Task RemoveDeviceToken(string deviceToken, Guid userId)
+    public async Task DeleteToken(string deviceToken, Guid userId)
     {
         var token = await _dbContext.DeviceTokens
             .Where(dt => dt.UserId == userId && dt.Token == deviceToken)

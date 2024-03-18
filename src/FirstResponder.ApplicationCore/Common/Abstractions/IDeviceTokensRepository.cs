@@ -10,7 +10,7 @@ public interface IDeviceTokensRepository
     
     Task<bool> DeviceTokenExists(string deviceToken, Guid userId);
     
-    Task RemoveTokens(IList<DeviceToken> deviceTokens);
+    Task DeleteTokens(IList<DeviceToken> deviceTokens);
     
-    Task RemoveDeviceToken(string deviceToken, Guid userId);
+    Task DeleteToken(string deviceToken, Guid userId);
 }

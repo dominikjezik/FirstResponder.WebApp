@@ -44,7 +44,7 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
         var notNotifiedUsers = recipients.Where(r => !successfullyNotifiedUsers.Contains(r.Id)).ToList();
         
         // Remove invalid tokens
-        await _deviceTokensRepository.RemoveTokens(failedTokens);
+        await _deviceTokensRepository.DeleteTokens(failedTokens);
         
         if (notNotifiedUsers.Any())
         {

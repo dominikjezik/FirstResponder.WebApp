@@ -23,11 +23,19 @@ public class UpdateUserDeviceTokenCommandHandler : IRequestHandler<UpdateUserDev
         
         if (request.OldDeviceToken != null)
         {
-            await _deviceTokensRepository.RemoveDeviceToken(request.OldDeviceToken, userId);
+            await _deviceTokensRepository.DeleteToken(request.OldDeviceToken, userId);
         }
         
         if (request.NewDeviceToken != null)
         {
+            // Check if same token already exists
+            var existingToken = await _deviceTokensRepository.DeviceTokenExists(request.NewDeviceToken, userId);
+        
+            if (existingToken)
+            {
+                return;
+            }
+            
             var deviceToken = new DeviceToken
             {
                 Token = request.NewDeviceToken,

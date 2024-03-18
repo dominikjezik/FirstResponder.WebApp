@@ -16,9 +16,6 @@ public class GetIncidentsNearbyQueryHandler : IRequestHandler<GetIncidentsNearby
     
     public async Task<IEnumerable<Incident>> Handle(GetIncidentsNearbyQuery request, CancellationToken cancellationToken)
     {
-        // TODO: Naimplementovat algoritmus pre ziskanie incidentov v okoli ! ! ! (pricom vybrat len otvorene incidenty)
-
-        var incidents = await _incidentsRepository.GetOpenedIncidentsNearby(request.Latitude, request.Longitude, request.Radius, request.UserId);
-        return incidents;
+        return await _incidentsRepository.GetOpenedIncidentsNearby(request.Latitude, request.Longitude, request.Radius, request.UserId);
     }
 }

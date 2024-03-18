@@ -35,6 +35,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     
     public DbSet<DeviceToken> DeviceTokens { get; set; }
     
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    
     // Incident Aggregate
     public DbSet<Incident> Incidents { get; set; }
     public DbSet<IncidentResponder> IncidentResponders { get; set; }
@@ -141,6 +143,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .WithMany(user => user.DeviceTokens)
             .HasForeignKey(a => a.UserId)
             .IsRequired();
+        
+        modelBuilder.Entity<RefreshToken>()
+            .HasOne<ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(a => a.UserId)
+            .IsRequired();
+        
+        modelBuilder.Entity<RefreshToken>()
+            .HasIndex(a => a.Token)
+            .IsUnique();
     }
     
     public override int SaveChanges()
