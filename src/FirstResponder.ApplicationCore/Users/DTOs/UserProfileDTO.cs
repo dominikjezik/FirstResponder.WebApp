@@ -26,6 +26,7 @@ public class UserProfileDTO
 
     public string? City { get; set; }
 
+    [EnumDataType(typeof(RegionOfState), ErrorMessage = "Neplatný región")]
     public RegionOfState Region { get; set; }
 
     public string? Notes { get; set; }
