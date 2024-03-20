@@ -1,3 +1,4 @@
+import 'normalize.css'
 import './scss/main.scss'
 
 import aedHelpers from './js/aed-helpers.js';
