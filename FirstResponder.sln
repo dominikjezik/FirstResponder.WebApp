@@ -5,14 +5,6 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{07523733-7033-4519-8495-94F99821453D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{71AEB712-E56D-4E29-8566-6293A527068E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.WebTests", "tests\FirstResponder.WebTests\FirstResponder.WebTests.csproj", "{718EEC45-9A36-4BC4-A290-D2FF4B9E04FD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.InfrastructureTests", "tests\FirstResponder.InfrastructureTests\FirstResponder.InfrastructureTests.csproj", "{637B2068-7AA5-4D03-BFC2-8C3BCA7852C2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.ApplicationCoreTests", "tests\FirstResponder.ApplicationCoreTests\FirstResponder.ApplicationCoreTests.csproj", "{5C425456-57E4-4597-BF34-B5C357F9B20A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.ApplicationCore", "src\FirstResponder.ApplicationCore\FirstResponder.ApplicationCore.csproj", "{FFE521B3-9B2D-46BD-B33C-3AB87BDAADCD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstResponder.Infrastructure", "src\FirstResponder.Infrastructure\FirstResponder.Infrastructure.csproj", "{49C887B9-A6E7-4A3D-BCE2-7299277E2041}"
@@ -25,18 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{718EEC45-9A36-4BC4-A290-D2FF4B9E04FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{718EEC45-9A36-4BC4-A290-D2FF4B9E04FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{718EEC45-9A36-4BC4-A290-D2FF4B9E04FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{718EEC45-9A36-4BC4-A290-D2FF4B9E04FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{637B2068-7AA5-4D03-BFC2-8C3BCA7852C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{637B2068-7AA5-4D03-BFC2-8C3BCA7852C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{637B2068-7AA5-4D03-BFC2-8C3BCA7852C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{637B2068-7AA5-4D03-BFC2-8C3BCA7852C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5C425456-57E4-4597-BF34-B5C357F9B20A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5C425456-57E4-4597-BF34-B5C357F9B20A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5C425456-57E4-4597-BF34-B5C357F9B20A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C425456-57E4-4597-BF34-B5C357F9B20A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FFE521B3-9B2D-46BD-B33C-3AB87BDAADCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FFE521B3-9B2D-46BD-B33C-3AB87BDAADCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFE521B3-9B2D-46BD-B33C-3AB87BDAADCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -54,9 +34,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{718EEC45-9A36-4BC4-A290-D2FF4B9E04FD} = {71AEB712-E56D-4E29-8566-6293A527068E}
-		{637B2068-7AA5-4D03-BFC2-8C3BCA7852C2} = {71AEB712-E56D-4E29-8566-6293A527068E}
-		{5C425456-57E4-4597-BF34-B5C357F9B20A} = {71AEB712-E56D-4E29-8566-6293A527068E}
 		{FFE521B3-9B2D-46BD-B33C-3AB87BDAADCD} = {07523733-7033-4519-8495-94F99821453D}
 		{49C887B9-A6E7-4A3D-BCE2-7299277E2041} = {07523733-7033-4519-8495-94F99821453D}
 		{2BE50C8F-CEA8-4073-9C76-1F5A4C0F9833} = {07523733-7033-4519-8495-94F99821453D}

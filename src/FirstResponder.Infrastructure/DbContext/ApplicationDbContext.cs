@@ -167,6 +167,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         return base.SaveChangesAsync(cancellationToken);
     }
     
+    // Inspired by https://stackoverflow.com/questions/45429719/automatic-createdat-and-updatedat-fields-onmodelcreating-in-ef6
     private void AddTimestamps()
     {
         var entityEntries = ChangeTracker.Entries().Where(x => 

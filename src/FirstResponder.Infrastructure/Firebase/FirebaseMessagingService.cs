@@ -58,8 +58,6 @@ public class FirebaseMessagingService : IMessagingService
             title = title.Substring(0, 97) + "...";
         }
         
-        // TODO: multicast ma obmedzenie na 500 zariadeni, treba to rozdelit na viac multicastov
-        
         var firebaseMessaging = FirebaseMessaging.DefaultInstance;
         
         if (firebaseMessaging == null)
@@ -67,44 +65,51 @@ public class FirebaseMessagingService : IMessagingService
             throw new Exception("Nastala chyba pri inicializácii FirebaseMessaging");
         }
         
-        // When using Notification instead of Data, the message is displayed to the user
-        var multicastMessage = new MulticastMessage
-        {
-            Tokens = deviceTokens.Select(dt => dt.Token).ToList(),
-            Notification = new Notification()
-            {
-                Title = title,
-                Body = message
-            },
-            Data = new Dictionary<string, string>
-            {
-                { "type", "display-notification" }
-            }
-        };
-        
-        var response = await firebaseMessaging.SendMulticastAsync(multicastMessage);
-        
         var failedTokens = new List<DeviceToken>();
         
-        if (response.FailureCount > 0)
+        // Divide tokens into batches of 500
+        do
         {
-            for (var i = 0; i < response.Responses.Count; i++)
+            var batch = deviceTokens.Take(500).ToList();
+            deviceTokens = deviceTokens.Skip(500).ToList();
+            
+            // When using Notification instead of Data, the message is displayed to the user
+            var multicastMessage = new MulticastMessage
             {
-                if (!response.Responses[i].IsSuccess)
+                Tokens = batch.Select(dt => dt.Token).ToList(),
+                Notification = new Notification()
                 {
-                    // NotFound -> when the token is no longer valid
-                    // InvalidArgument -> when the token is not valid or error in the payload
-                    if (response.Responses[i].Exception.ErrorCode == ErrorCode.InvalidArgument || response.Responses[i].Exception.ErrorCode == ErrorCode.NotFound)
+                    Title = title,
+                    Body = message
+                },
+                Data = new Dictionary<string, string>
+                {
+                    { "type", "display-notification" }
+                }
+            };
+        
+            var response = await firebaseMessaging.SendMulticastAsync(multicastMessage);
+        
+            if (response.FailureCount > 0)
+            {
+                for (var i = 0; i < response.Responses.Count; i++)
+                {
+                    if (!response.Responses[i].IsSuccess)
                     {
-                        failedTokens.Add(deviceTokens[i]);
-                    }
-                    else
-                    {
-                        // TODO: Logovat neznamu chybu
+                        // NotFound -> when the token is no longer valid
+                        // InvalidArgument -> when the token is not valid or error in the payload
+                        if (response.Responses[i].Exception.ErrorCode == ErrorCode.InvalidArgument || response.Responses[i].Exception.ErrorCode == ErrorCode.NotFound)
+                        {
+                            failedTokens.Add(batch[i]);
+                        }
+                        else
+                        {
+                            // TODO: Logovat neznamu chybu
+                        }
                     }
                 }
             }
-        }
+        } while (deviceTokens.Count > 0);
         
         return failedTokens;
     }

@@ -97,7 +97,7 @@ public class TokenService : ITokenService
         return refreshToken;
     }
 
-    public async Task<RefreshToken?> GetRefreshTokenModel(string token, Guid userId)
+    public async Task<RefreshToken?> GetRefreshTokenModel(string token)
     {
         return await _refreshTokensRepository.GetRefreshToken(token);
     }

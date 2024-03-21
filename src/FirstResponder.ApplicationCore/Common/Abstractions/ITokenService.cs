@@ -10,7 +10,7 @@ public interface ITokenService
 
     Task<RefreshToken> GenerateAndStoreRefreshToken(User user);
     
-    Task<RefreshToken?> GetRefreshTokenModel(string token, Guid userId);
+    Task<RefreshToken?> GetRefreshTokenModel(string token);
     
     Task DeleteRefreshToken(RefreshToken refreshToken);
 }

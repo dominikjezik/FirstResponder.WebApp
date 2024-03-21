@@ -196,9 +196,21 @@ public class UsersRepository : IUsersRepository
         }
     }
 
-    public Task DeleteUser(User user)
+    public async Task DeleteUser(User user)
     {
-        throw new NotImplementedException();
+        var applicationUser = await _dbContext.Users.Where(a => a.Id == user.Id).FirstOrDefaultAsync();
+
+        if (applicationUser == null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        var result = await _userManager.DeleteAsync(applicationUser);
+        
+        if (!result.Succeeded)
+        {
+            HandleIdentityErrors(result);
+        }
     }
 
     #region Helpers

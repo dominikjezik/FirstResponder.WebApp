@@ -112,7 +112,7 @@ public class AccountController : ApiController
         }
         
         // Get refresh token model
-        var refreshTokenModel = await _tokenService.GetRefreshTokenModel(refreshToken.RefreshToken, userId.Value);
+        var refreshTokenModel = await _tokenService.GetRefreshTokenModel(refreshToken.RefreshToken);
         
         if (refreshTokenModel == null || refreshTokenModel.UserId != userId)
         {
