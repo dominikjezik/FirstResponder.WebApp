@@ -2,24 +2,25 @@ using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Common.Enums;
 using FirstResponder.ApplicationCore.Common.Exceptions;
 using FirstResponder.ApplicationCore.Incidents.Commands;
+using FirstResponder.ApplicationCore.Incidents.DTOs;
 using MediatR;
 
 namespace FirstResponder.ApplicationCore.Incidents.Handlers;
 
-public class DeclineIncidentCommandHandler : IRequestHandler<DeclineIncidentCommand>
+public class UpdateResponderLocationCommandHandler : IRequestHandler<UpdateResponderLocationCommand, IncidentResponderItemDTO?>
 {
     private readonly IIncidentsRepository _incidentsRepository;
     private readonly IUsersRepository _usersRepository;
 
-    public DeclineIncidentCommandHandler(IIncidentsRepository incidentsRepository, IUsersRepository usersRepository)
+    public UpdateResponderLocationCommandHandler(IIncidentsRepository incidentsRepository, IUsersRepository usersRepository)
     {
         _incidentsRepository = incidentsRepository;
         _usersRepository = usersRepository;
     }
     
-    public async Task Handle(DeclineIncidentCommand request, CancellationToken cancellationToken)
+    public async Task<IncidentResponderItemDTO?> Handle(UpdateResponderLocationCommand request, CancellationToken cancellationToken)
     {
-        var incident = await _incidentsRepository.GetIncidentWithRespondersById(request.IncidentId);
+        var incident = await _incidentsRepository.GetIncidentById(request.IncidentId);
         
         if (incident == null)
         {
@@ -36,20 +37,19 @@ public class DeclineIncidentCommandHandler : IRequestHandler<DeclineIncidentComm
             throw new EntityNotFoundException();
         }
         
-        var user = await _usersRepository.GetUserById(responderId);
+        var incidentResponder = await _incidentsRepository.UpdateResponderLocation(incident, responderId, request.Latitude, request.Longitude, request.TypeOfTransport);
         
-        if (user == null)
+        if (incidentResponder == null)
         {
-            throw new EntityNotFoundException();
+            return null;
         }
         
-        await _incidentsRepository.DeclineIncident(incident, user);
-        
-        // If the incident has no accepted responders, change the state to Created
-        if (incident.Responders.Where(r => r.AcceptedAt != null).Count() == 0)
+        return new IncidentResponderItemDTO
         {
-            incident.State = IncidentState.Created;
-            await _incidentsRepository.UpdateIncident(incident);
-        }
+            ResponderId = incidentResponder.ResponderId,
+            Latitude = incidentResponder.LastLatitude,
+            Longitude = incidentResponder.LastLongitude,
+            TypeOfTransport = incidentResponder.TypeOfTransport.ToString(),
+        };
     }
 }

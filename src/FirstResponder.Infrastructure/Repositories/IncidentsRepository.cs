@@ -310,6 +310,29 @@ public class IncidentsRepository : IIncidentsRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<IncidentResponder?> UpdateResponderLocation(Incident incident, Guid responderId, double latitude, double longitude, TypeOfResponderTransport? typeOfTransport = null)
+    {
+        var responderIncident = await _dbContext.IncidentResponders
+            .Where(r => r.IncidentId == incident.Id && r.ResponderId == responderId)
+            .FirstOrDefaultAsync();
+        
+        if (responderIncident == null)
+        {
+            return null;
+        }
+        
+        responderIncident.LastLatitude = latitude;
+        responderIncident.LastLongitude = longitude;
+        
+        if (typeOfTransport != null)
+        {
+            responderIncident.TypeOfTransport = typeOfTransport.Value;
+        }
+        
+        await _dbContext.SaveChangesAsync();
+        return responderIncident;
+    }
+
     public async Task<IEnumerable<IncidentMessageDTO>> GetIncidentMessages(Guid incidentId)
     {
         return await _dbContext.IncidentMessages

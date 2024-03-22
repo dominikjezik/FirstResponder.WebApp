@@ -56,7 +56,10 @@ public class AcceptIncidentCommandHandler : IRequestHandler<AcceptIncidentComman
         {
             ResponderId = incidentResponder.ResponderId,
             FullName = user.FullName,
-            AcceptedAt = incidentResponder.AcceptedAt
+            AcceptedAt = incidentResponder.AcceptedAt,
+            Latitude = incidentResponder.LastLatitude,
+            Longitude = incidentResponder.LastLongitude,
+            TypeOfTransport = incidentResponder.TypeOfTransport.ToString(),
         };
     }
 }

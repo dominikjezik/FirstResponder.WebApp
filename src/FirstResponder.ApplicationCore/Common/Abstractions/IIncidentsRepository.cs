@@ -39,6 +39,8 @@ public interface IIncidentsRepository
     
     Task DeclineIncident(Incident incident, User user);
     
+    Task<IncidentResponder?> UpdateResponderLocation(Incident incident, Guid responderId, double latitude, double longitude, TypeOfResponderTransport? typeOfTransport = null);
+    
     Task<IEnumerable<IncidentMessageDTO>> GetIncidentMessages(Guid incidentId);
     
     Task<IncidentMessageDTO> SendMessageToIncident(Incident incident, User user, string message);

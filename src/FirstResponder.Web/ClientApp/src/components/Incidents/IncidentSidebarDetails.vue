@@ -101,6 +101,8 @@ export default {
         },
         updateResponderLocation(responder) {
             const responderMarkerIndex = this.markers.findIndex(marker => marker.type === 'responder' && marker.responderId === responder.responderId)
+            
+            console.log(responderMarkerIndex)
 
             if (responderMarkerIndex !== -1) {
                 this.markers[responderMarkerIndex].lat = responder.latitude
@@ -118,6 +120,18 @@ export default {
             }
 
             this.$refs.mapWithMarkers.refreshMarkers()
+        },
+        updateFormLabels() {
+            const incidentStateInput = document.getElementById('incidentStateInput')
+            const cancelIncidentBtn = document.getElementById('cancelIncidentBtn')
+            
+            if (this.responders.length === 0) {
+                incidentStateInput.value = 'Vytvorený'
+                cancelIncidentBtn.innerText = 'Zrušiť zásah'
+            } else {
+                incidentStateInput.value = 'Prebiehajúci'
+                cancelIncidentBtn.innerText = 'Ukončiť zásah'
+            }
         }
     },
     mounted() {
@@ -145,6 +159,10 @@ export default {
             }
             
             this.newResponderAccepted(responder)
+            
+            if (this.responders.length === 1) {
+                this.updateFormLabels()
+            }
         })
         
         // Responder that was already accepted declined incident
@@ -152,6 +170,7 @@ export default {
             this.responders = this.responders.filter(responder => responder.responderId !== responderId)
             if (this.responders.length === 0) {
                 this.respondersListMessage = 'Doposiaľ žiadny Responder nepotvrdil účasť na tomto zásahu.'
+                this.updateFormLabels()
             }
             
             this.markers = this.markers.filter(marker => marker.type !== 'responder' || marker.responderId !== responderId)
@@ -165,7 +184,7 @@ export default {
             }
         })
         
-        // TODO
+        // Responder location changed
         window.signalR.on('ResponderLocationChanged', responder => {
             this.updateResponderLocation(responder)
         })

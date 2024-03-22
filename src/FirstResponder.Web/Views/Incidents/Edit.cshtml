@@ -49,7 +49,7 @@
                 <div class="field">
                     <label class="label">Stav</label>
                     <div class="control">
-                        <input value="@Model.State.GetDisplayAttributeValue()" type="text" class="input" disabled>
+                        <input id="incidentStateInput" value="@Model.State.GetDisplayAttributeValue()" type="text" class="input" disabled>
                     </div>
                 </div>
 
@@ -107,7 +107,7 @@
                             <div class="buttons">
                                 @if (Model.State == IncidentState.Created || Model.State == IncidentState.InProgress)
                                 {
-                                    <button type="submit" class="button is-danger is-light" form="formClose">@(Model.State == IncidentState.Created ? "Zrušiť zásah" : "Ukončiť zásah")</button>
+                                    <button id="cancelIncidentBtn" type="submit" class="button is-danger is-light" form="formClose">@(Model.State == IncidentState.Created ? "Zrušiť zásah" : "Ukončiť zásah")</button>
                                 }
                                 <button type="submit" class="button is-danger" form="formDelete">Odstrániť zásah</button>
                             </div>
@@ -122,7 +122,7 @@
             id="formNotifyResponders" onSubmit="return confirm('Naozaj chcete vyhľadať dostupných responderov v okolí a notifikovať ich o zásahu?')"></form>
         <form 
             asp-controller="Incidents" asp-action="Close" asp-route-incidentId="@Model.IncidentId" 
-            id="formClose" onSubmit="return confirm('Naozaj chcete definitívne @((Model.State == IncidentState.Created ? "zrušiť" : "ukončiť")) tento zásah?')"></form>
+            id="formClose" onSubmit="return confirm('Naozaj chcete definitívne zrušiť/ukončiť tento zásah?')"></form>
         <form 
             asp-controller="Incidents" asp-action="Delete" asp-route-incidentId="@Model.IncidentId" 
             id="formDelete" onSubmit="return confirm('Naozaj chcete odstrániť tento zásah a všetky jeho informácie?')"></form>

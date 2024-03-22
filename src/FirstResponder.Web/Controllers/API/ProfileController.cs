@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace FirstResponder.Web.Controllers.API;
 
 [Authorize("Bearer")]
-[Authorize("IsResponderOrEmployee")]
 [Route("api/[controller]")]
 public class ProfileController : ApiController
 {

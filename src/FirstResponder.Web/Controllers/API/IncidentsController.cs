@@ -93,10 +93,6 @@ public class IncidentsController : ApiController
             });
             
             // Update responders list on edit page (SignalR)
-            incidentResponder.Latitude = latitude;
-            incidentResponder.Longitude = longitude;
-            incidentResponder.TypeOfTransport = typeOfTransport.ToString();
-            
             await _hubContext.Clients.Group(incidentId.ToString()).SendAsync("ResponderAccepted", incidentResponder);
         }
         catch (EntityNotFoundException)
@@ -127,6 +123,43 @@ public class IncidentsController : ApiController
             
             //  Update responders list on edit page (SignalR)
             await _hubContext.Clients.Group(incidentId.ToString()).SendAsync("ResponderDeclined", userId);
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (EntityValidationException e)
+        {
+            return BadRequest(e.Message);
+        }
+
+        return Ok();
+    }
+    
+    [HttpPost]
+    [Route("{incidentId}/update-location")]
+    public async Task<IActionResult> UpdateLocation(Guid incidentId, double latitude, double longitude, TypeOfResponderTransport? typeOfTransport = null)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        try
+        {
+            var incidentResponder = await _mediator.Send(new UpdateResponderLocationCommand
+            {
+                IncidentId = incidentId,
+                ResponderId = userId,
+                Latitude = latitude,
+                Longitude = longitude,
+                TypeOfTransport = typeOfTransport
+            });
+            
+            if (incidentResponder == null)
+            {
+                return NotFound();
+            }
+            
+            // Update responder item on edit page (SignalR)
+            await _hubContext.Clients.Group(incidentId.ToString()).SendAsync("ResponderLocationChanged", incidentResponder);
         }
         catch (EntityNotFoundException)
         {

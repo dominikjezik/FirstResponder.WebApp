@@ -1,4 +1,7 @@
 <script>
+// Used to for bugged this.map in leaflet and vue3
+import { toRaw } from "vue";
+
 export default {
     props: {
         markers: {
@@ -39,7 +42,7 @@ export default {
     },
     watch: {
         markers() {
-            if (!this.map) {
+            if (!toRaw(this.map)) {
                 return
             }
             
@@ -48,9 +51,13 @@ export default {
     },
     methods: {
         refreshMarkers() {
-            this.map.eachLayer(layer => {
+            if (!toRaw(this.map)) {
+                return
+            }
+
+            toRaw(this.map).eachLayer(layer => {
                 if (layer instanceof L.Marker) {
-                    this.map.removeLayer(layer)
+                    toRaw(this.map).removeLayer(layer)
                 }
             })
 
@@ -72,7 +79,7 @@ export default {
                     leafletMarker.bindPopup(marker.popup)
                 }
                 
-                leafletMarker.addTo(this.map)
+                leafletMarker.addTo(toRaw(this.map))
             })
         },
         loadLeaflet() {
@@ -143,9 +150,9 @@ export default {
             this.refreshMarkers()
 
             if (!marker && initialZoom) {
-                this.map.setView([lat, lon], 16)
+                toRaw(this.map).setView([lat, lon], 16)
             } else {
-                this.map.setView([lat, lon])
+                toRaw(this.map).setView([lat, lon])
             }
         },
         getIcon(id) {
