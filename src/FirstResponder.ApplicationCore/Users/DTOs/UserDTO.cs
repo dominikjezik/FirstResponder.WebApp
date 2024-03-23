@@ -15,7 +15,7 @@ public class UserDTO
     
     public List<IncidentItemDTO> Incidents { get; set; } = new();
     
-    public List<Course> Courses { get; set; } = new();
+    public List<CourseItemDTO> Courses { get; set; } = new();
     
     public class IncidentItemDTO
     {
@@ -24,5 +24,16 @@ public class UserDTO
         public DateTime CreatedAt { get; set; }
         
         public string Address { get; set; }
+    }
+    
+    public class CourseItemDTO
+    {
+        public Guid CourseId { get; set; }
+        
+        public string Name { get; set; }
+        
+        public DateTime StartDate { get; set; }
+        
+        public DateTime EndDate { get; set; }
     }
 }

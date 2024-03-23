@@ -45,18 +45,10 @@ public class IncidentsController : ApiController
             ResponderId = userId,
             Incidents = incidents
         });
+
+        var incidentItems = incidents.Select(i => i.ToItemDTO());
         
-        // TODO
-        incidents.ToList().ForEach(i =>
-        {
-            i.Responders.ToList().ForEach(r =>
-            {
-                r.Incident = null;
-                r.Responder = null;
-            });
-        });
-        
-        return Ok(incidents);
+        return Ok(incidentItems);
     }
     
     [HttpGet]

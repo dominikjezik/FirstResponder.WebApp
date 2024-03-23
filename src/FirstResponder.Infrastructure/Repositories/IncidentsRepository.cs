@@ -36,20 +36,7 @@ public class IncidentsRepository : IIncidentsRepository
                 );
         }
 
-        var queryItems = query
-            .Select(i => new IncidentItemDTO
-            {
-                Id = i.Id,
-                CreatedAt = i.CreatedAt,
-                ResolvedAt = i.ResolvedAt,
-                Patient = i.Patient,
-                Address = i.Address,
-                Diagnosis = i.Diagnosis,
-                State = i.State.ToString(),
-                DisplayState = i.State.GetDisplayAttributeValue(),
-                Latitude = i.Latitude,
-                Longitude = i.Longitude
-            });
+        var queryItems = query.Select(i => i.ToItemDTO());
 
         if (pageSize > 0)
         {
@@ -85,7 +72,9 @@ public class IncidentsRepository : IIncidentsRepository
                     )
                 ) <= radiusInMeters / 1000);
 
-        return await incidents.ToListAsync();
+        return await incidents
+            .OrderByDescending(i => i.CreatedAt)
+            .ToListAsync();
     }
     
     public async Task<IEnumerable<IncidentDTO>> GetUserIncidents(Guid userId)

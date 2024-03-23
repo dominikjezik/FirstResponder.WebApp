@@ -1,6 +1,7 @@
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 
 namespace FirstResponder.Infrastructure.Mail;
@@ -8,10 +9,12 @@ namespace FirstResponder.Infrastructure.Mail;
 public class MailKitService : IMailService
 {
     private readonly IConfiguration _configuration;
+    private readonly ILogger<MailKitService> _logger;
 
-    public MailKitService(IConfiguration configuration)
+    public MailKitService(IConfiguration configuration, ILogger<MailKitService> logger)
     {
         _configuration = configuration;
+        _logger = logger;
     }
     
     public bool SendMail(string toEmail, string toName, string subject, string body)
@@ -46,7 +49,7 @@ public class MailKitService : IMailService
         }
         catch (Exception ex)
         {
-            // TODO: Log exception
+            _logger.LogError(ex, "Error sending email");
             return false;
         }
     }
@@ -90,7 +93,7 @@ public class MailKitService : IMailService
         }
         catch (Exception ex)
         {
-            // TODO: Log exception
+            _logger.LogError(ex, "Error sending email");
             return false;
         }
     }

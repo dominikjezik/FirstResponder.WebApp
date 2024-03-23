@@ -16,7 +16,7 @@ public class IncidentDTO
     public DateTime? ResolvedAt { get; set; }
 }
 
-public static class IncidentExtensions
+public static partial class IncidentExtensions
 {
     public static IncidentDTO ToDTO(this Incident incident)
     {

@@ -2,12 +2,20 @@ using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using FirstResponder.ApplicationCore.Common.Abstractions;
 using FirstResponder.ApplicationCore.Entities.UserAggregate;
+using Microsoft.Extensions.Logging;
 using Notification = FirebaseAdmin.Messaging.Notification;
 
 namespace FirstResponder.Infrastructure.Firebase;
 
 public class FirebaseMessagingService : IMessagingService
 {
+    private readonly ILogger<FirebaseMessagingService> _logger;
+    
+    public FirebaseMessagingService(ILogger<FirebaseMessagingService> logger)
+    {
+        _logger = logger;
+    }
+    
     public async Task RequestDeviceLocationsAsync()
     {
         var firebaseMessaging = FirebaseMessaging.DefaultInstance;
@@ -36,7 +44,7 @@ public class FirebaseMessagingService : IMessagingService
         
         var response = await firebaseMessaging.SendAsync(message);
         
-        Console.WriteLine("Successfully sent message: " + response);
+        _logger.LogInformation($"RequestDeviceLocationsAsync: {response}");
     }
 
     public async Task<IList<DeviceToken>> SendNotificationAsync(IList<DeviceToken> deviceTokens, string title, string message)
@@ -104,11 +112,13 @@ public class FirebaseMessagingService : IMessagingService
                         }
                         else
                         {
-                            // TODO: Logovat neznamu chybu
+                            _logger.LogError(response.Responses[i].Exception, "Error sending FCM notification");
                         }
                     }
                 }
             }
+            
+            _logger.LogInformation($"SendNotificationAsync: {response} batch count: {batch.Count}; deviceTokens count: {deviceTokens.Count}");
         } while (deviceTokens.Count > 0);
         
         return failedTokens;

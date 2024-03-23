@@ -78,9 +78,9 @@ namespace FirstResponder.Infrastructure.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("Aeds");
+                    b.ToTable((string)null);
 
-                    b.UseTptMappingStrategy();
+                    b.UseTpcMappingStrategy();
                 });
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.AedPhoto", b =>
@@ -1000,12 +1000,6 @@ namespace FirstResponder.Infrastructure.Migrations
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PersonalAed", b =>
                 {
-                    b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed", null)
-                        .WithOne()
-                        .HasForeignKey("FirstResponder.ApplicationCore.Entities.AedAggregate.PersonalAed", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FirstResponder.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("OwnerId")
@@ -1015,12 +1009,6 @@ namespace FirstResponder.Infrastructure.Migrations
 
             modelBuilder.Entity("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", b =>
                 {
-                    b.HasOne("FirstResponder.ApplicationCore.Entities.AedAggregate.Aed", null)
-                        .WithOne()
-                        .HasForeignKey("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.OwnsOne("FirstResponder.ApplicationCore.Entities.AedAggregate.PublicAed+PublicAedAvailability", "Availability", b1 =>
                         {
                             b1.Property<Guid>("PublicAedId")

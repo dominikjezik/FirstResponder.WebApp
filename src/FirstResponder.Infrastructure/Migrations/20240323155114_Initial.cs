@@ -467,7 +467,7 @@ namespace FirstResponder.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Aeds",
+                name: "PersonalAeds",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -483,26 +483,94 @@ namespace FirstResponder.Infrastructure.Migrations
                     ElectrodesChildrenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     BatteryExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Aeds", x => x.Id);
+                    table.PrimaryKey("PK_PersonalAeds", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Aeds_AedLanguages_LanguageId",
+                        name: "FK_PersonalAeds_AedLanguages_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "AedLanguages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Aeds_AedManufacturers_ManufacturerId",
+                        name: "FK_PersonalAeds_AedManufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
                         principalTable: "AedManufacturers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Aeds_AedModels_ModelId",
+                        name: "FK_PersonalAeds_AedModels_ModelId",
+                        column: x => x.ModelId,
+                        principalTable: "AedModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_PersonalAeds_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PublicAeds",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false),
+                    ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModelId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FullyAutomatic = table.Column<bool>(type: "bit", nullable: false),
+                    ElectrodesAdults = table.Column<bool>(type: "bit", nullable: false),
+                    ElectrodesChildren = table.Column<bool>(type: "bit", nullable: false),
+                    ElectrodesAdultsExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ElectrodesChildrenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BatteryExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Holder = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Region = table.Column<int>(type: "int", nullable: false),
+                    Latitude = table.Column<double>(type: "float", nullable: true),
+                    Longitude = table.Column<double>(type: "float", nullable: true),
+                    DescriptionLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactPersonPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactPersonEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Availability_Type = table.Column<int>(type: "int", nullable: false),
+                    Availability_TimeFrom = table.Column<TimeSpan>(type: "time", nullable: true),
+                    Availability_TimeTo = table.Column<TimeSpan>(type: "time", nullable: true),
+                    Availability_Days = table.Column<int>(type: "int", nullable: true),
+                    Availability_DateFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Availability_DateTo = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Availability_Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PublicAeds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PublicAeds_AedLanguages_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "AedLanguages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_PublicAeds_AedManufacturers_ManufacturerId",
+                        column: x => x.ManufacturerId,
+                        principalTable: "AedManufacturers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_PublicAeds_AedModels_ModelId",
                         column: x => x.ModelId,
                         principalTable: "AedModels",
                         principalColumn: "Id",
@@ -530,65 +598,6 @@ namespace FirstResponder.Infrastructure.Migrations
                         name: "FK_CourseUser_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PersonalAeds",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PersonalAeds", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PersonalAeds_Aeds_Id",
-                        column: x => x.Id,
-                        principalTable: "Aeds",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PersonalAeds_AspNetUsers_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PublicAeds",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Holder = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Region = table.Column<int>(type: "int", nullable: false),
-                    Latitude = table.Column<double>(type: "float", nullable: true),
-                    Longitude = table.Column<double>(type: "float", nullable: true),
-                    DescriptionLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactPersonPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactPersonEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Availability_Type = table.Column<int>(type: "int", nullable: false),
-                    Availability_TimeFrom = table.Column<TimeSpan>(type: "time", nullable: true),
-                    Availability_TimeTo = table.Column<TimeSpan>(type: "time", nullable: true),
-                    Availability_Days = table.Column<int>(type: "int", nullable: true),
-                    Availability_DateFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Availability_DateTo = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Availability_Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PublicAeds", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PublicAeds_Aeds_Id",
-                        column: x => x.Id,
-                        principalTable: "Aeds",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -623,21 +632,6 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "IX_AedPhotos_PublicAedId",
                 table: "AedPhotos",
                 column: "PublicAedId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Aeds_LanguageId",
-                table: "Aeds",
-                column: "LanguageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Aeds_ManufacturerId",
-                table: "Aeds",
-                column: "ManufacturerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Aeds_ModelId",
-                table: "Aeds",
-                column: "ModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -726,9 +720,39 @@ namespace FirstResponder.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PersonalAeds_LanguageId",
+                table: "PersonalAeds",
+                column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonalAeds_ManufacturerId",
+                table: "PersonalAeds",
+                column: "ManufacturerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonalAeds_ModelId",
+                table: "PersonalAeds",
+                column: "ModelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersonalAeds_OwnerId",
                 table: "PersonalAeds",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PublicAeds_LanguageId",
+                table: "PublicAeds",
+                column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PublicAeds_ManufacturerId",
+                table: "PublicAeds",
+                column: "ManufacturerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PublicAeds_ModelId",
+                table: "PublicAeds",
+                column: "ModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_Token",
@@ -812,16 +836,13 @@ namespace FirstResponder.Infrastructure.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Aeds");
-
-            migrationBuilder.DropTable(
-                name: "CourseTypes");
-
-            migrationBuilder.DropTable(
                 name: "AedLanguages");
 
             migrationBuilder.DropTable(
                 name: "AedModels");
+
+            migrationBuilder.DropTable(
+                name: "CourseTypes");
 
             migrationBuilder.DropTable(
                 name: "AedManufacturers");

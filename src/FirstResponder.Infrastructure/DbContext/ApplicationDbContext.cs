@@ -56,7 +56,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         
         modelBuilder.Ignore<User>();
         
-        modelBuilder.Entity<Aed>().UseTptMappingStrategy();
+        modelBuilder.Entity<Aed>().UseTpcMappingStrategy();
         modelBuilder.Entity<PersonalAed>()
             .HasOne<ApplicationUser>()
             .WithMany()
