@@ -48,6 +48,8 @@ public class IncidentsRepository : IIncidentsRepository
         return await queryItems.ToListAsync();
     }
 
+    // Get incidents only in the specified radius using the Haversine formula
+    // https://en.wikipedia.org/wiki/Haversine_formula
     public async Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radiusInMeters, Guid? userId = null)
     {
         var incidents = _dbContext.Incidents
@@ -59,8 +61,6 @@ public class IncidentsRepository : IIncidentsRepository
                 .Include(i => i.Responders.Where(r => r.ResponderId == userId));
         }
         
-        // Get incidents only in the specified radius using the Haversine formula
-        // https://en.wikipedia.org/wiki/Haversine_formula
         incidents = incidents
             .Where(i =>
                 2 * 6371 * Math.Asin(

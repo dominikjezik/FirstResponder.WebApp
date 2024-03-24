@@ -44,4 +44,23 @@ public static partial class IncidentExtensions
             Longitude = incident.Longitude
         };
     }
+    
+    public static IncidentItemForResponderDTO ToItemForResponderDTO(this Incident incident, IncidentResponder? incidentResponder = null)
+    {
+        return new IncidentItemForResponderDTO
+        {
+            Id = incident.Id,
+            CreatedAt = incident.CreatedAt,
+            ResolvedAt = incident.ResolvedAt,
+            Address = incident.Address,
+            Patient = incident.Patient,
+            Diagnosis = incident.Diagnosis,
+            State = incident.State.ToString(),
+            DisplayState = incident.State.GetDisplayAttributeValue(),
+            Latitude = incident.Latitude,
+            Longitude = incident.Longitude,
+            AcceptedAt = incidentResponder?.AcceptedAt,
+            DeclinedAt = incidentResponder?.DeclinedAt,
+        };
+    }
 }

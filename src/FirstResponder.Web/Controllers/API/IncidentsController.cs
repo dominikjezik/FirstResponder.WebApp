@@ -46,7 +46,7 @@ public class IncidentsController : ApiController
             Incidents = incidents
         });
 
-        var incidentItems = incidents.Select(i => i.ToItemDTO());
+        var incidentItems = incidents.Select(i => i.ToItemForResponderDTO(i.Responders.FirstOrDefault()));
         
         return Ok(incidentItems);
     }
