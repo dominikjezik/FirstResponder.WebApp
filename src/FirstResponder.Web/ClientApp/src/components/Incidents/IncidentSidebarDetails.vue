@@ -46,8 +46,6 @@ export default {
                         if (responder.latitude === null || responder.longitude === null) {
                             return responder
                         }
-                        
-                        console.log(responder)
 
                         this.markers.push({
                             type: 'responder',
@@ -101,8 +99,6 @@ export default {
         },
         updateResponderLocation(responder) {
             const responderMarkerIndex = this.markers.findIndex(marker => marker.type === 'responder' && marker.responderId === responder.responderId)
-            
-            console.log(responderMarkerIndex)
 
             if (responderMarkerIndex !== -1) {
                 this.markers[responderMarkerIndex].lat = responder.latitude
@@ -241,28 +237,6 @@ export default {
     </table>
     
     <p v-if="respondersListMessage !== ''">{{ respondersListMessage }}</p>
-
-    <header class="section-header" style="opacity: 0.2;">
-        <h2 class="heading-with-icon">
-            <svg width="28" height="28" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.79832 201.333C-17.2805 98.4708 52.7101 20.734 131.257 20.0131C171.625 19.3941 222.121 40.7359 249.035 92.2912C275.948 40.7359 326.444 19.3941 366.813 20.0131C445.36 20.734 515.35 98.4708 494.271 201.333C478.203 279.744 394.702 381.713 249.035 480.552C103.368 381.713 19.8668 279.744 3.79832 201.333ZM164.031 331.283L190.768 48.4749C209.15 59.0772 226.112 75.261 238.016 98.0647L244.335 110.173L214.174 250.673L327.999 168.283L277.857 395.135H307.363L248.319 460.766L213.116 378.72L242.623 389.081L258.995 262.813L164.031 331.283Z" fill="currentColor"/>
-            </svg>
-            AED
-        </h2>
-    </header>
-
-    <table class="table is-striped is-narrow is-hoverable is-fullwidth" style="opacity: 0.2;">
-        <thead>
-        <tr>
-            <th>Umiestnenie</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>-</td>
-        </tr>
-        </tbody>
-    </table>
     
     <incident-report-modal 
         :incident-id="incidentId" 

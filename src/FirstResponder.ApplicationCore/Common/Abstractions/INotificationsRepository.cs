@@ -12,7 +12,7 @@ public interface INotificationsRepository
     
     Task<IEnumerable<NotificationDTO>> GetNotifications(int pageNumber, int pageSize, NotificationFiltersDTO? filtersDTO = null);
     
-    Task<IEnumerable<NotificationDTO>> GetNotificationsByUserIdAsync(Guid userId);
+    Task<IEnumerable<NotificationDTO>> GetNotificationsByUserIdAsync(Guid userId, int pageNumber, int pageSize);
 
     Task AddNotification(Notification notification);
     

@@ -5,10 +5,12 @@ using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.ApplicationCore.Incidents.Queries;
 using FirstResponder.Web.Extensions;
+using FirstResponder.Web.Hubs;
 using FirstResponder.Web.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FirstResponder.Web.Controllers;
 
@@ -17,10 +19,12 @@ namespace FirstResponder.Web.Controllers;
 public class IncidentsController : Controller
 {
     private readonly IMediator _mediator;
+    private readonly IHubContext<IncidentsHub> _hubContext;
 
-    public IncidentsController(IMediator mediator)
+    public IncidentsController(IMediator mediator, IHubContext<IncidentsHub> hubContext)
     {
         _mediator = mediator;
+        _hubContext = hubContext;
     }
     
     [Route("")]
@@ -220,8 +224,12 @@ public class IncidentsController : Controller
         try
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var incidentMessage = await _mediator.Send(new CreateIncidentMessageCommand(incidentId, userId, viewModel.MessageContent));
-            return Ok(incidentMessage);
+            var message = await _mediator.Send(new CreateIncidentMessageCommand(incidentId, userId, viewModel.MessageContent));
+            
+            // Update messages on edit page (SignalR) (possibly other employee)
+            await _hubContext.Clients.Group(incidentId.ToString()).SendAsync("NewMessage", message);
+            
+            return Ok(message);
         }
         catch (EntityValidationException exception)
         {

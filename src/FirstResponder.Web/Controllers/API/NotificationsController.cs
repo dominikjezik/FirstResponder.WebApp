@@ -20,11 +20,11 @@ public class NotificationsController : ApiController
     [Authorize("Bearer")]
     [Authorize("IsResponderOrEmployee")]
     [Route("")]
-    public async Task<IActionResult> GetNotifications()
+    public async Task<IActionResult> GetNotifications(int pageNumber)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         
-        var notifications = await _mediator.Send(new GetUserNotificationsQuery(userId));
+        var notifications = await _mediator.Send(new GetUserNotificationsQuery(userId, pageNumber));
         
         return Ok(notifications);
     }

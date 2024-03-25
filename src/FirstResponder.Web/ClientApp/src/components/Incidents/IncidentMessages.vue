@@ -20,6 +20,10 @@ export default {
     },
     methods: {
         onMessageSent(message) {
+            if (this.messages.some(m => m.id === message.id)) {
+                return
+            }
+            
             message.createdAt = new Date(message.createdAt).toLocaleString()
             this.messages.unshift(message)
             this.statusMessage = ''

@@ -5,6 +5,7 @@ using FirstResponder.ApplicationCore.Incidents.Commands;
 using FirstResponder.ApplicationCore.Incidents.DTOs;
 using FirstResponder.ApplicationCore.Incidents.Queries;
 using FirstResponder.Web.Hubs;
+using FirstResponder.Web.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -190,6 +191,31 @@ public class IncidentsController : ApiController
         catch (UnauthorizedException e)
         {
             return Unauthorized(e.Message);
+        }
+    }
+    
+    [HttpPost]
+    [Route("{incidentId}/messages")]
+    public async Task<IActionResult> SendMessage(Guid incidentId, IncidentNewMessageViewModel model)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        try
+        {
+            var message = await _mediator.Send(new CreateIncidentMessageCommand(incidentId, userId, model.MessageContent, true));
+            
+            // Update messages on edit page (SignalR)
+            await _hubContext.Clients.Group(incidentId.ToString()).SendAsync("NewMessage", message);
+            
+            return Ok(message);
+        }
+        catch (EntityNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (EntityValidationException e)
+        {
+            return BadRequest(e.Message);
         }
     }
     

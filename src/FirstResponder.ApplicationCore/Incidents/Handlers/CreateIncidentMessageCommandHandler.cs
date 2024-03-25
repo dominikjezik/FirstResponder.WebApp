@@ -11,16 +11,20 @@ public class CreateIncidentMessageCommandHandler : IRequestHandler<CreateInciden
 {
     private readonly IIncidentsRepository _incidentsRepository;
     private readonly IUsersRepository _usersRepository;
+    private readonly IDeviceTokensRepository _deviceTokensRepository;
+    private readonly IMessagingService _messagingService;
 
-    public CreateIncidentMessageCommandHandler(IIncidentsRepository incidentsRepository, IUsersRepository usersRepository)
+    public CreateIncidentMessageCommandHandler(IIncidentsRepository incidentsRepository, IUsersRepository usersRepository, IDeviceTokensRepository deviceTokensRepository, IMessagingService messagingService)
     {
         _incidentsRepository = incidentsRepository;
         _usersRepository = usersRepository;
+        _deviceTokensRepository = deviceTokensRepository;
+        _messagingService = messagingService;
     }
     
     public async Task<IncidentMessageDTO> Handle(CreateIncidentMessageCommand request, CancellationToken cancellationToken)
     {
-        var incident = await _incidentsRepository.GetIncidentById(request.IncidentId);
+        var incident = await _incidentsRepository.GetIncidentWithRespondersById(request.IncidentId);
         
         if (incident == null)
         {
@@ -32,7 +36,6 @@ public class CreateIncidentMessageCommandHandler : IRequestHandler<CreateInciden
             throw new EntityValidationException("Incident bol už uzavretý");
         }
         
-        // parse request.UserId to Guid
         if (!Guid.TryParse(request.UserId, out var userId))
         {
             throw new EntityNotFoundException("Používateľ nebol nájdený");
@@ -45,6 +48,28 @@ public class CreateIncidentMessageCommandHandler : IRequestHandler<CreateInciden
             throw new EntityNotFoundException("Používateľ nebol nájdený");
         }
         
-        return await _incidentsRepository.SendMessageToIncident(incident, user, request.MessageContent);
+        // Check if user is in responders of the incident
+        if (request.IsMessageFromResponder)
+        {
+            var incidentResponder = await _incidentsRepository.GetIncidentResponder(request.IncidentId, userId);
+        
+            if (incidentResponder?.AcceptedAt == null)
+            {
+                throw new EntityValidationException("Responder has not accepted the incident");
+            }
+        }
+        
+        var message = await _incidentsRepository.SendMessageToIncident(incident, user, request.MessageContent);
+
+        // Notify responders about new message in incident
+        var deviceTokens = await _deviceTokensRepository.GetDeviceTokensForUsers(
+            incident.Responders.Select(i => i.ResponderId));
+        
+        var failedTokens = await _messagingService.NotifyNewMessageInIncidentAsync(deviceTokens, 
+            request.IncidentId.ToString(), "Nová správa v zásahu", message.Content);
+        
+        await _deviceTokensRepository.DeleteTokens(failedTokens);
+        
+        return message;
     }
 }

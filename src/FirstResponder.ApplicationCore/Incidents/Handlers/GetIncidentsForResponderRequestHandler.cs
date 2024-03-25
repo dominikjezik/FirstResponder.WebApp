@@ -5,7 +5,7 @@ using MediatR;
 
 namespace FirstResponder.ApplicationCore.Incidents.Handlers;
 
-public class GetIncidentsForResponderRequestHandler : IRequestHandler<GetIncidentsForResponderRequest, IEnumerable<IncidentDTO>>
+public class GetIncidentsForResponderRequestHandler : IRequestHandler<GetIncidentsForResponderRequest, IEnumerable<IncidentItemForResponderDTO>>
 {
     private readonly IIncidentsRepository _incidentRepository;
 
@@ -14,8 +14,8 @@ public class GetIncidentsForResponderRequestHandler : IRequestHandler<GetInciden
         _incidentRepository = incidentRepository;
     }
 
-    public async Task<IEnumerable<IncidentDTO>> Handle(GetIncidentsForResponderRequest request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<IncidentItemForResponderDTO>> Handle(GetIncidentsForResponderRequest request, CancellationToken cancellationToken)
     {
-        return await _incidentRepository.GetUserIncidents(request.ResponderId);
+        return await _incidentRepository.GetUsersIncidents(request.ResponderId);
     }
 }

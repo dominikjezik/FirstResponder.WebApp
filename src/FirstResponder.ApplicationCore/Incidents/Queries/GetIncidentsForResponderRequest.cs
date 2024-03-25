@@ -3,7 +3,7 @@ using MediatR;
 
 namespace FirstResponder.ApplicationCore.Incidents.Queries;
 
-public class GetIncidentsForResponderRequest : IRequest<IEnumerable<IncidentDTO>>
+public class GetIncidentsForResponderRequest : IRequest<IEnumerable<IncidentItemForResponderDTO>>
 {
     public Guid ResponderId { get; private set; }
     

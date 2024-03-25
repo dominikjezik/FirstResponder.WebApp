@@ -11,10 +11,13 @@ public class CreateIncidentMessageCommand : IRequest<IncidentMessageDTO>
     
     public string MessageContent { get; private set; }
     
-    public CreateIncidentMessageCommand(Guid incidentId, string userId, string messageContent)
+    public bool IsMessageFromResponder { get; private set; }
+    
+    public CreateIncidentMessageCommand(Guid incidentId, string userId, string messageContent, bool isMessageFromResponder = false)
     {
         IncidentId = incidentId;
         UserId = userId;
         MessageContent = messageContent;
+        IsMessageFromResponder = isMessageFromResponder;
     }
 }

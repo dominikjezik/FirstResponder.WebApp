@@ -29,6 +29,13 @@ public class DeviceTokensRepository : IDeviceTokensRepository
             .ToListAsync();
     }
 
+    public async Task<IList<DeviceToken>> GetDeviceTokensForUsers(IEnumerable<Guid> userIds)
+    {
+        return await _dbContext.DeviceTokens
+            .Where(dt => userIds.Contains(dt.UserId))
+            .ToListAsync();
+    }
+
     public async Task<bool> DeviceTokenExists(string deviceToken, Guid userId)
     {
         return await _dbContext.DeviceTokens

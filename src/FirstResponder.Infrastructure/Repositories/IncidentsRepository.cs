@@ -77,7 +77,7 @@ public class IncidentsRepository : IIncidentsRepository
             .ToListAsync();
     }
     
-    public async Task<IEnumerable<IncidentDTO>> GetUserIncidents(Guid userId)
+    public async Task<IEnumerable<IncidentItemForResponderDTO>> GetUsersIncidents(Guid userId)
     {
         return await _dbContext.Incidents
             .Where(i => i.Responders
@@ -85,7 +85,7 @@ public class IncidentsRepository : IIncidentsRepository
                 .Any(r => r.ResponderId == userId)
             )
             .OrderByDescending(i => i.CreatedAt)
-            .Select(incident => incident.ToDTO())
+            .Select(incident => incident.ToItemForResponderDTO(incident.Responders.FirstOrDefault()))
             .ToListAsync();
     }
 

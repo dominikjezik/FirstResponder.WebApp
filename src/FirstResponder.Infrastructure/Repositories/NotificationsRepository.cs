@@ -89,7 +89,7 @@ public class NotificationsRepository : INotificationsRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<NotificationDTO>> GetNotificationsByUserIdAsync(Guid userId)
+    public async Task<IEnumerable<NotificationDTO>> GetNotificationsByUserIdAsync(Guid userId, int pageNumber, int pageSize)
     {
         return await _dbContext.NotificationUser
             .Where(notificationUser => notificationUser.UserId == userId)
@@ -100,6 +100,9 @@ public class NotificationsRepository : INotificationsRepository
                 user => user.Id,
                 (notificationUser, user) => new { NotificationUser = notificationUser, Sender = user }
             )
+            .OrderByDescending(result => result.NotificationUser.Notification.CreatedAt)
+            .Skip(pageNumber * pageSize)
+            .Take(pageSize)
             .Select(result => new NotificationDTO
             {
                 Id = result.NotificationUser.Notification.Id,

@@ -11,7 +11,7 @@ public interface IIncidentsRepository
     
     Task<IEnumerable<Incident>> GetOpenedIncidentsNearby(double latitude, double longitude, double radiusInMeters, Guid? userId = null);
     
-    Task<IEnumerable<IncidentDTO>> GetUserIncidents(Guid userId);
+    Task<IEnumerable<IncidentItemForResponderDTO>> GetUsersIncidents(Guid userId);
     
     Task<Incident?> GetIncidentById(Guid incidentId);
 
