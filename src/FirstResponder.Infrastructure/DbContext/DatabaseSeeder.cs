@@ -24,28 +24,40 @@ public class DatabaseSeeder
         // Seed languages
         var languages = new List<Language>
         {
-            new Language { Id = Guid.NewGuid(), Name = "Slovenský" },
-            new Language { Id = Guid.NewGuid(), Name = "Anglický" },
+            new() { Id = Guid.NewGuid(), Name = "Slovenský" },
+            new() { Id = Guid.NewGuid(), Name = "Anglický" },
         };
         
         _context.AedLanguages.AddRange(languages);
         
         // Seed manufacturers
-        var fakerManufacturers = new Faker<Manufacturer>()
-            .RuleFor(m => m.Id, f => Guid.NewGuid())
-            .RuleFor(m => m.Name, f => f.Company.CompanyName());
-        
-        var manufacturers = fakerManufacturers.Generate(10);
+        var manufacturers = new List<Manufacturer>
+        {
+            new() { Id = Guid.NewGuid(), Name = "Physio-Control" },
+            new() { Id = Guid.NewGuid(), Name = "HeartSine" },
+            new() { Id = Guid.NewGuid(), Name = "Cardiac Science" },
+            new() { Id = Guid.NewGuid(), Name = "Defibtech" },
+            new() { Id = Guid.NewGuid(), Name = "Philips" },
+            new() { Id = Guid.NewGuid(), Name = "ZOLL" }
+        };
+
         _context.AedManufacturers.AddRange(manufacturers);
         
         // Seed models
         var fakerModels = new Faker<Model>()
             .RuleFor(m => m.Id, f => Guid.NewGuid())
-            .RuleFor(m => m.Name, f => f.Commerce.ProductName())
+            .RuleFor(m => m.Name, f => f.Lorem.Word() + " " + f.Lorem.Word())
             .RuleFor(m => m.ManufacturerId, f => manufacturers[f.Random.Int(0, manufacturers.Count - 1)].Id);
         
         var models = fakerModels.Generate(100);
         _context.AedModels.AddRange(models);
+        
+        // Dictionary of manufacturer and model ids
+        var manufacturerModelIds = new Dictionary<Guid, List<Guid>>();
+        foreach (var manufacturer in manufacturers)
+        {
+            manufacturerModelIds.Add(manufacturer.Id, models.Where(m => m.ManufacturerId == manufacturer.Id).Select(m => m.Id).ToList());
+        }
         
         float minLatitude = 48.394886f;
         float maxLatitude = 49.388951f;
@@ -74,10 +86,18 @@ public class DatabaseSeeder
             .RuleFor(a => a.Notes, f => f.Lorem.Sentence())
             .RuleFor(a => a.LanguageId, f => languages[f.Random.Int(0, languages.Count - 1)].Id)
             .RuleFor(a => a.ManufacturerId, f => manufacturers[f.Random.Int(0, manufacturers.Count - 1)].Id)
-            .RuleFor(a => a.ModelId, f => models[f.Random.Int(0, models.Count - 1)].Id)
+            .RuleFor(a => a.ModelId, (f, a) => manufacturerModelIds[a.ManufacturerId.Value][f.Random.Int(0, manufacturerModelIds[a.ManufacturerId.Value].Count - 1)])
             .RuleFor(a => a.Availability, a => new PublicAed.PublicAedAvailability {Type = AedAvailabilityType.Anytime });
         
         var publicAeds = fakerPublicAeds.Generate(100);
+        
+        // Fix latitude and longitude precision
+        publicAeds.ForEach(p =>
+        {
+            p.Latitude = double.Round(p.Latitude.Value, 6);
+            p.Longitude = double.Round(p.Longitude.Value, 6);
+        });
+        
         _context.PublicAeds.AddRange(publicAeds);
         
         // Seed application users with password "Password1"
@@ -138,10 +158,14 @@ public class DatabaseSeeder
             for (int i = 0; i < groupUsersCount; i++)
             {
                 var user = users[faker.Random.Int(0, users.Count - 1)];
+                
+                if (groupUsers.Any(gu => gu.UserId == user.Id))
+                {
+                    continue;
+                }
+                
                 groupUsers.Add(new GroupUser { GroupId = group.Id, UserId = user.Id });
             }
-            
-            groupUsers = groupUsers.Distinct().ToList();
         }
         
         _context.GroupUser.AddRange(groupUsers);
