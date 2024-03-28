@@ -66,7 +66,7 @@ public class CreateIncidentMessageCommandHandler : IRequestHandler<CreateInciden
             incident.Responders.Select(i => i.ResponderId));
         
         var failedTokens = await _messagingService.NotifyNewMessageInIncidentAsync(deviceTokens, 
-            request.IncidentId.ToString(), "Nová správa v zásahu", message.Content);
+            request.IncidentId, "Nová správa v zásahu", message.Content, user.FullName, user.Id);
         
         await _deviceTokensRepository.DeleteTokens(failedTokens);
         

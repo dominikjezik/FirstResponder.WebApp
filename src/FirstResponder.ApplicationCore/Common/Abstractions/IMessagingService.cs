@@ -8,7 +8,7 @@ public interface IMessagingService
     
     Task<IList<DeviceToken>> SendNotificationAsync(IList<DeviceToken> deviceTokens, string title, string message);
     
-    Task<IList<DeviceToken>> NotifyNewMessageInIncidentAsync(IList<DeviceToken> deviceTokens, string incidentId, string title, string message);
+    Task<IList<DeviceToken>> NotifyNewMessageInIncidentAsync(IList<DeviceToken> deviceTokens, Guid incidentId, string title, string message, string senderName, Guid senderId);
     
     Task<IList<DeviceToken>> NotifyIncidentUpdateAsync(IList<DeviceToken> deviceTokens, string incidentId, string title, string message);
 }

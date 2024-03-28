@@ -124,11 +124,13 @@ public class FirebaseMessagingService : IMessagingService
         return failedTokens;
     }
 
-    public async Task<IList<DeviceToken>> NotifyNewMessageInIncidentAsync(IList<DeviceToken> deviceTokens, string incidentId, string title, string message)
+    public async Task<IList<DeviceToken>> NotifyNewMessageInIncidentAsync(IList<DeviceToken> deviceTokens, Guid incidentId, string title, string message, string senderName, Guid senderId)
     {
         var additionalData = new Dictionary<string, string>
         {
-            { "incidentId", incidentId }
+            { "incidentId", incidentId.ToString() },
+            { "senderName", senderName },
+            { "senderId", senderId.ToString() }
         };
 
         return await NotifyDevicesOnBackground(deviceTokens, "new-incident-message", title, message, additionalData);
