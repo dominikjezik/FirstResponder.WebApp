@@ -16,7 +16,7 @@ Webová časť je realizovaná v ASP.NET 8 pričom používa viaceré knižnice 
 
 
 ## Spustenie aplikácie
-Pre spustenie systému je potrebné nakonfigurovať viaceré služby. Ukážková štruktúra konfigurácie sa nachádza v súbore `appsettings.json` v projekte `FirstResponder.Web`. Pre vývoj je možné ukladať konfiguráciu pomocou `User Secrets`.
+Pre spustenie systému je potrebné nakonfigurovať viaceré služby. Ukážková štruktúra konfigurácie sa nachádza v súbore `appsettings.json` v projekte `FirstResponder.Web`. Pre vývoj je možné ukladať konfiguráciu pomocou `User Secrets`. Vstupný bod aplikácie je v projekte `FirstResponder.Web` a pomocou npm je potrebné spustiť príkaz `npm run build` pre skompilovanie front-end časti.
 
 
 ### Konfigurácia databázy
